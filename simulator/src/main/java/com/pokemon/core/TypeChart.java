@@ -2,12 +2,13 @@ package com.pokemon.core;
 
 public class TypeChart {
 
-private static final String[] TYPES = {
+    private static final String[] TYPES = {
     "Normal", "Feu", "Eau", "Plante", "Électrik", "Glace", 
     "Combat", "Poison", "Sol", "Vol", "Psy", "Insecte", 
     "Roche", "Spectre", "Dragon", "Ténèbres", "Acier", "Fée"
-};
-private static final double[][] CHART = {
+    };
+    
+    private static final double[][] CHART = {
     // Nor  Feu  Eau  Pla  Ele  Gla  Com  Poi  Sol  Vol  Psy  Ins  Roc  Spe  Dra  Tén  Aci  Fée
     { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.0, 1.0, 1.0, 0.5, 1.0 }, // Normal
     { 1.0, 0.5, 0.5, 2.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 1.0, 0.5, 1.0, 2.0, 1.0 }, // Feu
@@ -29,9 +30,16 @@ private static final double[][] CHART = {
     { 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 0.5, 1.0 }  // Fée
     };
 
+    /**
+     * attaquand / defandeur
+     * @param id1 
+     * @param id2
+     * @return
+     * */
     public static double chartByID(int id1, int id2) {
         return CHART[id1][id2];
     }
+
     public static String getTypeByID(int id) {
         return TYPES[id];
     }
