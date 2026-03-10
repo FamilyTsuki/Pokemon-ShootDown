@@ -10,7 +10,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        Label label = new Label("Simulateur Pokemon - Prêt pour le combat !");
+        Label label = new Label("SHOOT DOWN!");
         Scene scene = new Scene(new StackPane(label), 640, 480);
         stage.setScene(scene);
         stage.setTitle("Pokemon ShootDown");
