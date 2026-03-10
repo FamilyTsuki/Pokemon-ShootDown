@@ -1,0 +1,38 @@
+src/main/java/com/
+│
+├── Main.java                        # Point d'entrée de l'application (lance JavaFX)
+│
+├── core/                            # Moteur logique (Indépendant de l'UI)
+│   ├── GameEngine.java              # Gère le tour par tour et l'arbitrage
+│   ├── DamageCalculator.java        # Formules de calcul (Physique/Spécial/Types)
+│   └── TypeChart.java               # Matrice des efficacités (Feu > Plante, etc.)
+│
+├── models/                          # Classes de données (POO pure)
+│   ├── Pokemon.java                 # Stats, types, nom, HP actuels
+│   ├── Move.java                    # Base pour les attaques (Puissance, Précision)
+│   ├── Type.java                    # Enum ou classe pour les types (FEU, EAU...)
+│   ├── Team.java                    # Liste de 3 à 6 Pokemons
+│   ├── Trainer.java                 # Joueur ou CPU (possède une Team)
+│   ├── Item.java                    # Classe abstraite pour les objets tenus
+│   └── Status.java                  # Interface/Enum pour (Brulure, Poison...)
+│
+├── abilities/                       # Système de Talents (Feature Additionnelle)
+│   ├── Ability.java                 # Classe abstraite
+│   └── Levitation.java, Pitchou.java
+│
+├── effects/                         # Système d'effets secondaires et objets
+│   ├── Effect.java                  # Interface pour les effets (soin, recul, stat change)
+│   └── StatModifier.java            # Gère les niveaux (-6 à +6)
+│
+├── ai/                              # Intelligence Artificielle
+│   ├── BattleAI.java                # Interface pour les stratégies
+│   └── RandomAI.java, SmartAI.java  # Implémentations (Machine à état)
+│
+├── controller/                      # Contrôleurs JavaFX (Lien entre Modèle et Vue)
+│   ├── MenuController.java          # Gestion du menu principal
+│   ├── TeamBuilderController.java   # Création d'équipe et sliders EV
+│   └── BattleController.java        # Gestion du combat et historique
+│
+└── utils/                           # Outils secondaires
+    ├── DataLoader.java              # Lecture CSV / Base de données
+    └── SoundPlayer.java             # Gestion des effets sonores
