@@ -3,7 +3,7 @@ src/main/java/com/
 ├── Main.java                        # Point d'entrée de l'application (lance JavaFX)
 │
 ├── core/                            # Moteur logique (Indépendant de l'UI)
-│   ├── GameEngine.java              # Gère le tour par tour et l'arbitrage
+│   ├── GameEngine.java  //            # Gère le tour par tour et l'arbitrage
 │   ├── DamageCalculator.java        # Formules de calcul (Physique/Spécial/Types)
 │   └── TypeChart.java               # Matrice des efficacités (Feu > Plante, etc.)
 │
