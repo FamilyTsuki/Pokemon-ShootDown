@@ -10,7 +10,7 @@ src/main/java/com/
 ├── models/                          # Classes de données (POO pure)
 │   ├── Pokemon.java                 # Stats, types, nom, HP actuels
 │   ├── Move.java                    # Base pour les attaques (Puissance, Précision)
-│   ├── Type.java                    # Enum ou classe pour les types (FEU, EAU...)
+│   ├── Type.java                    # Enum ou classe pour les types (FEU, EAU...) //OK
 │   ├── Team.java                    # Liste de 3 à 6 Pokemons
 │   ├── Trainer.java                 # Joueur ou CPU (possède une Team)
 │   ├── Item.java                    # Classe abstraite pour les objets tenus

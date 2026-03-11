@@ -1,13 +1,9 @@
 package com.pokemon.core;
 
+import com.pokemon.models.Type;
+
 public class TypeChart {
 
-    private static final String[] TYPES = {
-    "Normal", "Feu", "Eau", "Plante", "Électrik", "Glace", 
-    "Combat", "Poison", "Sol", "Vol", "Psy", "Insecte", 
-    "Roche", "Spectre", "Dragon", "Ténèbres", "Acier", "Fée"
-    };
-    
     private static final double[][] CHART = {
     // Nor  Feu  Eau  Pla  Ele  Gla  Com  Poi  Sol  Vol  Psy  Ins  Roc  Spe  Dra  Tén  Aci  Fée
     { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.0, 1.0, 1.0, 0.5, 1.0 }, // Normal
@@ -31,19 +27,13 @@ public class TypeChart {
     };
 
     /**
-     * attaquand / defandeur
-     * @param id1 
-     * @param id2
-     * @return
+     * Calcule l'efficacité d'une attaque
+     * @param attackType Le type de l'attaque
+     * @param defenderType Le type du Pokémon défenseur
+     * @return Le multiplicateur de dégâts (0.0, 0.5, 1.0, ou 2.0)
      * */
-    public static double chartByID(int id1, int id2) {
-        return CHART[id1][id2];
+    public static double getEffectiveness(Type attackType, Type defenderType) {
+        if (attackType == null || defenderType == null) return 1.0;
+        return CHART[attackType.ordinal()][defenderType.ordinal()];
     }
-
-    public static String getTypeByID(int id) {
-        return TYPES[id];
-    }
-
-
-    
 }
