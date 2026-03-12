@@ -8,10 +8,12 @@ public class Pokemon {
     private int strenght;
     private int defense;
     private int speed;
-    private Type[] type;
+    private PokemonType[] type;
     private Attack[] attacks;
+    private Object object;
 
-    public Pokemon(int id, String name, int hp, int strenght, int defense, int speed, String type, String attacks) {
+
+    public Pokemon(int id, String name, int hp, int strenght, int defense, int speed, String type, String attacks , Object object) {
         this.id = id;
         this.name = name;
         this.hp = hp;
@@ -21,6 +23,11 @@ public class Pokemon {
         this.speed = speed;
         this.type = type;
         this.attacks = attacks;
+        this.object = object;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -62,6 +69,15 @@ public class Pokemon {
     public void takeDamage(int damage) {
         this.setHp(this.hp - damage);
     }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
+    }
+
 
     @Override
     public String toString() {
