@@ -20,9 +20,9 @@ public class Attack extends Move{
         
         int finalDamage = (int) Math.round(damage);
         attacker.getItem().onAttack(attacker, defender, this);
-        defander.getItem().onReceiveDamage(defender, this, finalDamage);
+        defender.getItem().onReceiveDamage(defender, this, finalDamage);
 
-        defender.takeDamage(finalDamage);
+        attacker.takeDamage(finalDamage);
         System.out.println(defender.getName() + " took " + finalDamage + " damage!");
     }
 

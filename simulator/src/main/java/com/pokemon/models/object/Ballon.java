@@ -29,6 +29,10 @@ public class Ballon extends Item {
         return null;
     }
 
+    public double getDamageModifier(){
+        return 0.0;
+    }
+
     @Override
     public void onReceiveDamage(Pokemon pokemon, Attack attack, int damage) {
 
