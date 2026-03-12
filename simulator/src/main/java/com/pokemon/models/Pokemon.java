@@ -2,18 +2,18 @@ package com.pokemon.models;
 
 public class Pokemon {
     private String name;
-    private int hp;
+    protected int hp;
     private int maxHp;
-    private int attack;
+    private int strenght;
     private int defense;
     private int speed;
-    private String type;
+    private Type[] type;
 
-    public Pokemon(String name, int hp, int attack, int defense, int speed, String type) {
+    public Pokemon(String name, int hp, int strenght, int defense, int speed, String type) {
         this.name = name;
         this.hp = hp;
         this.maxHp = hp;
-        this.attack = attack;
+        this.strenght = strenght;
         this.defense = defense;
         this.speed = speed;
         this.type = type;
@@ -36,7 +36,7 @@ public class Pokemon {
     }
 
     public int getAttack() {
-        return attack;
+        return strenght;
     }
 
     public int getDefense() {
@@ -63,6 +63,4 @@ public class Pokemon {
     public String toString() {
         return String.format("%s (HP: %d/%d, Type: %s)", name, hp, maxHp, type);
     }
-
-    
 }

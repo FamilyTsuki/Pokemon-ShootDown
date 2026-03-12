@@ -32,9 +32,9 @@ public class Team {
     }
 
     public void setActivePokemonIndex(int index) {
-        if (index >= 0 && index < pokemons.length && !pokemons[index].isFainted()) {
-            this.activePokemonIndex = index;
-        }
+            if (index >= 0 && index < pokemons.length && !pokemons[index].isFainted()) {
+                this.activePokemonIndex = index;
+            }
     }
 
     @Override
