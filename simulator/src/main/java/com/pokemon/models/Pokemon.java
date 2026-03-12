@@ -2,7 +2,7 @@ package com.pokemon.models;
 
 public class Pokemon {
     private String name;
-    protected int hp;
+    private int hp;
     private int maxHp;
     private int strenght;
     private int defense;
@@ -62,5 +62,8 @@ public class Pokemon {
     @Override
     public String toString() {
         return String.format("%s (HP: %d/%d, Type: %s)", name, hp, maxHp, type);
+    }
+    public void damageSuffered(int damage) {
+        this.hp -= damage;
     }
 }

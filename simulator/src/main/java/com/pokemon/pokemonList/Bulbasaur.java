@@ -6,8 +6,4 @@ public class Bulbasaur extends Pokemon {
     public Bulbasaur() {
         super("Bulbasaur", 100, 25, 25, 35, "f");
     }
-    public void damageSuffered(damage) {
-        int damage;
-        this.hp -= damage;
-    }
 }
