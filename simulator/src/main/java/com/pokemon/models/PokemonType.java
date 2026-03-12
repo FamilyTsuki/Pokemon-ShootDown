@@ -21,6 +21,9 @@ public class PokemonType {
     public void addEfficiency(PokemonType target, double multiplicateur) {
         efficiency.put(target, multiplicateur);
     }
+    public double getEfficiencyAgainst(PokemonType target) {
+        return efficiency.getOrDefault(target, 1.0);
+    }
 
    
 
