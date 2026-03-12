@@ -19,6 +19,8 @@ public class Attack extends Move{
         double damage = com.pokemon.core.DamageCalculator.calculateDamage(attacker, defender, this);
         
         int finalDamage = (int) Math.round(damage);
+        attacker.getItem().onAttack(attacker, defender, this);
+        defander.getItem().onReceiveDamage(defender, this, finalDamage);
 
         defender.takeDamage(finalDamage);
         System.out.println(defender.getName() + " took " + finalDamage + " damage!");

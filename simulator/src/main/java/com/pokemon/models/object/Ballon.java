@@ -1,11 +1,11 @@
 package com.pokemon.models.object;
 
-import com.pokemon.models.Objet;
+import com.pokemon.models.Item;
 import com.pokemon.models.Pokemon;
 import com.pokemon.models.PokemonType;
 import com.pokemon.models.Attack;
 
-public class Ballon extends Objet {
+public class Ballon extends Item {
 
     private boolean active = true;
 
@@ -23,7 +23,7 @@ public class Ballon extends Objet {
     }
 
     @Override
-    public Object use(Pokemon pokemon) {
+    public Item use(Pokemon pokemon) {
         System.out.println(pokemon.getName() + " est immunisé grâce au Ballon !");
         //TODO fair que l'object ranvoi son efect
         return null;

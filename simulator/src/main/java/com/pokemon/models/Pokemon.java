@@ -10,10 +10,10 @@ public class Pokemon {
     private int speed;
     private PokemonType[] type;
     private Attack[] attacks;
-    private Object object;
+    private Item item;
 
 
-    public Pokemon(int id, String name, int hp, int strenght, int defense, int speed, PokemonType[] type, Attack[] attacks , Object object) {
+    public Pokemon(int id, String name, int hp, int strenght, int defense, int speed, PokemonType[] type, Attack[] attacks , Item item) {
         this.id = id;
         this.name = name;
         this.hp = hp;
@@ -23,7 +23,7 @@ public class Pokemon {
         this.speed = speed;
         this.type = type;
         this.attacks = attacks;
-        this.object = object;
+        this.item = item;
     }
 
     public int getId() {
@@ -70,12 +70,13 @@ public class Pokemon {
         this.setHp(this.hp - damage);
     }
 
-    public Object getObject() {
-        return object;
+    public Item getItem() {
+        if (item == null) return null;
+        return item;
     }
 
-    public void setObject(Object object) {
-        this.object = object;
+    public void setitem(Item item) {
+        this.item = item;
     }
 
 

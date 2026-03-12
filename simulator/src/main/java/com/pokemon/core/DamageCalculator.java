@@ -25,16 +25,13 @@ public class DamageCalculator {
 
     private static double calculateModifier(Pokemon attacker, Pokemon defender, PokemonType moveType) {
         double stab = 1.0;
-        if (attacker.getType().equalsIgnoreCase(moveType.getName())) {
-            stab = 1.5;
+        for (PokemonType type : attacker.getType()){
+            if (type == moveType) {
+                stab = 1.5;
+            }
         }
+        double typeEffectiveness = moveType.getEfficiencyAgainst(defender.getType());
 
-        double typeEffectiveness = 1.0;
-        PokemonType defenderType = TypeRepository.get(defender.getType());
-        
-        if (defenderType != null) {
-            typeEffectiveness = moveType.getEfficiencyAgainst(defenderType);
-        }
 
         // Random factor between 0.85 and 1.0
         double random = 0.85 + (Math.random() * (1.0 - 0.85));
@@ -43,3 +40,4 @@ public class DamageCalculator {
     }
     
 }
+

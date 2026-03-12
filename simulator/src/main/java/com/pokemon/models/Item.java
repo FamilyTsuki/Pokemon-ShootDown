@@ -1,10 +1,10 @@
 package com.pokemon.models;
 
-public abstract class Objet {
+public abstract class Item {
     private String name;
     private String description;
 
-    public Objet(String name, String description) {
+    public Item(String name, String description) {
         this.name = name;
         this.description = description;
     }

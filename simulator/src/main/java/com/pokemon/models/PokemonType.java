@@ -21,8 +21,20 @@ public class PokemonType {
     public void addEfficiency(PokemonType target, double multiplicateur) {
         efficiency.put(target, multiplicateur);
     }
-    public double getEfficiencyAgainst(PokemonType target) {
-        return efficiency.getOrDefault(target, 1.0);
+    
+    public double getEfficiencyAgainst(PokemonType[] target) {
+        for (PokemonType type : target) {
+            if (efficiency.containsKey(type)) {
+                return efficiency.get(type);
+            }
+        }
+        return 1.0;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    
     }
 
    
