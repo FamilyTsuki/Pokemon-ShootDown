@@ -29,7 +29,7 @@ public class Ballon extends Item {
         return null;
     }
 
-    public double getDamageModifier(){
+    public double getDamageModifier(Pokemon defender,Pokemon attacker,Attack attack){
         return 0.0;
     }
 

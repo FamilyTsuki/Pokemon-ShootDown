@@ -16,6 +16,9 @@ public abstract class Item {
     public String getDescription() {
         return description;
     }
+    public double getDamageModifier(Pokemon defender,Pokemon attacker,Attack attack){
+        return 1;
+    }
     public abstract void onTurnStart(Pokemon pokemon);
 
     public abstract void onTurnEnd(Pokemon pokemon);
