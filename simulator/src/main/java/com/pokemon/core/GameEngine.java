@@ -1,21 +1,23 @@
 package com.pokemon.core;
 
+import com.pokemon.models.Attack;
+import com.pokemon.models.Pokemon;
+
 public class GameEngine {
     private boolean running;
     private final int FPS = 60;
     private final long TARGET_TIME = 1000 / FPS;
 
-    public GameEngine() {
+    private BattleEngine battleEngine; 
+
+    public GameEngine(BattleEngine logic) {
+        this.battleEngine = logic;
         this.running = false;
     }
 
     public void start() {
         running = true;
         gameLoop();
-    }
-
-    public void stop() {
-        running = false;
     }
 
     private void gameLoop() {
@@ -29,22 +31,22 @@ public class GameEngine {
             long sleepTime = TARGET_TIME - timeTaken;
 
             if (sleepTime > 0) {
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                try { Thread.sleep(sleepTime); } 
+                catch (InterruptedException e) { e.printStackTrace(); }
             }
         }
     }
 
     private void update() {
-        //TODO Logic for updating game state
+  
+        if (battleEngine.hasPendingAction()) {
+            battleEngine.executeNextStep();
+        }
     }
 
     private void render() {
-        //TODO Logic for rendering the game
+        // C'est ici que tu demandes à JavaFX de rafraîchir 
+        // les barres de vie (HP) ou l'historique.
+        // ex: uiController.updateUI();
     }
-    
-
 }

@@ -46,8 +46,12 @@ public class Pokemon {
         return maxHp;
     }
 
-    public int getAttack() {
+    public int getStrenght() {
         return strenght;
+    }
+
+    public Attack[] getAttacks() {
+        return attacks;
     }
 
     public int getDefense() {

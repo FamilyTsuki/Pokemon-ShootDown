@@ -17,7 +17,7 @@ public class DamageCalculator {
 
     double baseDamage = ((((2.0 * 50.0 / 5.0) + 2.0) 
                         * attack.getPower() 
-                        * ((double) attacker.getAttack() / defender.getDefense())) 
+                        * ((double) attacker.getStrenght() / defender.getDefense())) 
                         / 50.0) + 2.0;
 
     double modifier = calculateModifier(attacker, defender, attack.getType());
