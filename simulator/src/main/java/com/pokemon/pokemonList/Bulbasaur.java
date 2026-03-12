@@ -4,6 +4,6 @@ import com.pokemon.models.Pokemon;
 
 public class Bulbasaur extends Pokemon {
     public Bulbasaur() {
-        super("Bulbasaur", 100, 25, 25, 35, "f");
+        super(001, "Bulbasaur", 100, 25, 25, 35, "f", "f");
     }
 }

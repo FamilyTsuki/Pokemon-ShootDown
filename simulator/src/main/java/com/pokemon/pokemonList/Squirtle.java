@@ -4,6 +4,6 @@ import com.pokemon.models.Pokemon;
 
 public class Squirtle extends Pokemon {
     public Squirtle() {
-        super("Squirtle", 100, 25, 25, 35, "f");
+        super(007,"Squirtle", 100, 25, 25, 35, "f","f");
     }
 }

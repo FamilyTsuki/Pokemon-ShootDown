@@ -1,6 +1,7 @@
 package com.pokemon.models;
 
 public class Pokemon {
+    private int id;
     private String name;
     private int hp;
     private int maxHp;
@@ -8,8 +9,10 @@ public class Pokemon {
     private int defense;
     private int speed;
     private Type[] type;
+    private Attack[] attacks;
 
-    public Pokemon(String name, int hp, int strenght, int defense, int speed, String type) {
+    public Pokemon(int id, String name, int hp, int strenght, int defense, int speed, String type, String attacks) {
+        this.id = id;
         this.name = name;
         this.hp = hp;
         this.maxHp = hp;
@@ -17,6 +20,7 @@ public class Pokemon {
         this.defense = defense;
         this.speed = speed;
         this.type = type;
+        this.attacks = attacks;
     }
 
     public String getName() {
