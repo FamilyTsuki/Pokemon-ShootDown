@@ -67,7 +67,4 @@ public class Pokemon {
     public String toString() {
         return String.format("%s (HP: %d/%d, Type: %s)", name, hp, maxHp, type);
     }
-    public void damageSuffered(int damage) {
-        this.hp -= damage;
-    }
 }
