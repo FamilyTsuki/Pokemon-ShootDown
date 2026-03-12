@@ -13,7 +13,7 @@ public class Pokemon {
     private Object object;
 
 
-    public Pokemon(int id, String name, int hp, int strenght, int defense, int speed, String type, String attacks , Object object) {
+    public Pokemon(int id, String name, int hp, int strenght, int defense, int speed, String type, Attack[] attacks , Object object) {
         this.id = id;
         this.name = name;
         this.hp = hp;
@@ -58,7 +58,7 @@ public class Pokemon {
         return speed;
     }
 
-    public String getType() {
+    public PokemonType[] getType() {
         return type;
     }
 
