@@ -36,9 +36,4 @@ public class PokemonType {
         return name;
     
     }
-
-   
-
-    
-
 }
