@@ -1,5 +1,6 @@
 package com.pokemon.status;
 
+import com.pokemon.models.Pokemon;
 import com.pokemon.models.Status;
 
 public class Paralyse extends Status {
@@ -9,9 +10,16 @@ public class Paralyse extends Status {
                         "et vois sa vitesse etre diviser par 2"
                 );
     }
-    public int effect(int speed){
-        speed = (int)(speed / 2);
+
+    public void onTurnStart(Pokemon pokemon) {
         int rightattack = (int)(Math.random() * (4 - 1 + 1) + 1);
-        return rightattack + speed;
+        if (rightattack == 1) {
+            //faire en sorte que cela l'empeche d'attaque durant le tour
+        }
+        //modif la vitesse
+    }
+
+    public void onTurnEnd(Pokemon pokemon) {
+        pokemon.setHp((int)(pokemon.getHp() * 0.9375));
     }
 }

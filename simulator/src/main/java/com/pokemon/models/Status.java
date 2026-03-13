@@ -1,6 +1,6 @@
 package com.pokemon.models;
 
-public class Status {
+public abstract class Status {
     String name;
     String description;
     public Status(String name, String description){
@@ -23,4 +23,7 @@ public class Status {
     public String getDescription() {
         return this.description;
     }
+    public abstract void onTurnStart(Pokemon pokemon);
+
+    public abstract void onTurnEnd(Pokemon pokemon);
 }
