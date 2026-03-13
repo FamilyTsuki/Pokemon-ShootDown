@@ -1,7 +1,4 @@
 package com.pokemon.models;
-import com.pokemon.models.Move;
-import com.pokemon.models.Pokemon;
-import com.pokemon.models.PokemonType;
 
 public class Attack extends Move{
     public Attack(String name, int power, int accuracy, PokemonType type, String category) {
