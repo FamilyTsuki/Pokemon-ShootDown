@@ -22,9 +22,4 @@ public class Attack extends Move{
         attacker.takeDamage(finalDamage);
         System.out.println(defender.getName() + " took " + finalDamage + " damage!");
     }
-
-
-
-
-    
 }
