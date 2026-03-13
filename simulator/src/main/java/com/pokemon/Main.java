@@ -15,23 +15,17 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    @Override
+    public void start(Stage stage) throws Exception {
+        // On charge l'écran de démarrage au lieu du combat
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/pokemon/views/start_view.fxml"));
+        Parent root = loader.load();
 
-public void start(Stage stage) throws Exception {
-    
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/pokemon/views/battle_view.fxml"));
-    Parent root = loader.load();
-
-    BattleController controller = loader.getController();
-
-    Pokemon playerPkm = new Blastoise();
-    Pokemon cpuPkm = new Blastoise();
-
-    controller.setupBattle(playerPkm, cpuPkm);
-
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
-}
+        Scene scene = new Scene(root);
+        stage.setTitle("Pokémon ShootDown - Accueil");
+        stage.setScene(scene);
+        stage.show();
+    }
 
     public static void main(String[] args) {
         launch();

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx" 
+           xmlns:fx="http://javafx.com/fxml" 
+           fx:controller="com.pokemon.controllers.StartController"
+           prefHeight="600.0" prefWidth="800.0" 
+           style="-fx-background-color: #2c3e50;">
+
+    <VBox alignment="CENTER" spacing="40">
+        <Label text="POKÉMON SHOOTDOWN" 
+               style="-fx-text-fill: #f1c40f; -fx-font-size: 45px; -fx-font-weight: bold;"/>
+
+        <Button text="COMMENCER" 
+                onAction="#handleStart" 
+                prefWidth="250" prefHeight="60"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 20px; -fx-cursor: hand;"/>
+
+        <Button text="QUITTER" 
+                onAction="#handleQuit" 
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+    </VBox>
+</StackPane>
