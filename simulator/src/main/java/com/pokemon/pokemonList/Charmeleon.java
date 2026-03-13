@@ -1,7 +1,11 @@
 package com.pokemon.pokemonList;
 
+import com.pokemon.models.Attack;
 import com.pokemon.models.Pokemon;
 import com.pokemon.models.PokemonType;
+import com.pokemon.models.attack.Ember;
+import com.pokemon.models.attack.Fire_Blast;
+import com.pokemon.models.attack.Scratch;
 
 public class Charmeleon extends Pokemon {
     public Charmeleon() {
@@ -13,7 +17,14 @@ public class Charmeleon extends Pokemon {
                 15,
                 new PokemonType[]{PokemonType.FIRE},
                 null,
-                null
+                null,
+                new Attack[]{ 
+                    new Scratch(), 
+                    new Ember(), 
+                    new Fire_Blast() 
+                },
+                80,
+                65
         );
     }
 }

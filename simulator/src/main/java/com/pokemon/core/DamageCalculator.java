@@ -17,7 +17,7 @@ public class DamageCalculator {
 
     double baseDamage = ((((2.0 * 50.0 / 5.0) + 2.0) 
                         * attack.getPower() 
-                        * ((double) attacker.getStrenght() / defender.getDefense())) 
+                        * ((double) attacker.getAttack() / defender.getDefense())) 
                         / 50.0) + 2.0;
 
     double modifier = calculateModifier(attacker, defender, attack.getType());
@@ -35,12 +35,12 @@ public class DamageCalculator {
 
     private static double calculateModifier(Pokemon attacker, Pokemon defender, PokemonType moveType) {
         double stab = 1.0;
-        for (PokemonType type : attacker.getType()){
+        for (PokemonType type : attacker.getTypes()){
             if (type == moveType) {
                 stab = 1.5;
             }
         }
-        double typeEffectiveness = moveType.getEfficiencyAgainst(defender.getType());
+        double typeEffectiveness = moveType.getEfficiencyAgainst(defender.getTypes());
 
 
         double random = 0.85 + (Math.random() * (1.0 - 0.85));

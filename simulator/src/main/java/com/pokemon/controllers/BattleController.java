@@ -58,7 +58,6 @@ private void handleMove(ActionEvent event) {
     Button clickedButton = (Button) event.getSource();
     Attack selectedAttack = null;
 
-    // On identifie l'attaque correspondante au bouton
     if (clickedButton == move1) selectedAttack = activePlayerPokemon.getAttacks()[0];
     else if (clickedButton == move2) selectedAttack = activePlayerPokemon.getAttacks()[1];
     else if (clickedButton == move3) selectedAttack = activePlayerPokemon.getAttacks()[2];
@@ -114,10 +113,10 @@ private void toggleLog() {
     TranslateTransition transition = new TranslateTransition(Duration.millis(300), logPane);
     
     if (isLogVisible) {
-        transition.setToX(300); // On le cache vers la droite
+        transition.setToX(300); 
         toggleLogBtn.setText("◀");
     } else {
-        transition.setToX(0); // On le ramène à sa position normale
+        transition.setToX(0);
         toggleLogBtn.setText("▶");
     }
     
