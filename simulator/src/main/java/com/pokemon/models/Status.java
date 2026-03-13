@@ -18,4 +18,20 @@ public class Status {
     public String getDescription() {
         return this.description;
     }
+    public void updateDuration(){
+        if (this.duration > 0) {
+            this.duration--;
+        }
+    }
+    public void getStatusAply(){
+        if (duration <= 0) {
+            System.out.println("status");
+        }
+    }
+    public boolean isExpired() {
+        return duration == 0;
+    }
+    public void Setduration(int duration){
+        this.duration += duration;
+    }
 }
