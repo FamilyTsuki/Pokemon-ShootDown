@@ -4,7 +4,7 @@ import com.pokemon.models.Status;
 
 public class Burn extends Status {
     public Burn(){
-        super("Burn", 3,
+        super("Burn",
                 "a chaque tour le pokemon perd 1/16 de sa vie");
     }
     public int damage(int vie){

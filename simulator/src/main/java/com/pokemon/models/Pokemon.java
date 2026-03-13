@@ -12,8 +12,16 @@ public class Pokemon {
     private Attack[] attacks;
     private Item item;
 
-
-    public Pokemon(int id, String name, int hp, int strenght, int defense, int speed, PokemonType[] type, Attack[] attacks , Item item) {
+    public Pokemon(int id,
+                   String name,
+                   int hp,
+                   int strenght,
+                   int defense,
+                   int speed,
+                   PokemonType[] type,
+                   Attack[] attacks ,
+                   Item item
+                ) {
         this.id = id;
         this.name = name;
         this.hp = hp;
