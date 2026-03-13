@@ -2,36 +2,25 @@ package com.pokemon.models;
 
 public class Status {
     String name;
-    int duration;
     String description;
-    public Status(String name, int duration, String description){
+    public Status(String name, String description){
         this.name = name;
-        this.duration = duration;
         this.description = description;
     }
-    public int getDuration() {
-        return this.duration;
+    public static String[] statusInit(){
+        String[] statusList = new String[3];
+        statusList[0] = "Paralyse";
+        statusList[1] = "Burn";
+        statusList[2] = "poison";
+        return statusList;
+    }
+    public boolean getStatusActif(){
+        return true;
     }
     public String getName() {
         return this.name;
     }
     public String getDescription() {
         return this.description;
-    }
-    public void updateDuration(){
-        if (this.duration > 0) {
-            this.duration--;
-        }
-    }
-    public void getStatusAply(){
-        if (duration <= 0) {
-            System.out.println("status");
-        }
-    }
-    public boolean isExpired() {
-        return duration == 0;
-    }
-    public void Setduration(int duration){
-        this.duration += duration;
     }
 }
