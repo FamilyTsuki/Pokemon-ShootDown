@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.pokemon.controllers.TeamBuilderController"
+      prefHeight="700.0" prefWidth="800.0" spacing="20" 
+      style="-fx-background-color: #2c3e50;" alignment="TOP_CENTER">
+
+    <padding>
+        <Insets top="30" bottom="30" left="20" right="20"/>
+    </padding>
+
+    <Label text="FORMATION DE L'ÉQUIPE (6 POKÉMON)" 
+           style="-fx-text-fill: #f1c40f; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+    <Separator opacity="0.2" prefWidth="600"/>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" prefHeight="450.0">
+        <VBox spacing="15" alignment="CENTER">
+            
+            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
+                <Label text="1." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="pkm1" prefWidth="180" promptText="Choisir Pokémon"/>
+                <ComboBox fx:id="item1" prefWidth="150" promptText="Choisir Objet"/>
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
+                <Label text="2." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="pkm2" prefWidth="180" promptText="Choisir Pokémon"/>
+                <ComboBox fx:id="item2" prefWidth="150" promptText="Choisir Objet"/>
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
+                <Label text="3." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="pkm3" prefWidth="180" promptText="Choisir Pokémon"/>
+                <ComboBox fx:id="item3" prefWidth="150" promptText="Choisir Objet"/>
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
+                <Label text="4." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="pkm4" prefWidth="180" promptText="Choisir Pokémon"/>
+                <ComboBox fx:id="item4" prefWidth="150" promptText="Choisir Objet"/>
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
+                <Label text="5." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="pkm5" prefWidth="180" promptText="Choisir Pokémon"/>
+                <ComboBox fx:id="item5" prefWidth="150" promptText="Choisir Objet"/>
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
+                <Label text="6." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="pkm6" prefWidth="180" promptText="Choisir Pokémon"/>
+                <ComboBox fx:id="item6" prefWidth="150" promptText="Choisir Objet"/>
+            </HBox>
+
+        </VBox>
+    </ScrollPane>
+
+    <HBox spacing="30" alignment="CENTER">
+        <Button text="RETOUR" onAction="#handleBack"
+                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        
+        <Button text="LANCER LE COMBAT" onAction="#handleStartBattle" 
+                prefWidth="250" prefHeight="50"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+    </HBox>
+
+</VBox>
