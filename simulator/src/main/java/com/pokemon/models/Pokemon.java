@@ -5,25 +5,44 @@ public class Pokemon {
     private String name;
     private int hp;
     private int maxHp;
-    private int strenght;
+    private int attack;
     private int defense;
     private int speed;
     private PokemonType[] type;
     private Attack[] attacks;
+    private Attack[] learble;
     private Item item;
+    private int spAttack;
+    private int spDefense;
 
 
-    public Pokemon(int id, String name, int hp, int strenght, int defense, int speed, PokemonType[] type, Attack[] attacks , Item item) {
+
+    public Pokemon(int id, String name, int hp, int attack, int defense, int speed, PokemonType[] type, Attack[] attacks , Item item, Attack[] learble, int spAttack, int spDefense) {
         this.id = id;
         this.name = name;
         this.hp = hp;
         this.maxHp = hp;
-        this.strenght = strenght;
+        this.attack = attack;
         this.defense = defense;
         this.speed = speed;
         this.type = type;
         this.attacks = attacks;
         this.item = item;
+        this.learble = learble;
+        this.spAttack = spAttack;
+        this.spDefense = spDefense;
+
+
+    }
+
+    public Attack[] getLearble() {
+        return learble;
+    }
+    public void setAttack(Attack attack) {
+        if (this.attacks.length < 4) {
+            this.attacks = new Attack[this.attacks.length +1];
+            this.attacks[this.attacks.length -1] = attack;
+        }
     }
 
     public int getId() {
@@ -46,8 +65,8 @@ public class Pokemon {
         return maxHp;
     }
 
-    public int getStrenght() {
-        return strenght;
+    public int getAttack() {
+        return attack;
     }
 
     public Attack[] getAttacks() {
@@ -62,7 +81,7 @@ public class Pokemon {
         return speed;
     }
 
-    public PokemonType[] getType() {
+    public PokemonType[] getTypes() {
         return type;
     }
 
@@ -77,6 +96,17 @@ public class Pokemon {
     public Item getItem() {
         if (item == null) return null;
         return item;
+    }
+
+    public int getSpAttack() {
+        return spAttack;
+    }
+
+    public int getSpDefense() {
+        return spDefense;
+    }
+    public void setAttacks(Attack[] attacks) {
+        this.attacks = attacks;
     }
 
     public void setitem(Item item) {

@@ -1,52 +1,83 @@
 package com.pokemon.controllers;
 
 import com.pokemon.models.Pokemon;
-import com.pokemon.pokemonList.*; // Importe tes classes de Pokémon
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 
 public class TeamBuilderController {
+
+    @FXML private Button slot1Btn, slot2Btn, slot3Btn, slot4Btn, slot5Btn, slot6Btn;
     
-    @FXML private ComboBox<String> pkm1, pkm2, pkm3, pkm4, pkm5, pkm6;
-    @FXML private ComboBox<String> item1, item2, item3, item4, item5, item6;
+    private Pokemon[] team = new Pokemon[6];
 
     @FXML
-    public void initialize() {
+    private void handleSelectPokemon(ActionEvent event) {
+        Button clickedBtn = (Button) event.getSource();
+        
 
-        String[] pokemonOptions = {"Blastoise", "Charizard", "Venusaur"};
-        String[] itemOptions = {"Leftovers", "Life Orb", "Choice Band"};
+        String id = clickedBtn.getId();
+        if (id == null) return; 
+        int slotIndex = Integer.parseInt(id.replaceAll("[^0-9]", "")) - 1;
 
-        ComboBox<String>[] pkmSelectors = new ComboBox[]{pkm1, pkm2, pkm3, pkm4, pkm5, pkm6};
-        ComboBox<String>[] itemSelectors = new ComboBox[]{item1, item2, item3, item4, item5, item6};
+        try {
+            FXMLLoader selectorLoader = new FXMLLoader(getClass().getResource("/com/pokemon/views/pokemon_selector.fxml"));
+            Parent selectorRoot = selectorLoader.load();
+            PokemonSelectorController selectorCtrl = selectorLoader.getController();
+            
+            Stage selectorStage = new Stage();
+            selectorStage.initModality(Modality.APPLICATION_MODAL);
+            selectorStage.setScene(new Scene(selectorRoot));
+            selectorStage.showAndWait(); 
+            
+            Pokemon chosenFromList = selectorCtrl.getSelectedPokemon();
+            System.out.println(selectorCtrl.getSelectedPokemon());
+            if (chosenFromList != null) {
 
-        for (int i = 0; i < 6; i++) {
-            if (pkmSelectors[i] != null) pkmSelectors[i].getItems().addAll(pokemonOptions);
-            if (itemSelectors[i] != null) itemSelectors[i].getItems().addAll(itemOptions);
+                FXMLLoader editorLoader = new FXMLLoader(getClass().getResource("/com/pokemon/views/pokemon_editor.fxml"));
+                Parent editorRoot = editorLoader.load();
+                PokemonEditorController editorCtrl = editorLoader.getController();
+                
+                editorCtrl.setPokemon(chosenFromList); 
+
+                Stage editorStage = new Stage();
+                editorStage.initModality(Modality.APPLICATION_MODAL);
+                editorStage.setScene(new Scene(editorRoot));
+                editorStage.showAndWait(); 
+
+                if (editorCtrl.isSaveClicked()) {
+                    Pokemon finalPokemon = editorCtrl.getSelectedPokemon();
+                    this.team[slotIndex] = finalPokemon;
+                    
+
+                    clickedBtn.setText(finalPokemon.getName().toUpperCase());
+                    clickedBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: #f1c40f; -fx-border-width: 2;");
+                    
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @FXML
     private void handleStartBattle(ActionEvent event) throws IOException {
-        
-        String selected = pkm1.getValue();
-        if (selected == null) selected = "Blastoise";
-
-        // Création du Pokémon choisi
-        Pokemon playerPkm = createPokemonInstance(selected);
-        Pokemon cpuPkm = new Charizard();
+        if (team[0] == null) {
+            System.out.println("Erreur: Choisissez au moins un Pokémon !");
+            return;
+        }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/pokemon/views/battle_view.fxml"));
         Parent root = loader.load();
-
         BattleController battleCtrl = loader.getController();
-        battleCtrl.setupBattle(playerPkm, cpuPkm);
+        
+        battleCtrl.setupBattle(team[0], new com.pokemon.pokemonList.Charizard());
 
         Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -58,13 +89,5 @@ public class TeamBuilderController {
         Parent root = loader.load();
         Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
-    }
-
-    private Pokemon createPokemonInstance(String name) {
-        return switch (name) {
-            case "Charizard" -> new Charizard();
-            case "Venusaur" -> new Venusaur();
-            default -> new Blastoise();
-        };
     }
 }

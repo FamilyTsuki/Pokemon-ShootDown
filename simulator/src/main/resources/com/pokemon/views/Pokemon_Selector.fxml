@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="600.0" prefWidth="600.0" spacing="10" style="-fx-background-color: #f0f0f0;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.pokemon.controllers.PokemonSelectorController">
+    <padding><javafx.geometry.Insets top="10" bottom="10" left="10" right="10"/></padding>
+    
+    <TextField fx:id="searchField" promptText="Search Pokémon..." />
+    
+    <TableView fx:id="pokemonTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="img" prefWidth="40" />
+            <TableColumn fx:id="nameCol" text="Name" prefWidth="150" />
+            <TableColumn fx:id="typeCol" text="Types" prefWidth="120" />
+            <TableColumn fx:id="hpCol" text="HP" prefWidth="40" />
+            <TableColumn fx:id="atkCol" text="Atk" prefWidth="40" />
+            <TableColumn fx:id="defCol" text="Def" prefWidth="40" />
+            <TableColumn fx:id="spaCol" text="SpA" prefWidth="40" />
+            <TableColumn fx:id="spdCol" text="SpD" prefWidth="40" />
+            <TableColumn fx:id="speCol" text="Spe" prefWidth="40" />
+        </columns>
+    </TableView>
+</VBox>
