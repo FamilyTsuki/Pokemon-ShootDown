@@ -95,18 +95,27 @@ public class PokemonEditorController {
 
     private void setupMoveComboBoxes(Pokemon pokemon) {
         ObservableList<String> attackNames = FXCollections.observableArrayList();
+
         if (pokemon.getLearble() != null) {
             for (Attack move : pokemon.getLearble()) {
-                if (move != null) attackNames.add(move.getName());
+                if (move != null) {
+                    attackNames.add(move.getName());
+                }
             }
         }
-        move1.setItems(attackNames); move2.setItems(attackNames);
-        move3.setItems(attackNames); move4.setItems(attackNames);
-        
-        if (attackNames.size() >= 4) {
-            move1.getSelectionModel().select(0); move2.getSelectionModel().select(1);
-            move3.getSelectionModel().select(2); move4.getSelectionModel().select(3);
-        }
+        move1.setItems(attackNames);
+        move2.setItems(attackNames);
+        move3.setItems(attackNames);
+        move4.setItems(attackNames);
+        int count = attackNames.size();
+        if (count > 0) move1.getSelectionModel().select(0);
+        if (count > 1) move2.getSelectionModel().select(1);
+        if (count > 2) move3.getSelectionModel().select(2);
+        if (count > 3) move4.getSelectionModel().select(3);
+
+        move2.setDisable(count < 2);
+        move3.setDisable(count < 3);
+        move4.setDisable(count < 4);
     }
 
     private void saveMoves() {

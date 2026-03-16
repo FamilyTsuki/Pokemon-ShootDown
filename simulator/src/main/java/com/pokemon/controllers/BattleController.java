@@ -40,6 +40,8 @@ public class BattleController {
     private final BattleEngine engine = new BattleEngine();
     private boolean isSwitchMenuVisible = false;
     private boolean isLogVisible = false;
+    private int turnCount = 1;
+    
 
     public void setupBattle(Team playerTeam, Team cpuTeam) {
         this.playerTeam = playerTeam;
@@ -76,42 +78,58 @@ public class BattleController {
     }
 
     private void executeTurnSequence(Pokemon first, Pokemon second, Attack atk1, Attack atk2) {
-        processAttack(first, second, atk1);
-        
-        if (second.isFainted()) {
-            PauseTransition shortPause = new PauseTransition(Duration.seconds(1.0));
-            shortPause.setOnFinished(e -> {
-                if (activePlayer.isFainted()) disableUI(false); 
-                checkBattleStatus();
-            });
-            shortPause.play();
-            return;
-        }
+    battleLog.appendText("\n=== TOUR " + turnCount + " ====\n");
+    
+    battleLog.appendText("[INFO] " + first.getName() + " est plus rapide (Vitesse: " + first.getSpeed() + ")\n");
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
-        delay.setOnFinished(e -> {
-            processAttack(second, first, atk2);
-            
-            PauseTransition endDelay = new PauseTransition(Duration.seconds(1.0));
-            endDelay.setOnFinished(ev -> {
-                if (activePlayer.isFainted()) disableUI(false); 
-                checkBattleStatus(); 
-                if (!activePlayer.isFainted() && !activeCpu.isFainted()) {
-                    disableUI(false);
-                }
-            });
-            endDelay.play();
+    processAttack(first, second, atk1);
+    
+    if (second.isFainted()) {
+        turnCount++;
+        PauseTransition shortPause = new PauseTransition(Duration.seconds(1.0));
+        shortPause.setOnFinished(e -> {
+            if (activePlayer.isFainted()) disableUI(false); 
+            checkBattleStatus();
         });
-        delay.play();
+        shortPause.play();
+        return;
     }
+
+    PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
+    delay.setOnFinished(e -> {
+        processAttack(second, first, atk2);
+        
+        PauseTransition endDelay = new PauseTransition(Duration.seconds(1.0));
+        endDelay.setOnFinished(ev -> {
+            turnCount++;
+            if (activePlayer.isFainted()) disableUI(false); 
+            checkBattleStatus(); 
+            if (!activePlayer.isFainted() && !activeCpu.isFainted()) {
+                disableUI(false);
+            }
+        });
+        endDelay.play();
+    });
+    delay.play();
+}
 
     private void processAttack(Pokemon attacker, Pokemon target, Attack move) {
-        int damage = engine.applyDamage(attacker, target, move);
-        battleLog.appendText(attacker.getName() + " utilise " + move.getName() + " !\n");
-        battleLog.appendText("  -> " + target.getName() + " perd " + damage + " PV.\n");
-        if (target.isFainted()) battleLog.appendText("  -> " + target.getName() + " est KO !\n");
-        refreshUI();
+    
+    int damage = engine.applyDamage(attacker, target, move);
+    
+    String efficacite = ""; 
+    if (damage > 20) efficacite = " (C'est efficace !)";
+    else if (damage < 10 && damage > 0) efficacite = " (Ce n'est pas très efficace...)";
+
+    battleLog.appendText("• " + attacker.getName() + " utilise " + move.getName() + efficacite + "\n");
+    battleLog.appendText("   -> " + target.getName() + " perd " + damage + " PV.\n");
+
+    if (target.isFainted()) {
+        battleLog.appendText("   -> " + target.getName() + " est KO !\n");
     }
+
+    refreshUI();
+}
 
     private void checkBattleStatus() {
         if (activeCpu.isFainted()) {
@@ -156,28 +174,33 @@ public class BattleController {
     }
 
     private void refreshUI() {
-        playerHPBar.setProgress((double) activePlayer.getHp() / activePlayer.getMaxHp());
-        playerHPText.setText(activePlayer.getHp() + " / " + activePlayer.getMaxHp());
-        cpuHPBar.setProgress((double) activeCpu.getHp() / activeCpu.getMaxHp());
-        cpuHPText.setText(activeCpu.getHp() + " / " + activeCpu.getMaxHp());
-        
-        playerNameLabel.setText(activePlayer.getName().toUpperCase());
-        cpuNameLabel.setText(activeCpu.getName().toUpperCase());
+    
+    playerHPBar.setProgress((double) activePlayer.getHp() / activePlayer.getMaxHp());
+    playerHPText.setText(activePlayer.getHp() + " / " + activePlayer.getMaxHp());
+    cpuHPBar.setProgress((double) activeCpu.getHp() / activeCpu.getMaxHp());
+    cpuHPText.setText(activeCpu.getHp() + " / " + activeCpu.getMaxHp());
+    
+    playerNameLabel.setText(activePlayer.getName().toUpperCase());
+    cpuNameLabel.setText(activeCpu.getName().toUpperCase());
 
-        updateCpuIcons();
-        boolean alive = !activePlayer.isFainted();
-        move1.setVisible(alive && activePlayer.getAttacks().length > 0 && activePlayer.getAttacks()[0] != null);
-        move2.setVisible(alive && activePlayer.getAttacks().length > 1 && activePlayer.getAttacks()[1] != null);
-        move3.setVisible(alive && activePlayer.getAttacks().length > 2 && activePlayer.getAttacks()[2] != null);
-        move4.setVisible(alive && activePlayer.getAttacks().length > 3 && activePlayer.getAttacks()[3] != null);
+    updateCpuIcons();
 
-        if (alive) {
-            move1.setText(activePlayer.getAttacks()[0].getName());
-            if (activePlayer.getAttacks()[1] != null) move2.setText(activePlayer.getAttacks()[1].getName());
-            if (activePlayer.getAttacks()[2] != null) move3.setText(activePlayer.getAttacks()[2].getName());
-            if (activePlayer.getAttacks()[3] != null) move4.setText(activePlayer.getAttacks()[3].getName());
+    Button[] btns = {move1, move2, move3, move4};
+    Attack[] atks = activePlayer.getAttacks();
+
+    boolean alive = !activePlayer.isFainted();
+
+    for (int i = 0; i < 4; i++) {
+        if (alive && atks != null && i < atks.length && atks[i] != null) {
+            btns[i].setText(atks[i].getName());
+            btns[i].setVisible(true);
+            btns[i].setManaged(true);
+        } else {
+            btns[i].setVisible(false);
+            btns[i].setManaged(false);
         }
     }
+}
 
     @FXML
     private void handleSwitch(ActionEvent event) {
