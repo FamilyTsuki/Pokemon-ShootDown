@@ -1,4 +1,4 @@
-package com.pokemon.models.object;
+package com.pokemon.models.items;
 
 import com.pokemon.models.Item;
 import com.pokemon.models.Pokemon;

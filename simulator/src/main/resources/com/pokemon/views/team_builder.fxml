@@ -24,37 +24,31 @@
             <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
                 <Label text="1." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
                 <Button fx:id="slot1Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item1" prefWidth="150" promptText="Choisir Objet"/>
             </HBox>
 
             <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
                 <Label text="2." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
                 <Button fx:id="slot2Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item2" prefWidth="150" promptText="Choisir Objet"/>
             </HBox>
 
             <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
                 <Label text="3." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
                 <Button fx:id="slot3Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item3" prefWidth="150" promptText="Choisir Objet"/>
             </HBox>
 
             <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
                 <Label text="4." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
                 <Button fx:id="slot4Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item4" prefWidth="150" promptText="Choisir Objet"/>
             </HBox>
 
             <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
                 <Label text="5." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
                 <Button fx:id="slot5Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item5" prefWidth="150" promptText="Choisir Objet"/>
             </HBox>
 
             <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
                 <Label text="6." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
                 <Button fx:id="slot6Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item6" prefWidth="150" promptText="Choisir Objet"/>
             </HBox>
 
         </VBox>

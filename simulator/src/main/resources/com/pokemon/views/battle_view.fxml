@@ -1,53 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.ImageView?>
 
-<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+<StackPane fx:id="battleStackPane" xmlns="http://javafx.com/javafx" 
+           xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.pokemon.controllers.BattleController"
-           prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #2c3e50;">
+           prefHeight="600.0" prefWidth="800.0" 
+           style="-fx-background-color: #2c3e50;">
 
-    <VBox spacing="10">
+    <VBox fx:id="mainBattleArea" spacing="10">
+        <AnchorPane>
+            <HBox fx:id="cpuTeamStatus" spacing="5" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="10" />
+        </AnchorPane>
+
         <HBox prefHeight="350.0" spacing="100" alignment="CENTER">
             <padding><Insets top="20" bottom="20" left="20" right="20"/></padding>
             
             <VBox alignment="BOTTOM_CENTER" spacing="5">
-                <Label fx:id="playerNameLabel" text="Nom" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                <ProgressBar fx:id="playerHPBar" prefWidth="150" progress="1.0" style="-fx-accent: green;"/>
+                <Label fx:id="playerNameLabel" text="Joueur" 
+                       style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;"/>
+                <ProgressBar fx:id="playerHPBar" prefWidth="200" progress="1.0" 
+                             style="-fx-accent: #2ecc71;"/>
                 <Label fx:id="playerHPText" text="100/100" style="-fx-text-fill: white;"/>
-                <ImageView fx:id="playerSprite" fitHeight="150" fitWidth="150" />
+                <ImageView fx:id="playerSprite" fitHeight="180" fitWidth="180" preserveRatio="true" />
             </VBox>
 
             <VBox alignment="TOP_CENTER" spacing="5">
-                <ImageView fx:id="cpuSprite" fitHeight="150" fitWidth="150" />
-                <Label fx:id="cpuNameLabel" text="CPU" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                <ProgressBar fx:id="cpuHPBar" prefWidth="150" progress="1.0" style="-fx-accent: red;"/>
+                <ImageView fx:id="cpuSprite" fitHeight="180" fitWidth="180" preserveRatio="true" />
+                <Label fx:id="cpuNameLabel" text="CPU" 
+                       style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;"/>
+                <ProgressBar fx:id="cpuHPBar" prefWidth="200" progress="1.0" 
+                             style="-fx-accent: #e74c3c;"/>
                 <Label fx:id="cpuHPText" text="100/100" style="-fx-text-fill: white;"/>
             </VBox>
         </HBox>
 
-        <Separator/>
-
-        <HBox spacing="20" alignment="CENTER" prefHeight="200.0">
-            <GridPane hgap="10" vgap="10">
-                <Button fx:id="move1" prefWidth="120" prefHeight="50" onAction="#handleMove" text="Attaque 1"/>
-                <Button fx:id="move2" prefWidth="120" prefHeight="50" onAction="#handleMove" text="Attaque 2" GridPane.columnIndex="1"/>
-                <Button fx:id="move3" prefWidth="120" prefHeight="50" onAction="#handleMove" text="Attaque 3" GridPane.rowIndex="1"/>
-                <Button fx:id="move4" prefWidth="120" prefHeight="50" onAction="#handleMove" text="Attaque 4" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <HBox spacing="30" alignment="CENTER" prefHeight="200.0" 
+              style="-fx-background-color: #34495e; -fx-padding: 20;">
+            
+            <GridPane hgap="15" vgap="15">
+                <Button fx:id="move1" prefWidth="150" prefHeight="50" onAction="#handleMove" style="-fx-font-weight: bold;"/>
+                <Button fx:id="move2" prefWidth="150" prefHeight="50" onAction="#handleMove" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+                <Button fx:id="move3" prefWidth="150" prefHeight="50" onAction="#handleMove" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                <Button fx:id="move4" prefWidth="150" prefHeight="50" onAction="#handleMove" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
             </GridPane>
-            <VBox spacing="10">
-                <Button text="Switch" onAction="#handleSwitch" prefWidth="150" style="-fx-background-color: #f39c12;"/>
-                <Button text="Items" onAction="#handleItems" prefWidth="150" style="-fx-background-color: #3498db;"/>
+            
+            <VBox spacing="15">
+                <Button text="SWITCH" onAction="#handleSwitch" prefWidth="180" prefHeight="50" 
+                        style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button text="ITEMS" onAction="#handleItems" prefWidth="180" prefHeight="50" 
+                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;"/>
             </VBox>
         </HBox>
     </VBox>
 
-    <HBox fx:id="logPane" alignment="CENTER_RIGHT" pickOnBounds="false" translateX="300">
-        <Button fx:id="toggleLogBtn" onAction="#toggleLog" text="◀" 
-                style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-background-radius: 10 0 0 10;"/>
-        <TextArea fx:id="battleLog" editable="false" prefWidth="300.0" prefHeight="600.0" wrapText="true" 
-                  style="-fx-control-inner-background: #34495e; -fx-text-fill: white; -fx-border-color: #2c3e50;"/>
-    </HBox>
+    <AnchorPane pickOnBounds="false" mouseTransparent="false">
+        <HBox fx:id="logPane" alignment="CENTER_RIGHT" translateX="300" 
+              AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+            <Button fx:id="toggleLogBtn" onAction="#toggleLog" text="◀" prefHeight="60"
+                    style="-fx-background-color: #f1c40f; -fx-text-fill: #2c3e50; -fx-font-weight: bold; -fx-background-radius: 15 0 0 15;"/>
+            <TextArea fx:id="battleLog" editable="false" prefWidth="300.0" wrapText="true" 
+                      style="-fx-control-inner-background: #34495e; -fx-text-fill: white; -fx-font-family: 'Consolas';"/>
+        </HBox>
+    </AnchorPane>
+
+    <AnchorPane pickOnBounds="false" mouseTransparent="false">
+        <VBox fx:id="switchMenu" prefHeight="160.0" spacing="15" alignment="TOP_CENTER"
+              style="-fx-background-color: rgba(44, 62, 80, 0.98); -fx-padding: 15; -fx-border-color: #f1c40f; -fx-border-width: 3 0 0 0;" 
+              AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" 
+              translateY="170.0">
+            
+            <Label text="CHOISISSEZ UN POKÉMON" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;" />
+            
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="switchBtn0" onAction="#handleSwitchConfirmation" prefWidth="100" prefHeight="70" wrapText="true" />
+                <Button fx:id="switchBtn1" onAction="#handleSwitchConfirmation" prefWidth="100" prefHeight="70" wrapText="true" />
+                <Button fx:id="switchBtn2" onAction="#handleSwitchConfirmation" prefWidth="100" prefHeight="70" wrapText="true" />
+                <Button fx:id="switchBtn3" onAction="#handleSwitchConfirmation" prefWidth="100" prefHeight="70" wrapText="true" />
+                <Button fx:id="switchBtn4" onAction="#handleSwitchConfirmation" prefWidth="100" prefHeight="70" wrapText="true" />
+                <Button fx:id="switchBtn5" onAction="#handleSwitchConfirmation" prefWidth="100" prefHeight="70" wrapText="true" />
+                <Button text="ANNULER" onAction="#closeSwitchMenu" prefHeight="70" 
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;" />
+            </HBox>
+        </VBox>
+    </AnchorPane>
 
 </StackPane>

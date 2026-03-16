@@ -109,11 +109,11 @@ public class Pokemon {
         this.attacks = attacks;
     }
 
-    public void setitem(Item item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 
-
+    
     @Override
     public String toString() {
         return String.format("%s (HP: %d/%d, Type: %s)", name, hp, maxHp, type);
