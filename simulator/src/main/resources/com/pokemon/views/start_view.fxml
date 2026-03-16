@@ -3,24 +3,37 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 
 <StackPane xmlns="http://javafx.com/javafx" 
            xmlns:fx="http://javafx.com/fxml" 
            fx:controller="com.pokemon.controllers.StartController"
            prefHeight="600.0" prefWidth="800.0" 
-           style="-fx-background-color: #2c3e50;">
+           styleClass="root">
+    
+    <stylesheets>
+        <URL value="@../css/style.css" />
+    </stylesheets>
 
-    <VBox alignment="CENTER" spacing="40">
-        <Label text="POKÉMON SHOOTDOWN" 
-               style="-fx-text-fill: #f1c40f; -fx-font-size: 45px; -fx-font-weight: bold;"/>
+    <VBox alignment="CENTER" spacing="50">
+        <VBox alignment="CENTER" spacing="10">
+            <Label text="POKÉMON" styleClass="title-label" style="-fx-font-size: 60px;"/>
+            <Label text="SHOOTDOWN" styleClass="title-label" style="-fx-text-fill: #ecf0f1; -fx-font-size: 40px;"/>
+        </VBox>
 
-        <Button text="COMMENCER" 
-                onAction="#handleStart" 
-                prefWidth="250" prefHeight="60"
-                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 20px; -fx-cursor: hand;"/>
+        <VBox alignment="CENTER" spacing="20">
+            <Button text="COMMENCER LE COMBAT" 
+                    onAction="#handleStart" 
+                    prefWidth="300" prefHeight="70"
+                    styleClass="btn-primary"/>
 
-        <Button text="QUITTER" 
-                onAction="#handleQuit" 
-                style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+            <Button text="QUITTER LE JEU" 
+                    onAction="#handleQuit" 
+                    prefWidth="200" prefHeight="45"
+                    styleClass="btn-secondary"/>
+        </VBox>
+
+        <Label text="Version 1.0 - Projet Simulation POO" 
+               style="-fx-text-fill: #7f8c8d; -fx-font-style: italic;"/>
     </VBox>
 </StackPane>

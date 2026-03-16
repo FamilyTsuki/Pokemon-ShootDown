@@ -2,6 +2,8 @@ package com.pokemon.controllers;
 
 import com.pokemon.models.*;
 import com.pokemon.core.BattleEngine;
+
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -34,6 +36,8 @@ public class BattleController {
     @FXML private HBox logPane;
     @FXML private StackPane battleStackPane; 
     @FXML private VBox mainBattleArea; 
+    @FXML private HBox playerTypeContainer;
+    @FXML private HBox cpuTypeContainer;
 
     private Team playerTeam, cpuTeam;
     private Pokemon activePlayer, activeCpu;
@@ -44,21 +48,47 @@ public class BattleController {
     
 
     public void setupBattle(Team playerTeam, Team cpuTeam) {
-        this.playerTeam = playerTeam;
-        this.cpuTeam = cpuTeam;
-        updateActivePokemons();
-        
-        loadSprites();
-        refreshUI();
-        disableUI(false); 
-        
-        battleLog.appendText("Un combat commence !\n");
+    this.playerTeam = playerTeam;
+    this.cpuTeam = cpuTeam;
+    
+    updateActivePokemons();
+    
+    if (this.activePlayer == null) {
+        System.err.println("ERREUR : Aucun Pokémon actif trouvé pour le joueur !");
+        return;
     }
 
-    private void updateActivePokemons() {
-        this.activePlayer = playerTeam.getActivePokemon();
-        this.activeCpu = cpuTeam.getActivePokemon();
+    loadSprites();
+    refreshUI();
+    disableUI(false); 
+    
+    battleLog.appendText("Un combat commence !\n");
+}
+
+   private void updateActivePokemons() {
+    this.activePlayer = playerTeam.getActivePokemon();
+    this.activeCpu = cpuTeam.getActivePokemon();
+
+    if (this.activePlayer == null) {
+        for (Pokemon p : playerTeam.getPokemons()) {
+            if (p != null) {
+                this.activePlayer = p;
+                playerTeam.setActivePokemon(p);
+                break;
+            }
+        }
     }
+
+    if (this.activeCpu == null) {
+        for (Pokemon p : cpuTeam.getPokemons()) {
+            if (p != null) {
+                this.activeCpu = p;
+                cpuTeam.setActivePokemon(p);
+                break;
+            }
+        }
+    }
+}
 
     @FXML
     private void handleMove(ActionEvent event) {
@@ -108,17 +138,28 @@ public class BattleController {
                 disableUI(false);
             }
         });
+        
         endDelay.play();
     });
     delay.play();
 }
 
     private void processAttack(Pokemon attacker, Pokemon target, Attack move) {
-    
+
+    boolean isPlayerAttacking = (attacker == activePlayer);
+    ImageView attackerSprite = isPlayerAttacking ? playerSprite : cpuSprite;
+    ImageView targetSprite = isPlayerAttacking ? cpuSprite : playerSprite;
+
+    animateAttack(attackerSprite, isPlayerAttacking);
+
     int damage = engine.applyDamage(attacker, target, move);
     
+    if (damage > 0) {
+        animateDamage(targetSprite);
+    }
+
     String efficacite = ""; 
-    if (damage > 20) efficacite = " (C'est efficace !)";
+    if (damage > 30) efficacite = " (C'est super efficace !)";
     else if (damage < 10 && damage > 0) efficacite = " (Ce n'est pas très efficace...)";
 
     battleLog.appendText("• " + attacker.getName() + " utilise " + move.getName() + efficacite + "\n");
@@ -126,9 +167,34 @@ public class BattleController {
 
     if (target.isFainted()) {
         battleLog.appendText("   -> " + target.getName() + " est KO !\n");
+
+        FadeTransition koFade = new FadeTransition(Duration.millis(500), targetSprite);
+        koFade.setToValue(0);
+        koFade.play();
     }
 
     refreshUI();
+}
+
+private void animateAttack(ImageView sprite, boolean toRight) {
+    double distance = toRight ? 60 : -60;
+    TranslateTransition tt = new TranslateTransition(Duration.millis(100), sprite);
+    tt.setByX(distance);
+    tt.setCycleCount(2);
+    tt.setAutoReverse(true);
+    tt.play();
+}
+
+/**
+ * Animation de clignotement quand on reçoit des dégâts
+ */
+private void animateDamage(ImageView sprite) {
+    FadeTransition ft = new FadeTransition(Duration.millis(50), sprite);
+    ft.setFromValue(1.0);
+    ft.setToValue(0.2);
+    ft.setCycleCount(6);
+    ft.setAutoReverse(true);
+    ft.play();
 }
 
     private void checkBattleStatus() {
@@ -182,6 +248,8 @@ public class BattleController {
     
     playerNameLabel.setText(activePlayer.getName().toUpperCase());
     cpuNameLabel.setText(activeCpu.getName().toUpperCase());
+    displayTypes(playerTypeContainer, activePlayer);
+    displayTypes(cpuTypeContainer, activeCpu);
 
     updateCpuIcons();
 
@@ -295,4 +363,18 @@ public class BattleController {
     }
     
     @FXML private void handleItems(ActionEvent event) { battleLog.appendText("Sac vide !\n"); }
+    private void displayTypes(HBox container, Pokemon pokemon) {
+    container.getChildren().clear(); 
+    if (pokemon == null || pokemon.getTypes() == null) return;
+
+    for (PokemonType type : pokemon.getTypes()) {
+        Label badge = new Label(type.toString().toUpperCase());
+        badge.getStyleClass().add("type-badge");
+        badge.getStyleClass().add("type-" + type.toString().toLowerCase());
+        badge.setStyle("-fx-text-fill: white; -fx-font-size: 9px; -fx-padding: 1 5;");
+        
+        container.getChildren().add(badge);
+    }
+}
+
 }

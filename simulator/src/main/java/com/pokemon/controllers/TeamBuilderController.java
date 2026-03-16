@@ -31,6 +31,7 @@ public class TeamBuilderController {
 
     @FXML private Button slot1Btn, slot2Btn, slot3Btn, slot4Btn, slot5Btn, slot6Btn;
     @FXML private VBox rootContainer;
+    @FXML private Button remove1Btn, remove2Btn, remove3Btn, remove4Btn, remove5Btn, remove6Btn;
 
     private Pokemon[] team = new Pokemon[6];
 
@@ -105,17 +106,12 @@ public class TeamBuilderController {
             btn.setText(p.getName().toUpperCase());
         }
 
-        btn.setStyle("-fx-background-color: #27ae60; " +
-                     "-fx-background-radius: 15; " +
-                     "-fx-border-color: #f1c40f; " +
-                     "-fx-border-width: 3; " +
-                     "-fx-border-radius: 15; " +
-                     "-fx-effect: dropshadow(gaussian, rgba(241, 196, 15, 0.5), 15, 0.5, 0, 0);");
-        
         ScaleTransition st = new ScaleTransition(Duration.millis(300), btn);
         st.setFromX(0.5); st.setFromY(0.5);
         st.setToX(1.0); st.setToY(1.0);
         st.play();
+        int slotIndex = Integer.parseInt(btn.getId().replaceAll("[^0-9]", ""));
+        getRemoveButtonByIndex(slotIndex).setVisible(true);
     }
 
     private void animateClick(Button btn) {
@@ -182,4 +178,33 @@ public class TeamBuilderController {
         Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
     }
+    @FXML
+private void handleRemovePokemon(ActionEvent event) {
+    Button removeBtn = (Button) event.getSource();
+    int slotIndex = Integer.parseInt(removeBtn.getId().replaceAll("[^0-9]", "")) - 1;
+
+    this.team[slotIndex] = null;
+
+    Button slotBtn = getSlotButtonByIndex(slotIndex + 1);
+    slotBtn.setGraphic(null);
+    slotBtn.setText("+");
+    slotBtn.getStyleClass().remove("pokemon-slot-filled");
+    slotBtn.getStyleClass().add("pokemon-slot");
+
+    removeBtn.setVisible(false);
+}
+
+private Button getRemoveButtonByIndex(int index) {
+    return switch (index) {
+        case 1 -> remove1Btn; case 2 -> remove2Btn; case 3 -> remove3Btn;
+        case 4 -> remove4Btn; case 5 -> remove5Btn; default -> remove6Btn;
+    };
+}
+
+private Button getSlotButtonByIndex(int index) {
+    return switch (index) {
+        case 1 -> slot1Btn; case 2 -> slot2Btn; case 3 -> slot3Btn;
+        case 4 -> slot4Btn; case 5 -> slot5Btn; default -> slot6Btn;
+    };
+}
 }
