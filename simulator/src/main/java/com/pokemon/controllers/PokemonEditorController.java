@@ -1,7 +1,12 @@
 package com.pokemon.controllers;
 
 import com.pokemon.models.Pokemon;
+import com.pokemon.models.items.Ballon;
+import com.pokemon.models.items.Reste;
 import com.pokemon.models.Attack;
+import com.pokemon.models.Item;
+
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,88 +28,111 @@ public class PokemonEditorController {
 
     private Pokemon currentPokemon;
     private boolean saveClicked = false;
-
     
+    private final List<Item> availableItems = new ArrayList<>();
+
     public void setPokemon(Pokemon pokemon) {
         this.currentPokemon = pokemon;
         this.pokemonNameLabel.setText(pokemon.getName().toUpperCase());
 
         try {
             String imagePath = "/com/pokemon/assets/sprites/" + pokemon.getId() + ".png";
-            var inputStream = getClass().getResourceAsStream(imagePath);
-            if (inputStream != null) {
-                pokemonSprite.setImage(new Image(inputStream));
-            } else {
-                System.out.println("Image manquante : " + imagePath);
+            var stream = getClass().getResourceAsStream(imagePath);
+            if (stream != null) pokemonSprite.setImage(new Image(stream));
+        } catch (Exception e) { e.printStackTrace(); }
 
-            }
-        } catch (Exception e) {
-            System.err.println("Erreur chargement image");
-        }
+        setupMoveComboBoxes(pokemon);
 
-        ObservableList<String> attackNames = FXCollections.observableArrayList();
-        if (pokemon.getLearble() != null) {
-            for (Attack move : pokemon.getLearble()) {
-                if (move != null) attackNames.add(move.getName());
-            }
-        }
-
-        move1.setItems(attackNames);
-        move2.setItems(attackNames);
-        move3.setItems(attackNames);
-        move4.setItems(attackNames);
-
-        if (attackNames.size() >= 1) move1.getSelectionModel().select(0);
-        if (attackNames.size() >= 2) move2.getSelectionModel().select(1);
-        if (attackNames.size() >= 3) move3.getSelectionModel().select(2);
-        if (attackNames.size() >= 4) move4.getSelectionModel().select(3);
-
-        ObservableList<String> items = FXCollections.observableArrayList(
-            "Life Orb", "Leftovers", "Choice Band", "Choice Specs", "Focus Sash", "None"
-        );
-        itemComboBox.setItems(items);
-        itemComboBox.getSelectionModel().select("None");
+        setupItemComboBox();
     }
 
+    private void setupItemComboBox() {
+        availableItems.clear();
 
+        availableItems.add(new Ballon());
+        availableItems.add(new Reste());
+
+
+        ObservableList<String> itemNames = FXCollections.observableArrayList();
+        itemNames.add("None");
+        for (Item it : availableItems) {
+            itemNames.add(it.getName());
+        }
+
+        itemComboBox.setItems(itemNames);
+
+        if (currentPokemon.getItem() != null) {
+            itemComboBox.getSelectionModel().select(currentPokemon.getItem().getName());
+        } else {
+            itemComboBox.getSelectionModel().select("None");
+        }
+    }
 
     @FXML
     private void handleSave() {
         if (currentPokemon != null) {
-
-            String[] selectedNames = { move1.getValue(), move2.getValue(), move3.getValue(), move4.getValue() };
-            List<Attack> finalMoves = new ArrayList<>();
             
-            Attack[] learnable = currentPokemon.getLearble();
-            if (learnable != null) {
-                for (String name : selectedNames) {
-                    if (name == null) continue;
-                    for (Attack a : learnable) {
-                        if (a.getName().equals(name)) {
-                            finalMoves.add(a);
-                            break;
-                        }
+            saveMoves();
+
+            String selectedName = itemComboBox.getValue();
+            if (selectedName == null || selectedName.equals("None")) {
+                currentPokemon.setItem(null);
+            } else {
+                
+                for (Item it : availableItems) {
+                    if (it.getName().equals(selectedName)) {
+                        currentPokemon.setItem(it);
+                        break;
                     }
                 }
             }
-            
-            currentPokemon.setAttacks(finalMoves.toArray(new Attack[0]));
-            this.saveClicked = true;
 
-            Stage stage = (Stage) pokemonNameLabel.getScene().getWindow();
-            stage.close();
+            this.saveClicked = true;
+            ((Stage) pokemonNameLabel.getScene().getWindow()).close();
         }
     }
 
-    public boolean isSaveClicked() {
-        return saveClicked;
+
+    private void setupMoveComboBoxes(Pokemon pokemon) {
+        ObservableList<String> attackNames = FXCollections.observableArrayList();
+
+        if (pokemon.getLearble() != null) {
+            for (Attack move : pokemon.getLearble()) {
+                if (move != null) {
+                    attackNames.add(move.getName());
+                }
+            }
+        }
+        move1.setItems(attackNames);
+        move2.setItems(attackNames);
+        move3.setItems(attackNames);
+        move4.setItems(attackNames);
+        int count = attackNames.size();
+        if (count > 0) move1.getSelectionModel().select(0);
+        if (count > 1) move2.getSelectionModel().select(1);
+        if (count > 2) move3.getSelectionModel().select(2);
+        if (count > 3) move4.getSelectionModel().select(3);
+
+        move2.setDisable(count < 2);
+        move3.setDisable(count < 3);
+        move4.setDisable(count < 4);
     }
 
-    public Pokemon getSelectedPokemon() {
-        return currentPokemon;
+    private void saveMoves() {
+        String[] selected = { move1.getValue(), move2.getValue(), move3.getValue(), move4.getValue() };
+        List<Attack> finalMoves = new ArrayList<>();
+        for (String name : selected) {
+            if (name == null) continue;
+            for (Attack a : currentPokemon.getLearble()) {
+                if (a.getName().equals(name)) {
+                    finalMoves.add(a);
+                    break;
+                }
+            }
+        }
+        currentPokemon.setAttacks(finalMoves.toArray(new Attack[0]));
     }
-    
-    public String getSelectedItem() {
-        return itemComboBox.getValue();
-    }
+
+    public boolean isSaveClicked() { return saveClicked; }
+    public Pokemon getSelectedPokemon() { return currentPokemon; }
 }

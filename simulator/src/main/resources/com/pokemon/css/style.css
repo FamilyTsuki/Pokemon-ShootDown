@@ -1,0 +1,291 @@
+/* --- BASE --- */
+.root {
+  -fx-background-color: linear-gradient(to bottom right, #2c3e50, #000000);
+  -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* --- TEXTES GLOBAUX --- */
+/* Force la couleur de tous les labels par défaut */
+.label {
+  -fx-text-fill: white;
+}
+
+.title-label {
+  -fx-text-fill: #f1c40f;
+  -fx-font-size: 32px;
+  -fx-font-weight: bold;
+  -fx-effect: dropshadow(gaussian, rgba(241, 196, 15, 0.5), 15, 0.4, 0, 0);
+}
+
+.field-label {
+  -fx-text-fill: #bdc3c7;
+  -fx-font-weight: bold;
+}
+
+/* --- BOUTONS SPÉCIFIQUES --- */
+
+/* Bouton Vert (Valider / Combat) */
+.btn-primary {
+  -fx-background-color: #27ae60;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 10;
+  -fx-cursor: hand;
+}
+.btn-primary:hover {
+  -fx-background-color: #2ecc71;
+}
+
+/* Boutons de combat (Attaques) */
+/* Style de base des boutons d'attaque */
+.btn-attack {
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 13px;
+  -fx-background-radius: 8;
+  -fx-border-color: rgba(255, 255, 255, 0.2);
+  -fx-border-width: 1;
+  -fx-cursor: hand;
+}
+
+/* Couleurs par type pour les boutons */
+.atk-fire {
+  -fx-background-color: linear-gradient(to bottom, #ff4422, #a32d16);
+}
+.atk-water {
+  -fx-background-color: linear-gradient(to bottom, #3399ff, #1d5691);
+}
+.atk-grass {
+  -fx-background-color: linear-gradient(to bottom, #77cc55, #4d8537);
+}
+.atk-electric {
+  -fx-background-color: linear-gradient(to bottom, #ffcc33, #b38f24);
+  -fx-text-fill: black;
+}
+.atk-normal {
+  -fx-background-color: linear-gradient(to bottom, #aaaa99, #6e6e63);
+}
+.atk-poison {
+  -fx-background-color: linear-gradient(to bottom, #aa5599, #703865);
+}
+/* Ajoute les autres types sur le même modèle (atk-psychic, atk-dark, etc.) */
+
+/* Bouton SWITCH (Orange) */
+.btn-switch {
+  -fx-background-color: #e67e22;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 5;
+}
+.btn-switch:hover {
+  -fx-background-color: #d35400;
+}
+
+/* Bouton ITEMS (Bleu) */
+.btn-items {
+  -fx-background-color: #2980b9;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 5;
+}
+.btn-items:hover {
+  -fx-background-color: #3498db;
+}
+
+/* Bouton Retour / Annuler */
+.btn-secondary,
+.btn-cancel {
+  -fx-background-color: #c0392b;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+
+/* --- TABLEAU DE CHOIX (POKEMON SELECTOR) --- */
+.pokemon-table {
+  -fx-background-color: #1a252f;
+  -fx-border-color: #34495e;
+}
+
+/* Style des cellules du tableau */
+.table-view .table-cell {
+  -fx-text-fill: white; /* Force le texte en blanc dans les cellules */
+}
+
+/* Style des en-têtes de colonnes */
+.table-view .column-header,
+.table-view .column-header-background {
+  -fx-background-color: #34495e;
+}
+.table-view .column-header .label {
+  -fx-text-fill: #f1c40f; /* Texte doré pour les titres de colonnes */
+  -fx-font-weight: bold;
+}
+
+/* Lignes du tableau */
+.table-row-cell {
+  -fx-background-color: #2c3e50;
+}
+.table-row-cell:odd {
+  -fx-background-color: #1a252f;
+}
+.table-row-cell:selected {
+  -fx-background-color: #27ae60;
+}
+.table-row-cell:selected .table-cell {
+  -fx-text-fill: white;
+}
+
+/* --- BARRES DE RECHERCHE ET COMBOBOX --- */
+.search-field,
+.combo-box-styled {
+  -fx-background-color: #34495e;
+  -fx-text-fill: white;
+  -fx-prompt-text-fill: #bdc3c7;
+}
+
+/* Force le texte blanc à l'intérieur de la ComboBox */
+.combo-box-styled .list-cell {
+  -fx-text-fill: white;
+  -fx-background-color: #34495e;
+}
+
+/* --- LOG DE COMBAT --- */
+.battle-log-area {
+  -fx-control-inner-background: #1a252f; /* Fond du TextArea */
+  -fx-text-fill: #2ecc71; /* Texte vert style terminal */
+  -fx-font-family: "Consolas", monospace;
+}
+/* Le conteneur de chaque slot (la carte derrière le bouton) */
+.pokemon-slot-container {
+  -fx-background-color: rgba(52, 73, 94, 0.4); /* Gris bleu transparent */
+  -fx-background-radius: 20;
+  -fx-border-color: rgba(255, 255, 255, 0.1);
+  -fx-border-radius: 20;
+  -fx-border-width: 2;
+  -fx-padding: 25; /* Donne de l'espace interne */
+  -fx-pref-width: 200;
+  -fx-pref-height: 180;
+}
+
+/* Le bouton "+" à l'intérieur */
+.pokemon-slot {
+  -fx-background-radius: 100; /* Cercle parfait */
+  -fx-min-width: 80;
+  -fx-min-height: 80;
+  -fx-max-width: 80;
+  -fx-max-height: 80;
+  -fx-background-color: #34495e;
+  -fx-text-fill: #f1c40f; /* Le "+" en jaune */
+  -fx-font-size: 30px;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0, 0, 4);
+}
+
+.pokemon-slot:hover {
+  -fx-background-color: #486581;
+  -fx-scale-x: 1.1; /* Petit effet de zoom au survol */
+  -fx-scale-y: 1.1;
+}
+
+/* Slot quand un Pokémon est là */
+.pokemon-slot-filled {
+  -fx-background-color: linear-gradient(to bottom, #27ae60, #1e8449);
+  -fx-border-color: #f1c40f;
+  -fx-border-width: 3;
+  -fx-effect: dropshadow(gaussian, #f1c40f, 15, 0.3, 0, 0);
+}
+
+/* Style de base des badges de type */
+.type-badge {
+  -fx-padding: 2 8;
+  -fx-background-radius: 5;
+  -fx-text-fill: white;
+  -fx-font-size: 10px;
+  -fx-font-weight: bold;
+}
+
+/* Couleurs par type */
+.type-fire {
+  -fx-background-color: #ff4422;
+}
+.type-water {
+  -fx-background-color: #3399ff;
+}
+.type-grass {
+  -fx-background-color: #77cc55;
+}
+.type-electric {
+  -fx-background-color: #ffcc33;
+  -fx-text-fill: black;
+}
+.type-ice {
+  -fx-background-color: #66ccff;
+}
+.type-fighting {
+  -fx-background-color: #bb5544;
+}
+.type-poison {
+  -fx-background-color: #aa5599;
+}
+.type-ground {
+  -fx-background-color: #ddbb55;
+}
+.type-flying {
+  -fx-background-color: #8899ff;
+}
+.type-psychic {
+  -fx-background-color: #ff5599;
+}
+.type-bug {
+  -fx-background-color: #aabb22;
+}
+.type-rock {
+  -fx-background-color: #bbaa66;
+}
+.type-ghost {
+  -fx-background-color: #6666bb;
+}
+.type-dragon {
+  -fx-background-color: #7766ee;
+}
+.type-dark {
+  -fx-background-color: #775544;
+}
+.type-steel {
+  -fx-background-color: #aaaabb;
+}
+.type-fairy {
+  -fx-background-color: #ee99ee;
+}
+.type-normal {
+  -fx-background-color: #aaaa99;
+}
+.btn-remove-small {
+  -fx-background-color: #e74c3c;
+  -fx-text-fill: white;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-background-radius: 20;
+  -fx-min-width: 24;
+  -fx-min-height: 24;
+  -fx-max-width: 24;
+  -fx-max-height: 24;
+  -fx-padding: 0;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0, 0, 1);
+}
+
+.btn-remove-small:hover {
+  -fx-background-color: #c0392b;
+  -fx-scale-x: 1.2;
+  -fx-scale-y: 1.2;
+}
+.damage-popup {
+  -fx-text-fill: #e74c3c; /* Rouge vif */
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+  -fx-font-family: "System";
+  /* Contour noir pour la lisibilité */
+  -fx-effect: dropshadow(one-pass-box, black, 2, 0, 1, 1);
+}

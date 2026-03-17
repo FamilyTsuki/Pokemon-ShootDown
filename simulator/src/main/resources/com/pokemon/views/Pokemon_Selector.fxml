@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 
-<VBox prefHeight="600.0" prefWidth="600.0" spacing="10" style="-fx-background-color: #f0f0f0;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.pokemon.controllers.PokemonSelectorController">
-    <padding><javafx.geometry.Insets top="10" bottom="10" left="10" right="10"/></padding>
+<VBox prefHeight="600.0" prefWidth="750.0" spacing="15" styleClass="root" 
+      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.pokemon.controllers.PokemonSelectorController"
+      alignment="TOP_CENTER">
     
-    <TextField fx:id="searchField" promptText="Search Pokémon..." />
+    <stylesheets>
+        <URL value="@../css/style.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets top="20" bottom="20" left="20" right="20"/>
+    </padding>
     
-    <TableView fx:id="pokemonTable" VBox.vgrow="ALWAYS">
+    <Label text="SÉLECTION DU POKÉMON" styleClass="title-label" />
+    
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher un Pokémon..." 
+                   HBox.hgrow="ALWAYS" styleClass="search-field" />
+    </HBox>
+    
+    <TableView fx:id="pokemonTable" VBox.vgrow="ALWAYS" styleClass="pokemon-table">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
         <columns>
-            <TableColumn fx:id="img" prefWidth="40" />
-            <TableColumn fx:id="nameCol" text="Name" prefWidth="150" />
-            <TableColumn fx:id="typeCol" text="Types" prefWidth="120" />
-            <TableColumn fx:id="hpCol" text="HP" prefWidth="40" />
-            <TableColumn fx:id="atkCol" text="Atk" prefWidth="40" />
-            <TableColumn fx:id="defCol" text="Def" prefWidth="40" />
-            <TableColumn fx:id="spaCol" text="SpA" prefWidth="40" />
-            <TableColumn fx:id="spdCol" text="SpD" prefWidth="40" />
-            <TableColumn fx:id="speCol" text="Spe" prefWidth="40" />
+            <TableColumn fx:id="img" text="Icon" minWidth="60" maxWidth="60" prefWidth="60" styleClass="column-centered" />
+            <TableColumn fx:id="nameCol" text="Nom" minWidth="120" prefWidth="150" />
+            <TableColumn fx:id="typeCol" text="Types" minWidth="120" prefWidth="150" />
+            <TableColumn fx:id="hpCol" text="HP" minWidth="50" maxWidth="60" prefWidth="55" styleClass="column-centered" />
+            <TableColumn fx:id="atkCol" text="Atk" minWidth="50" maxWidth="60" prefWidth="55" styleClass="column-centered" />
+            <TableColumn fx:id="defCol" text="Def" minWidth="50" maxWidth="60" prefWidth="55" styleClass="column-centered" />
+            <TableColumn fx:id="spaCol" text="SpA" minWidth="50" maxWidth="60" prefWidth="55" styleClass="column-centered" />
+            <TableColumn fx:id="spdCol" text="SpD" minWidth="50" maxWidth="60" prefWidth="55" styleClass="column-centered" />
+            <TableColumn fx:id="speCol" text="Spe" minWidth="50" maxWidth="60" prefWidth="55" styleClass="column-centered" />
         </columns>
+        <placeholder>
+            <Label text="Aucun Pokémon trouvé" style="-fx-text-fill: gray;" />
+        </placeholder>
     </TableView>
+
+    <Label text="Double-cliquez sur un Pokémon pour le sélectionner" 
+           style="-fx-text-fill: #bdc3c7; -fx-font-style: italic; -fx-font-size: 11px;" />
 </VBox>

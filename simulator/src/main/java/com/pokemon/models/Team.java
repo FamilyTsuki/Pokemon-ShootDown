@@ -1,46 +1,32 @@
 package com.pokemon.models;
 
 public class Team {
-    
     private Pokemon[] pokemons;
-    private int activePokemonIndex;
+    private Pokemon activePokemon;
 
     public Team(Pokemon[] pokemons) {
-        
         this.pokemons = pokemons;
-        this.activePokemonIndex = 0;
+        this.activePokemon = pokemons[0];
     }
 
-    public Pokemon[] getPokemons() {
-        return pokemons;
+    public Pokemon[] getPokemons() { return pokemons; }
+    
+    public Pokemon getActivePokemon() { return activePokemon; }
+
+    public void setActivePokemon(Pokemon pokemon) {
+        this.activePokemon = pokemon;
     }
 
-    public Pokemon getActivePokemon() {
-        if (activePokemonIndex < pokemons.length) {
-            return pokemons[activePokemonIndex];
+    public Pokemon getNextAvailablePokemon() {
+        for (Pokemon p : pokemons) {
+            if (p != null && !p.isFainted()) {
+                return p;
+            }
         }
         return null;
     }
 
     public boolean hasAvailablePokemon() {
-        for (Pokemon p : pokemons) {
-            if (!p.isFainted()) {
-                return true;
-            }
-        }
-        return false;
+        return getNextAvailablePokemon() != null;
     }
-
-    public void setActivePokemonIndex(int index) {
-            if (index >= 0 && index < pokemons.length && !pokemons[index].isFainted()) {
-                this.activePokemonIndex = index;
-            }
-    }
-
-    @Override
-    public String toString() {
-        return " (Active: " + getActivePokemon().getName() + ")";
-    }
-
-    
 }

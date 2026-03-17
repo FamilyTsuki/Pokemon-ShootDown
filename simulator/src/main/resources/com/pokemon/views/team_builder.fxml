@@ -3,70 +3,105 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import java.net.URL?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.pokemon.controllers.TeamBuilderController"
-      prefHeight="700.0" prefWidth="800.0" spacing="20" 
-      style="-fx-background-color: #2c3e50;" alignment="TOP_CENTER">
+      prefHeight="700.0" prefWidth="900.0" spacing="25" 
+      styleClass="root" alignment="TOP_CENTER">
+
+    <stylesheets>
+        <URL value="@../css/style.css" />
+    </stylesheets>
 
     <padding>
-        <Insets top="30" bottom="30" left="20" right="20"/>
+        <Insets top="40" bottom="40" left="40" right="40"/>
     </padding>
 
-    <Label text="FORMATION DE L'ÉQUIPE (6 POKÉMON)" 
-           style="-fx-text-fill: #f1c40f; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+    <VBox alignment="CENTER" spacing="5">
+        <Label text="TEAM BUILDER" styleClass="title-label"/>
+        <Label text="Sélectionnez vos 6 compagnons de combat" style="-fx-text-fill: #bdc3c7; -fx-font-size: 14px;"/>
+    </VBox>
 
-    <Separator opacity="0.2" prefWidth="600"/>
+    <GridPane hgap="30" vgap="30" alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints prefWidth="220"/>
+            <ColumnConstraints prefWidth="220"/>
+            <ColumnConstraints prefWidth="220"/>
+        </columnConstraints>
 
-    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" prefHeight="450.0">
-        <VBox spacing="15" alignment="CENTER">
-            
-            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
-                <Label text="1." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button fx:id="slot1Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item1" prefWidth="150" promptText="Choisir Objet"/>
-            </HBox>
-
-            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
-                <Label text="2." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button fx:id="slot2Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item2" prefWidth="150" promptText="Choisir Objet"/>
-            </HBox>
-
-            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
-                <Label text="3." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button fx:id="slot3Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item3" prefWidth="150" promptText="Choisir Objet"/>
-            </HBox>
-
-            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
-                <Label text="4." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button fx:id="slot4Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item4" prefWidth="150" promptText="Choisir Objet"/>
-            </HBox>
-
-            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
-                <Label text="5." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button fx:id="slot5Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item5" prefWidth="150" promptText="Choisir Objet"/>
-            </HBox>
-
-            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 10; -fx-background-radius: 10;">
-                <Label text="6." style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button fx:id="slot6Btn" text="Choisir Pokémon" onAction="#handleSelectPokemon" prefWidth="180" style="-fx-cursor: hand;"/>
-                <ComboBox fx:id="item6" prefWidth="150" promptText="Choisir Objet"/>
-            </HBox>
-
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" alignment="CENTER" spacing="10" styleClass="pokemon-slot-container">
+            <StackPane>
+                <Button fx:id="slot1Btn" text="+" onAction="#handleSelectPokemon" styleClass="pokemon-slot"/>
+                <Button fx:id="remove1Btn" text="×" onAction="#handleRemovePokemon" visible="false" 
+                        StackPane.alignment="TOP_RIGHT" styleClass="btn-remove-small">
+                    <StackPane.margin><Insets top="-10" right="-10"/></StackPane.margin>
+                </Button>
+            </StackPane>
+            <Label text="SLOT 1" styleClass="field-label"/>
         </VBox>
-    </ScrollPane>
 
-    <HBox spacing="30" alignment="CENTER">
-        <Button text="RETOUR" onAction="#handleBack"
-                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold;"/>
-        
-        <Button text="LANCER LE COMBAT" onAction="#handleStartBattle" 
-                prefWidth="250" prefHeight="50"
-                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" alignment="CENTER" spacing="10" styleClass="pokemon-slot-container">
+            <StackPane>
+                <Button fx:id="slot2Btn" text="+" onAction="#handleSelectPokemon" styleClass="pokemon-slot"/>
+                <Button fx:id="remove2Btn" text="×" onAction="#handleRemovePokemon" visible="false" 
+                        StackPane.alignment="TOP_RIGHT" styleClass="btn-remove-small">
+                    <StackPane.margin><Insets top="-10" right="-10"/></StackPane.margin>
+                </Button>
+            </StackPane>
+            <Label text="SLOT 2" styleClass="field-label"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" alignment="CENTER" spacing="10" styleClass="pokemon-slot-container">
+            <StackPane>
+                <Button fx:id="slot3Btn" text="+" onAction="#handleSelectPokemon" styleClass="pokemon-slot"/>
+                <Button fx:id="remove3Btn" text="×" onAction="#handleRemovePokemon" visible="false" 
+                        StackPane.alignment="TOP_RIGHT" styleClass="btn-remove-small">
+                    <StackPane.margin><Insets top="-10" right="-10"/></StackPane.margin>
+                </Button>
+            </StackPane>
+            <Label text="SLOT 3" styleClass="field-label"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" alignment="CENTER" spacing="10" styleClass="pokemon-slot-container">
+            <StackPane>
+                <Button fx:id="slot4Btn" text="+" onAction="#handleSelectPokemon" styleClass="pokemon-slot"/>
+                <Button fx:id="remove4Btn" text="×" onAction="#handleRemovePokemon" visible="false" 
+                        StackPane.alignment="TOP_RIGHT" styleClass="btn-remove-small">
+                    <StackPane.margin><Insets top="-10" right="-10"/></StackPane.margin>
+                </Button>
+            </StackPane>
+            <Label text="SLOT 4" styleClass="field-label"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" alignment="CENTER" spacing="10" styleClass="pokemon-slot-container">
+            <StackPane>
+                <Button fx:id="slot5Btn" text="+" onAction="#handleSelectPokemon" styleClass="pokemon-slot"/>
+                <Button fx:id="remove5Btn" text="×" onAction="#handleRemovePokemon" visible="false" 
+                        StackPane.alignment="TOP_RIGHT" styleClass="btn-remove-small">
+                    <StackPane.margin><Insets top="-10" right="-10"/></StackPane.margin>
+                </Button>
+            </StackPane>
+            <Label text="SLOT 5" styleClass="field-label"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="1" alignment="CENTER" spacing="10" styleClass="pokemon-slot-container">
+            <StackPane>
+                <Button fx:id="slot6Btn" text="+" onAction="#handleSelectPokemon" styleClass="pokemon-slot"/>
+                <Button fx:id="remove6Btn" text="×" onAction="#handleRemovePokemon" visible="false" 
+                        StackPane.alignment="TOP_RIGHT" styleClass="btn-remove-small">
+                    <StackPane.margin><Insets top="-10" right="-10"/></StackPane.margin>
+                </Button>
+            </StackPane>
+            <Label text="SLOT 6" styleClass="field-label"/>
+        </VBox>
+    </GridPane>
+
+    <HBox spacing="40" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+        <Button text="RETOUR" onAction="#handleBack" styleClass="btn-secondary"/>
+        <Button text="ALÉATOIRE" onAction="#handleRandomTeam" styleClass="btn-switch" prefWidth="150" prefHeight="40"/>
+        <Button text="COMBAT !" onAction="#handleStartBattle" prefWidth="300" prefHeight="60" styleClass="btn-primary"/>
     </HBox>
 
 </VBox>

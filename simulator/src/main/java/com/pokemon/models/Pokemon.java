@@ -117,7 +117,7 @@ public class Pokemon {
         this.attacks = attacks;
     }
 
-    public void setitem(Item item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 
