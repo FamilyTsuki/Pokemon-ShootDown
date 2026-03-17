@@ -14,7 +14,7 @@ public class Pokemon {
     private Item item;
     private int spAttack;
     private int spDefense;
-
+    private Status currentStatus;
 
 
     public Pokemon(int id, String name, int hp, int attack, int defense, int speed, PokemonType[] type, Attack[] attacks , Item item, Attack[] learble, int spAttack, int spDefense) {
@@ -61,6 +61,10 @@ public class Pokemon {
         this.hp = Math.max(0, Math.min(hp, maxHp));
     }
 
+    public void hpmodifier(int hp) {
+        this.hp += hp;
+    }
+
     public int getMaxHp() {
         return maxHp;
     }
@@ -80,6 +84,8 @@ public class Pokemon {
     public int getSpeed() {
         return speed;
     }
+
+    public void setSpeed(int speedadd) {this.speed += speedadd;}
 
     public PokemonType[] getTypes() {
         return type;
@@ -133,6 +139,20 @@ public class Pokemon {
         this.spDefense = spDefense;
     }
     
+    public Status getCurrentStatus() { return currentStatus; }
+    public void setCurrentStatus(Status status) { this.currentStatus = status; }
+
+    public void setBaseAttack(int newAttack) {
+        this.attack = newAttack;
+    }
+
+    private boolean canAttack = true; // Par défaut, il peut attaquer
+
+    public boolean canAttack() { return canAttack; }
+    public void setCanAttack(boolean canAttack) { this.canAttack = canAttack; }
+
+    public void setBaseSpeed(int newSpeed) { this.speed = newSpeed; }
+
     @Override
     public String toString() {
         return String.format("%s (HP: %d/%d, Type: %s)", name, hp, maxHp, type);
