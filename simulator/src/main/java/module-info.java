@@ -15,7 +15,6 @@ module com.pokemon {
     opens com.pokemon.models to javafx.base;
     exports com.pokemon.models;
 
-    opens com.pokemon.pokemonList to javafx.base;
 
     exports com.pokemon.controllers; 
 }

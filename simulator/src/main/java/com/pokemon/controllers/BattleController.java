@@ -93,41 +93,46 @@ public class BattleController {
     }
 }
 
+
     @FXML
-    private void handleMove(ActionEvent event) {
-        int moveIdx = getButtonIndex((Button) event.getSource());
-        Attack playerAtk = activePlayer.getAttacks()[moveIdx];
+private void handleMove(ActionEvent event) {
+    // 1. BLOQUER L'INTERFACE IMMÉDIATEMENT
+    disableUI(true); 
 
-        if (playerAtk != null) {
-            disableUI(true); 
-            Attack cpuAtk = engine.chooseBestAttack(activeCpu, activePlayer);
+    int moveIdx = getButtonIndex((Button) event.getSource());
+    Attack playerAtk = activePlayer.getAttacks()[moveIdx];
 
-            if (engine.isPlayerFirst(activePlayer, activeCpu)) {
-                executeTurnSequence(activePlayer, activeCpu, playerAtk, cpuAtk);
-            } else {
-                executeTurnSequence(activeCpu, activePlayer, cpuAtk, playerAtk);
-            }
+    if (playerAtk != null) {
+        Attack cpuAtk = engine.chooseBestAttack(activeCpu, activePlayer);
+
+        if (engine.isPlayerFirst(activePlayer, activeCpu)) {
+            executeTurnSequence(activePlayer, activeCpu, playerAtk, cpuAtk);
+        } else {
+            executeTurnSequence(activeCpu, activePlayer, cpuAtk, playerAtk);
         }
+    } else {
+        // Si l'attaque est nulle pour une raison X, on débloque
+        disableUI(false);
     }
+}
 
-    private void executeTurnSequence(Pokemon first, Pokemon second, Attack atk1, Attack atk2) {
+private void executeTurnSequence(Pokemon first, Pokemon second, Attack atk1, Attack atk2) {
     battleLog.appendText("\n=== TOUR " + turnCount + " ====\n");
     
-    battleLog.appendText("[INFO] " + first.getName() + " est plus rapide (Vitesse: " + first.getSpeed() + ")\n");
-
+    // Premier attaquant
     processAttack(first, second, atk1);
     
     if (second.isFainted()) {
         turnCount++;
         PauseTransition shortPause = new PauseTransition(Duration.seconds(1.0));
         shortPause.setOnFinished(e -> {
-            if (activePlayer.isFainted()) disableUI(false); 
-            checkBattleStatus();
+            checkBattleStatus(); // Ici, checkBattleStatus gérera le déblocage si besoin
         });
         shortPause.play();
         return;
     }
 
+    // Deuxième attaquant (après un délai)
     PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
     delay.setOnFinished(e -> {
         processAttack(second, first, atk2);
@@ -135,13 +140,13 @@ public class BattleController {
         PauseTransition endDelay = new PauseTransition(Duration.seconds(1.0));
         endDelay.setOnFinished(ev -> {
             turnCount++;
-            if (activePlayer.isFainted()) disableUI(false); 
             checkBattleStatus(); 
+            
+            // ON NE DÉBLOQUE QUE SI LE COMBAT CONTINUE ET QUE LE JOUEUR N'EST PAS KO
             if (!activePlayer.isFainted() && !activeCpu.isFainted()) {
                 disableUI(false);
             }
         });
-        
         endDelay.play();
     });
     delay.play();
@@ -284,18 +289,29 @@ private void animateDamage(ImageView sprite) {
     }
 
     @FXML
-    private void handleSwitchConfirmation(ActionEvent event) {
-        int index = (int) ((Button)event.getSource()).getUserData();
-        activePlayer = playerTeam.getPokemons()[index];
-        playerTeam.setActivePokemon(activePlayer);
-        
-        battleLog.appendText("Switch : " + activePlayer.getName() + " entre en combat !\n");
-        loadSprites();
-        closeSwitchMenu();
-        refreshUI();
-        
+
+private void handleSwitchConfirmation(ActionEvent event) {
+    // 1. Récupérer l'ancien et le nouveau Pokémon
+    Pokemon oldPokemon = activePlayer; 
+    int index = (int) ((Button)event.getSource()).getUserData();
+    activePlayer = playerTeam.getPokemons()[index];
+    playerTeam.setActivePokemon(activePlayer);
+    
+    // 2. Mise à jour visuelle immédiate
+    battleLog.appendText("\nSwitch : " + activePlayer.getName() + " entre en combat !\n");
+    loadSprites();
+    closeSwitchMenu();
+    refreshUI();
+    
+    // 3. Logique de tour
+    if (oldPokemon != null && !oldPokemon.isFainted()) {
+        // Switch volontaire : l'adversaire profite du changement pour attaquer
+        processCpuOnlyTurn(); 
+    } else {
+        // Switch forcé (après un KO) : on redonne la main au joueur pour son tour
         disableUI(false); 
     }
+}
 
     private void updateCpuIcons() {
         cpuTeamStatus.getChildren().clear();
@@ -362,7 +378,22 @@ private void animateDamage(ImageView sprite) {
         return 3;
     }
     
-    @FXML private void handleItems(ActionEvent event) { battleLog.appendText("Sac vide !\n"); }
+    @FXML 
+private void handleItems(ActionEvent event) { 
+    // --- Simulation de soin (Exemple : Potion) ---
+    if (activePlayer.getHp() < activePlayer.getMaxHp()) {
+        int healAmount = 20;
+        activePlayer.setHp(Math.min(activePlayer.getMaxHp(), activePlayer.getHp() + healAmount));
+        battleLog.appendText("Objet utilisé sur " + activePlayer.getName() + " (+"+healAmount+" PV) !\n");
+        battleLog.appendText("Votre tour se termine.\n");
+        
+        refreshUI();
+        // L'action est faite, le CPU attaque maintenant
+        processCpuOnlyTurn(); 
+    } else {
+        battleLog.appendText(activePlayer.getName() + " a déjà tous ses PV !\n");
+    }
+}
     private void displayTypes(HBox container, Pokemon pokemon) {
     container.getChildren().clear(); 
     if (pokemon == null || pokemon.getTypes() == null) return;
@@ -442,5 +473,24 @@ private void setMoveButtons(Pokemon p) {
             moveButtons[i].setVisible(false);
         }
     }
+}
+private void processCpuOnlyTurn() {
+    disableUI(true); 
+    
+    PauseTransition pause = new PauseTransition(Duration.seconds(1.0));
+    pause.setOnFinished(e -> {
+        // L'IA choisit et attaque
+        Attack cpuAtk = engine.chooseBestAttack(activeCpu, activePlayer);
+        processAttack(activeCpu, activePlayer, cpuAtk);
+        
+        // On attend la fin de l'animation pour rendre la main au joueur
+        PauseTransition endPause = new PauseTransition(Duration.seconds(1.0));
+        endPause.setOnFinished(ev -> {
+            checkBattleStatus(); // Vérifie si le joueur est KO
+            if (!activePlayer.isFainted()) disableUI(false); 
+        });
+        endPause.play();
+    });
+    pause.play();
 }
 }

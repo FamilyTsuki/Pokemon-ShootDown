@@ -95,7 +95,7 @@ public class PokemonEditorController {
 
     private void setupMoveComboBoxes(Pokemon pokemon) {
         ObservableList<String> attackNames = FXCollections.observableArrayList();
-
+        System.err.println(pokemon.getLearble().length);
         if (pokemon.getLearble() != null) {
             for (Attack move : pokemon.getLearble()) {
                 if (move != null) {

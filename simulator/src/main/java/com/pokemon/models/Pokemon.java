@@ -112,7 +112,26 @@ public class Pokemon {
     public void setItem(Item item) {
         this.item = item;
     }
+    // Dans Pokemon.java
 
+    // Permet de modifier l'Attaque (utilisé par Danse-Lames / Boosts)
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    // Permet de modifier la Défense (utilisé par Armure / Malus)
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    // Optionnel mais recommandé : Setters pour les stats spéciales
+    public void setSpAttack(int spAttack) {
+        this.spAttack = spAttack;
+    }
+
+    public void setSpDefense(int spDefense) {
+        this.spDefense = spDefense;
+    }
     
     @Override
     public String toString() {

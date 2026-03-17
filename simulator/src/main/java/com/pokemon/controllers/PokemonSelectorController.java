@@ -1,8 +1,10 @@
 package com.pokemon.controllers;
 
+import java.util.List;
+
+import com.pokemon.core.PokemonDataManager;
 import com.pokemon.models.Pokemon;
 import com.pokemon.models.PokemonType;
-import com.pokemon.pokemonList.*; 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -14,7 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
+
 
 public class PokemonSelectorController {
 
@@ -32,11 +34,8 @@ public class PokemonSelectorController {
 
     @FXML
     public void initialize() {
-        masterData.addAll(
-            new Bulbasaur(), new Ivysaur(), new Venusaur(),
-            new Charmander(), new Charmeleon(), new Charizard(),
-            new Squirtle(), new Wartortle(), new Blastoise()
-        );
+        List<Pokemon> pokedex = PokemonDataManager.loadPokemonsFromCSV("/com/pokemon/data/pokemons.csv");
+        masterData.addAll(pokedex);
 
         img.setCellFactory(param -> new TableCell<>() {
             private final ImageView imageView = new ImageView();

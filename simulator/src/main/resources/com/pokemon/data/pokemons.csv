@@ -1,0 +1,10 @@
+id,name,hp,atk,def,spd,type1,type2,spAtk,spDef,moves
+1,Bulbasaur,45,49,49,45,GRASS,POISON,65,65,Charge;Rugissement;Vampigraine;Fouet Lianes;Poudre Dodo;Tranch'Herbe;Belier;Lance-Soleil
+2,Ivysaur,60,62,63,60,GRASS,POISON,80,80,Charge;Vampigraine;Fouet Lianes;Tranch'Herbe;Poudre Dodo;Belier;Lance-Soleil
+3,Venusaur,80,82,83,80,GRASS,POISON,100,100,Fouet Lianes;Tranch'Herbe;Poudre Dodo;Belier;Lance-Soleil;Tempete Verte;Seisme
+4,Charmander,39,52,43,65,FIRE,,60,50,Griffe;Rugissement;Flammeche;Brouillard;Danse Flammes;Tranche;Lance-Flammes
+5,Charmeleon,58,64,58,80,FIRE,,80,65,Griffe;Flammeche;Brouillard;Danse Flammes;Tranche;Lance-Flammes;Deflagration
+6,Charizard,78,84,78,100,FIRE,FLYING,109,85,Flammeche;Danse Flammes;Tranche;Lance-Flammes;Deflagration;Boutefeu;Seisme
+7,Squirtle,44,48,65,43,WATER,,50,64,Charge;Mimi-Queue;Pistolet à O;Repli;Tour Rapide;Morsure;Vibraqua;Abri
+8,Wartortle,59,63,80,58,WATER,,65,80,Charge;Pistolet à O;Repli;Tour Rapide;Morsure;Vibraqua;Abri;Hydro-Queue
+9,Blastoise,79,83,100,78,WATER,,85,105,Pistolet à O;Vibraqua;Abri;Hydro-Queue;Exuviation;Hydrocanon;Coud'Krane;Seisme

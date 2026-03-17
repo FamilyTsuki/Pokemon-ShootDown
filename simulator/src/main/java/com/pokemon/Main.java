@@ -2,8 +2,7 @@ package com.pokemon;
 
 import com.pokemon.controllers.BattleController;
 import com.pokemon.models.Pokemon;
-import com.pokemon.pokemonList.Blastoise;
-import com.pokemon.pokemonList.Charizard;
+
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

@@ -3,7 +3,7 @@ package com.pokemon.controllers;
 import com.pokemon.models.Attack;
 import com.pokemon.models.Pokemon;
 import com.pokemon.models.Team;
-import com.pokemon.pokemonList.*;
+
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
@@ -123,35 +123,50 @@ public class TeamBuilderController {
     }
 
     private Pokemon[] generateCpuTeam(int teamSize) {
-        Pokemon[] cpuTeam = new Pokemon[6];
-        Random random = new Random();
-        Pokemon[] availableSpecies = {
-            new Bulbasaur(), new Ivysaur(), new Venusaur(),
-            new Charmander(), new Charmeleon(), new Charizard(),
-            new Squirtle(), new Wartortle(), new Blastoise()
-        };
+    Pokemon[] cpuTeam = new Pokemon[6];
+    Random random = new Random();
+    
+    // 1. Charger toutes les espèces depuis le CSV
+    List<Pokemon> availableSpecies = com.pokemon.core.PokemonDataManager.loadPokemonsFromCSV("/com/pokemon/data/pokemons.csv");
 
-        for (int i = 0; i < teamSize; i++) {
-            Pokemon randomPkmn = availableSpecies[random.nextInt(availableSpecies.length)];
-            Pokemon newCpuPkmn;
-            try {
-                newCpuPkmn = randomPkmn.getClass().getDeclaredConstructor().newInstance();
-            } catch (Exception e) { newCpuPkmn = randomPkmn; }
-
-            Attack[] learnable = newCpuPkmn.getLearble();
-            if (learnable != null) {
-                List<Attack> pool = new ArrayList<>();
-                for(Attack a : learnable) if(a != null) pool.add(a);
-                Collections.shuffle(pool);
-                int numAtk = Math.min(4, pool.size());
-                Attack[] finalAtks = new Attack[4];
-                for(int j=0; j<numAtk; j++) finalAtks[j] = pool.get(j);
-                newCpuPkmn.setAttacks(finalAtks);
-            }
-            cpuTeam[i] = newCpuPkmn;
-        }
+    if (availableSpecies.isEmpty()) {
+        System.err.println("Erreur : Aucun Pokémon chargé depuis le CSV pour l'équipe CPU !");
         return cpuTeam;
     }
+
+    for (int i = 0; i < teamSize; i++) {
+        // 2. Sélectionner un Pokémon aléatoire dans la liste
+        Pokemon basePkmn = availableSpecies.get(random.nextInt(availableSpecies.size()));
+        
+        // 3. Créer une copie unique (pour éviter que deux CPU partagent les mêmes PV)
+        // Note : On utilise les données du basePkmn pour en créer un nouveau
+        Pokemon newCpuPkmn = new Pokemon(
+            basePkmn.getId(), basePkmn.getName(), basePkmn.getMaxHp(),
+            basePkmn.getAttack(), basePkmn.getDefense(), basePkmn.getSpeed(),
+            basePkmn.getTypes(), new Attack[4], null, 
+            basePkmn.getLearble(), basePkmn.getSpAttack(), basePkmn.getSpDefense()
+        );
+
+        // 4. Assigner des attaques aléatoires (si learble n'est pas vide)
+        Attack[] pool = newCpuPkmn.getLearble();
+        if (pool != null && pool.length > 0) {
+            List<Attack> availableMoves = new ArrayList<>();
+            for (Attack a : pool) if (a != null) availableMoves.add(a);
+            
+            if (!availableMoves.isEmpty()) {
+                Collections.shuffle(availableMoves);
+                Attack[] finalAtks = new Attack[4];
+                for (int j = 0; j < Math.min(4, availableMoves.size()); j++) {
+                    finalAtks[j] = availableMoves.get(j);
+                }
+                newCpuPkmn.setAttacks(finalAtks);
+            }
+        }
+        
+        cpuTeam[i] = newCpuPkmn;
+    }
+    return cpuTeam;
+}
 
     @FXML
     private void handleStartBattle(ActionEvent event) throws IOException {
@@ -211,37 +226,49 @@ private Button getSlotButtonByIndex(int index) {
 private void handleRandomTeam(ActionEvent event) {
     Random random = new Random();
     
-    Pokemon[] availableSpecies = {
-        new Bulbasaur(), new Ivysaur(), new Venusaur(),
-        new Charmander(), new Charmeleon(), new Charizard(),
-        new Squirtle(), new Wartortle(), new Blastoise()
-    };
+    // 1. Charger la liste des Pokémon depuis le CSV
+    List<Pokemon> allSpecies = com.pokemon.core.PokemonDataManager.loadPokemonsFromCSV("/com/pokemon/data/pokemons.csv");
+
+    if (allSpecies.isEmpty()) {
+        System.err.println("Erreur : Impossible de charger les Pokémon pour l'équipe aléatoire.");
+        return;
+    }
 
     for (int i = 0; i < 6; i++) {
-        Pokemon randomSpecies = availableSpecies[random.nextInt(availableSpecies.length)];
-        Pokemon newPkmn;
-        try {
-            newPkmn = randomSpecies.getClass().getDeclaredConstructor().newInstance();
-        } catch (Exception e) { 
-            newPkmn = randomSpecies; 
-        }
+        // 2. Choisir une espèce au hasard dans la liste CSV
+        Pokemon basePkmn = allSpecies.get(random.nextInt(allSpecies.size()));
+        
+        // 3. Créer une nouvelle instance unique
+        Pokemon newPkmn = new Pokemon(
+            basePkmn.getId(), basePkmn.getName(), basePkmn.getMaxHp(),
+            basePkmn.getAttack(), basePkmn.getDefense(), basePkmn.getSpeed(),
+            basePkmn.getTypes(), new Attack[4], null, 
+            basePkmn.getLearble(), basePkmn.getSpAttack(), basePkmn.getSpDefense()
+        );
 
-        Attack[] learnable = newPkmn.getLearble();
-        if (learnable != null) {
-            List<Attack> pool = new ArrayList<>();
-            for (Attack a : learnable) if (a != null) pool.add(a);
-            Collections.shuffle(pool);
-            
-            Attack[] finalAtks = new Attack[4];
-            for (int j = 0; j < Math.min(4, pool.size()); j++) {
-                finalAtks[j] = pool.get(j);
+        // 4. Assigner des attaques aléatoires depuis le pool 'learble'
+        Attack[] learnablePool = newPkmn.getLearble();
+        if (learnablePool != null) {
+            List<Attack> validMoves = new ArrayList<>();
+            for (Attack a : learnablePool) {
+                if (a != null) validMoves.add(a);
             }
-            newPkmn.setAttacks(finalAtks);
+
+            if (!validMoves.isEmpty()) {
+                Collections.shuffle(validMoves);
+                Attack[] finalAtks = new Attack[4];
+                for (int j = 0; j < Math.min(4, validMoves.size()); j++) {
+                    finalAtks[j] = validMoves.get(j);
+                }
+                newPkmn.setAttacks(finalAtks);
+            }
         }
 
+        // 5. Mise à jour de l'équipe et de l'interface
         this.team[i] = newPkmn;
         Button slotBtn = getSlotButtonByIndex(i + 1);
         updateSlotVisual(slotBtn, newPkmn);
     }
+
 }
 }
