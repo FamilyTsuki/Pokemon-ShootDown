@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<StackPane xmlns="http://javafx.com/javafx" 
+           xmlns:fx="http://javafx.com/fxml" 
+           fx:controller="com.pokemon.controllers.StartController"
+           prefHeight="600.0" prefWidth="800.0" 
+           styleClass="root">
+    
+    <stylesheets>
+        <URL value="@../css/style.css" />
+    </stylesheets>
+
+    <VBox alignment="CENTER" spacing="50">
+        <VBox alignment="CENTER" spacing="10">
+            <ImageView fitWidth="700" preserveRatio="true">
+                <image>
+                    <Image url="@../assets/sprites/gameTitle.png" />
+                </image>
+            </ImageView>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="20">
+            <Button text="START" 
+                    onAction="#handleStart" 
+                    prefWidth="300" prefHeight="70"
+                    styleClass="btn-primary"/>
+
+            <Button text="Leav" 
+                    onAction="#handleQuit" 
+                    prefWidth="200" prefHeight="45"
+                    styleClass="btn-secondary"/>
+        </VBox>
+
+        <Label text="Version 1.0 - Projet Simulation POO" 
+               style="-fx-text-fill: #7f8c8d; -fx-font-style: italic;"/>
+    </VBox>
+</StackPane>
