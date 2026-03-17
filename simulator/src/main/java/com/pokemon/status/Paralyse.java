@@ -4,22 +4,33 @@ import com.pokemon.models.Pokemon;
 import com.pokemon.models.Status;
 
 public class Paralyse extends Status {
+    private int speed_storage;
+    private boolean hasModifiedSpeed = false;
+
     public Paralyse() {
-        super("Paralyse",
-                "le pokemon a une chance sur 4 de ne pas pouvoir attaquer " +
-                        "et vois sa vitesse etre diviser par 2"
-                );
+        super("Paralyse", "25% de chance de ne pas pouvoir attaquer et vitesse divisée par 2.");
     }
 
+    @Override
     public void onTurnStart(Pokemon pokemon) {
-        int rightattack = (int)(Math.random() * (4 - 1 + 1) + 1);
-        if (rightattack == 1) {
-            //faire en sorte que cela l'empeche d'attaque durant le tour
+        if (!hasModifiedSpeed) {
+            this.speed_storage = pokemon.getSpeed();
+            pokemon.setSpeed(- (this.speed_storage / 2));
+            this.hasModifiedSpeed = true;
         }
-        //modif la vitesse
+
+        int chance = (int)(Math.random() * 4);
+        if (chance == 0) {
+            System.out.println(pokemon.getName() + " est paralysé ! Il ne peut pas attaquer !");
+            pokemon.setCanAttack(false);
+        }
     }
 
+    @Override
     public void onTurnEnd(Pokemon pokemon) {
-        pokemon.setHp((int)(pokemon.getHp() * 0.9375));
+        if (hasModifiedSpeed) {
+            pokemon.setSpeed(speed_storage);
+            this.hasModifiedSpeed = false;
+        }
     }
 }
