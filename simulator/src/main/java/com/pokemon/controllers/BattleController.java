@@ -408,10 +408,22 @@ private void setMoveButtons(Pokemon p) {
     Attack[] attacks = p.getAttacks();
 
     for (int i = 0; i < moveButtons.length; i++) {
+        // --- 1. NETTOYAGE CRITIQUE ---
+        moveButtons[i].setGraphic(null); 
+        moveButtons[i].setText("");
+        
+        // On retire toutes les classes de types possibles pour repartir à zéro
+        moveButtons[i].getStyleClass().removeAll(
+            "atk-fire", "atk-water", "atk-grass", "atk-electric", "atk-ice", 
+            "atk-fighting", "atk-poison", "atk-ground", "atk-flying", "atk-psychic", 
+            "atk-bug", "atk-rock", "atk-ghost", "atk-dragon", "atk-dark", "atk-steel", 
+            "atk-fairy", "atk-normal"
+        );
+
+        // --- 2. MISE À JOUR ---
         if (i < attacks.length && attacks[i] != null) {
             Attack atk = attacks[i];
 
-            // Création d'un mini-layout pour l'intérieur du bouton
             VBox content = new VBox(2);
             content.setAlignment(Pos.CENTER);
             
@@ -424,11 +436,16 @@ private void setMoveButtons(Pokemon p) {
             content.getChildren().addAll(nameLabel, typeLabel);
             
             moveButtons[i].setGraphic(content);
-            moveButtons[i].setText(""); // On enlève le texte par défaut
             
-            // Application de la classe CSS du type
-            moveButtons[i].getStyleClass().add("atk-" + atk.getType().toString().toLowerCase());
+            // On ajoute la nouvelle classe
+            String typeClass = "atk-" + atk.getType().toString().toLowerCase();
+            moveButtons[i].getStyleClass().add(typeClass);
+            
+            moveButtons[i].setVisible(true);
             moveButtons[i].setDisable(false);
+        } else {
+            // Si pas d'attaque à cet emplacement, on cache le bouton
+            moveButtons[i].setVisible(false);
         }
     }
 }
