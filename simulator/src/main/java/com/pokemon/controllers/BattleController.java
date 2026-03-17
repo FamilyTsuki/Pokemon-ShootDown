@@ -62,7 +62,7 @@ public class BattleController {
 
     loadSprites();
     refreshUI();
-    
+    setMoveButtons(activePlayer);
     disableUI(false); 
     
     battleLog.appendText("Un combat commence !\n");
@@ -93,28 +93,25 @@ public class BattleController {
     }
 }
 
-
     @FXML
 private void handleMove(ActionEvent event) {
     disableUI(true); 
 
-    int moveIdx = getButtonIndex((Button) event.getSource());
-    Attack playerAtk = activePlayer.getAttacks()[moveIdx];
+        if (playerAtk != null) {
+            disableUI(true); 
+            Attack cpuAtk = engine.chooseBestAttack(activeCpu, activePlayer);
 
-    if (playerAtk != null) {
-        Attack cpuAtk = engine.chooseBestAttack(activeCpu, activePlayer);
-
-        if (engine.isPlayerFirst(activePlayer, activeCpu)) {
-            executeTurnSequence(activePlayer, activeCpu, playerAtk, cpuAtk);
-        } else {
-            executeTurnSequence(activeCpu, activePlayer, cpuAtk, playerAtk);
+            if (engine.isPlayerFirst(activePlayer, activeCpu)) {
+                executeTurnSequence(activePlayer, activeCpu, playerAtk, cpuAtk);
+            } else {
+                executeTurnSequence(activeCpu, activePlayer, cpuAtk, playerAtk);
+            }
         }
     } else {
         disableUI(false);
     }
-}
 
-private void executeTurnSequence(Pokemon first, Pokemon second, Attack atk1, Attack atk2) {
+    private void executeTurnSequence(Pokemon first, Pokemon second, Attack atk1, Attack atk2) {
     battleLog.appendText("\n=== TOUR " + turnCount + " ====\n");
     
     processAttack(first, second, atk1);
@@ -136,12 +133,14 @@ private void executeTurnSequence(Pokemon first, Pokemon second, Attack atk1, Att
         PauseTransition endDelay = new PauseTransition(Duration.seconds(1.0));
         endDelay.setOnFinished(ev -> {
             turnCount++;
+            if (activePlayer.isFainted()) disableUI(false); 
             checkBattleStatus(); 
             
             if (!activePlayer.isFainted() && !activeCpu.isFainted()) {
                 disableUI(false);
             }
         });
+        
         endDelay.play();
     });
     delay.play();
@@ -210,7 +209,6 @@ private void animateDamage(ImageView sprite) {
                 battleLog.appendText("L'adversaire envoie " + next.getName() + " !\n");
                 loadSprites();
                 refreshUI();
-                
                 disableUI(false);
             } else {
                 showEndGameMessage("VICTOIRE !", Color.GREEN);
@@ -257,8 +255,6 @@ private void animateDamage(ImageView sprite) {
     displayTypes(cpuTypeContainer, activeCpu);
 
     updateCpuIcons();
-    setMoveButtons(activePlayer);
-
 
 
 }
@@ -301,7 +297,6 @@ private void handleSwitchConfirmation(ActionEvent event) {
     } else {
         disableUI(false); 
     }
-}
 
     private void updateCpuIcons() {
         cpuTeamStatus.getChildren().clear();
@@ -351,7 +346,6 @@ private void handleSwitchConfirmation(ActionEvent event) {
         TranslateTransition tt = new TranslateTransition(Duration.millis(300), switchMenu);
         tt.setToY(170); tt.play();
         isSwitchMenuVisible = false;
-        disableUI(false);
     }
 
     @FXML private void toggleLog() {
@@ -399,25 +393,31 @@ private void handleItems(ActionEvent event) {
     }
 }
 private void showDamagePopup(ImageView targetSprite, int damage) {
-
+    // 1. Création du label de dégâts
     Label damageLabel = new Label("-" + damage);
-    damageLabel.getStyleClass().add("damage-popup");
+    damageLabel.getStyleClass().add("damage-popup"); // On va créer ce style en CSS
     
+    // 2. Positionnement initial (au-dessus du Pokémon cible)
+    // On récupère les coordonnées du sprite dans le StackPane
     double startX = targetSprite.getParent().getLayoutX() + (targetSprite.getFitWidth() / 2);
     double startY = targetSprite.getParent().getLayoutY() - 20;
 
     damageLabel.setLayoutX(startX);
     damageLabel.setLayoutY(startY);
     
+    // 3. Ajout au conteneur principal (battleStackPane)
     battleStackPane.getChildren().add(damageLabel);
 
+    // 4. Animation de montée (Move Up)
     TranslateTransition moveUp = new TranslateTransition(Duration.millis(800), damageLabel);
-    moveUp.setByY(-60); 
+    moveUp.setByY(-60); // Monte de 60 pixels
 
+    // 5. Animation de disparition (Fade Out)
     FadeTransition fadeOut = new FadeTransition(Duration.millis(800), damageLabel);
     fadeOut.setFromValue(1.0);
     fadeOut.setToValue(0.0);
 
+    // 6. Nettoyage : supprimer le label une fois fini
     ParallelTransition pt = new ParallelTransition(damageLabel, moveUp, fadeOut);
     pt.setOnFinished(e -> battleStackPane.getChildren().remove(damageLabel));
     
@@ -428,20 +428,10 @@ private void setMoveButtons(Pokemon p) {
     Attack[] attacks = p.getAttacks();
 
     for (int i = 0; i < moveButtons.length; i++) {
-
-        moveButtons[i].setGraphic(null); 
-        moveButtons[i].setText("");      
-        
-        moveButtons[i].getStyleClass().removeAll(
-            "atk-fire", "atk-water", "atk-grass", "atk-electric", "atk-ice", 
-            "atk-fighting", "atk-poison", "atk-ground", "atk-flying", "atk-psychic", 
-            "atk-bug", "atk-rock", "atk-ghost", "atk-dragon", "atk-dark", "atk-steel", 
-            "atk-fairy", "atk-normal"
-        );
-
         if (i < attacks.length && attacks[i] != null) {
             Attack atk = attacks[i];
 
+            // Création d'un mini-layout pour l'intérieur du bouton
             VBox content = new VBox(2);
             content.setAlignment(Pos.CENTER);
             
@@ -454,6 +444,7 @@ private void setMoveButtons(Pokemon p) {
             content.getChildren().addAll(nameLabel, typeLabel);
             
             moveButtons[i].setGraphic(content);
+            moveButtons[i].setText(""); // On enlève le texte par défaut
             
             String typeClass = "atk-" + atk.getType().toString().toLowerCase();
             moveButtons[i].getStyleClass().add(typeClass);
