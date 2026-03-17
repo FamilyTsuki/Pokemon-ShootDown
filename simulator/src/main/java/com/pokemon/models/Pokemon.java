@@ -118,19 +118,15 @@ public class Pokemon {
     public void setItem(Item item) {
         this.item = item;
     }
-    // Dans Pokemon.java
-
-    // Permet de modifier l'Attaque (utilisé par Danse-Lames / Boosts)
+    
     public void setAttack(int attack) {
         this.attack = attack;
     }
 
-    // Permet de modifier la Défense (utilisé par Armure / Malus)
     public void setDefense(int defense) {
         this.defense = defense;
     }
 
-    // Optionnel mais recommandé : Setters pour les stats spéciales
     public void setSpAttack(int spAttack) {
         this.spAttack = spAttack;
     }
@@ -146,7 +142,7 @@ public class Pokemon {
         this.attack = newAttack;
     }
 
-    private boolean canAttack = true; // Par défaut, il peut attaquer
+    private boolean canAttack = true; 
 
     public boolean canAttack() { return canAttack; }
     public void setCanAttack(boolean canAttack) { this.canAttack = canAttack; }
