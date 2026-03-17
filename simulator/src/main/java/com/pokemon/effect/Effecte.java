@@ -1,6 +1,8 @@
 package com.pokemon.effect;
 
-public class Effecte {
+import com.pokemon.models.Pokemon;
+
+public abstract class Effecte {
     private String name;
     private String description;
     private int duration;
@@ -37,10 +39,9 @@ public class Effecte {
         return duration == 0;
     }
 
+    public abstract void onAfterAttack(Pokemon attacker, Pokemon defender, int damageDealt);
     @Override
     public String toString() {
         return String.format("%s: %s (Turns remaining: %d)", name, description, duration);
     }
-
-    
 }
