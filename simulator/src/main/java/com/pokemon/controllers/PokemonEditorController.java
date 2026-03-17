@@ -25,6 +25,8 @@ public class PokemonEditorController {
     @FXML private ImageView pokemonSprite;
     @FXML private ComboBox<String> move1, move2, move3, move4;
     @FXML private ComboBox<String> itemComboBox;
+    // --- NOUVEAU : Label pour la description ---
+    @FXML private Label itemDescriptionLabel; 
 
     private Pokemon currentPokemon;
     private boolean saveClicked = false;
@@ -59,10 +61,33 @@ public class PokemonEditorController {
 
         itemComboBox.setItems(itemNames);
 
+        // --- NOUVEAU : Listener pour mettre à jour la description quand on change d'objet ---
+        itemComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            updateItemDescription(newVal);
+        });
+
         if (currentPokemon.getItem() != null) {
-            itemComboBox.getSelectionModel().select(currentPokemon.getItem().getName());
+            String itemName = currentPokemon.getItem().getName();
+            itemComboBox.getSelectionModel().select(itemName);
+            updateItemDescription(itemName); // Init description
         } else {
             itemComboBox.getSelectionModel().select("None");
+            updateItemDescription("None");
+        }
+    }
+
+    // --- NOUVELLE MÉTHODE : Met à jour le texte du Label ---
+    private void updateItemDescription(String itemName) {
+        if (itemName == null || itemName.equals("None")) {
+            itemDescriptionLabel.setText("Aucun objet tenu.");
+            return;
+        }
+
+        for (Item it : availableItems) {
+            if (it.getName().equals(itemName)) {
+                itemDescriptionLabel.setText(it.getDescription());
+                return;
+            }
         }
     }
 
@@ -132,7 +157,7 @@ public class PokemonEditorController {
     }
 
     private void refreshMoveOptions() {
-        if (isUpdating) return; // Sécurité anti-crash
+        if (isUpdating) return; 
         
         isUpdating = true;
         ComboBox<String>[] boxes = new ComboBox[]{move1, move2, move3, move4};

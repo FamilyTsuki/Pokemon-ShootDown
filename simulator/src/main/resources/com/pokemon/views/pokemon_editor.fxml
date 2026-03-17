@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 
-<VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="600.0" spacing="20.0" 
+<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="600.0" spacing="20.0" 
       styleClass="root" xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="com.pokemon.controllers.PokemonEditorController">
@@ -26,6 +26,10 @@
                     <VBox alignment="CENTER" spacing="5.0">
                         <Label text="OBJET TENU" styleClass="field-label" />
                         <ComboBox fx:id="itemComboBox" prefWidth="150.0" promptText="Select Item" styleClass="combo-box-styled" />
+                        
+                        <Label fx:id="itemDescriptionLabel" text="Aucun objet tenu." 
+                               wrapText="true" maxWidth="180.0" alignment="CENTER" textAlignment="CENTER"
+                               style="-fx-font-size: 11px; -fx-text-fill: #bdc3c7; -fx-font-style: italic;"/>
                     </VBox>
                 </VBox>
 
