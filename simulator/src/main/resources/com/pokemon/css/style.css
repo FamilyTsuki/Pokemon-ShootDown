@@ -37,18 +37,38 @@
 }
 
 /* Boutons de combat (Attaques) */
+/* Style de base des boutons d'attaque */
 .btn-attack {
-  -fx-background-color: #34495e;
   -fx-text-fill: white;
   -fx-font-weight: bold;
-  -fx-border-color: #7f8c8d;
-  -fx-border-radius: 5;
+  -fx-font-size: 13px;
+  -fx-background-radius: 8;
+  -fx-border-color: rgba(255, 255, 255, 0.2);
+  -fx-border-width: 1;
   -fx-cursor: hand;
 }
-.btn-attack:hover {
-  -fx-background-color: #ecf0f1;
+
+/* Couleurs par type pour les boutons */
+.atk-fire {
+  -fx-background-color: linear-gradient(to bottom, #ff4422, #a32d16);
+}
+.atk-water {
+  -fx-background-color: linear-gradient(to bottom, #3399ff, #1d5691);
+}
+.atk-grass {
+  -fx-background-color: linear-gradient(to bottom, #77cc55, #4d8537);
+}
+.atk-electric {
+  -fx-background-color: linear-gradient(to bottom, #ffcc33, #b38f24);
   -fx-text-fill: black;
 }
+.atk-normal {
+  -fx-background-color: linear-gradient(to bottom, #aaaa99, #6e6e63);
+}
+.atk-poison {
+  -fx-background-color: linear-gradient(to bottom, #aa5599, #703865);
+}
+/* Ajoute les autres types sur le même modèle (atk-psychic, atk-dark, etc.) */
 
 /* Bouton SWITCH (Orange) */
 .btn-switch {
@@ -260,4 +280,12 @@
   -fx-background-color: #c0392b;
   -fx-scale-x: 1.2;
   -fx-scale-y: 1.2;
+}
+.damage-popup {
+  -fx-text-fill: #e74c3c; /* Rouge vif */
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+  -fx-font-family: "System";
+  /* Contour noir pour la lisibilité */
+  -fx-effect: dropshadow(one-pass-box, black, 2, 0, 1, 1);
 }

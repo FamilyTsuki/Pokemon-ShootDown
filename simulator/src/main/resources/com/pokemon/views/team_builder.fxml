@@ -100,6 +100,7 @@
 
     <HBox spacing="40" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
         <Button text="RETOUR" onAction="#handleBack" styleClass="btn-secondary"/>
+        <Button text="ALÉATOIRE" onAction="#handleRandomTeam" styleClass="btn-switch" prefWidth="150" prefHeight="40"/>
         <Button text="COMBAT !" onAction="#handleStartBattle" prefWidth="300" prefHeight="60" styleClass="btn-primary"/>
     </HBox>
 

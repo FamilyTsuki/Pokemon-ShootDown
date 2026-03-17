@@ -4,10 +4,12 @@ import com.pokemon.models.*;
 import com.pokemon.core.BattleEngine;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.GaussianBlur;
@@ -60,6 +62,7 @@ public class BattleController {
 
     loadSprites();
     refreshUI();
+    
     disableUI(false); 
     
     battleLog.appendText("Un combat commence !\n");
@@ -156,6 +159,7 @@ public class BattleController {
     
     if (damage > 0) {
         animateDamage(targetSprite);
+        showDamagePopup(targetSprite, damage);
     }
 
     String efficacite = ""; 
@@ -206,6 +210,7 @@ private void animateDamage(ImageView sprite) {
                 battleLog.appendText("L'adversaire envoie " + next.getName() + " !\n");
                 loadSprites();
                 refreshUI();
+                
                 disableUI(false);
             } else {
                 showEndGameMessage("VICTOIRE !", Color.GREEN);
@@ -252,22 +257,10 @@ private void animateDamage(ImageView sprite) {
     displayTypes(cpuTypeContainer, activeCpu);
 
     updateCpuIcons();
+    setMoveButtons(activePlayer);
 
-    Button[] btns = {move1, move2, move3, move4};
-    Attack[] atks = activePlayer.getAttacks();
 
-    boolean alive = !activePlayer.isFainted();
 
-    for (int i = 0; i < 4; i++) {
-        if (alive && atks != null && i < atks.length && atks[i] != null) {
-            btns[i].setText(atks[i].getName());
-            btns[i].setVisible(true);
-            btns[i].setManaged(true);
-        } else {
-            btns[i].setVisible(false);
-            btns[i].setManaged(false);
-        }
-    }
 }
 
     @FXML
@@ -300,6 +293,7 @@ private void animateDamage(ImageView sprite) {
         loadSprites();
         closeSwitchMenu();
         refreshUI();
+        
         disableUI(false); 
     }
 
@@ -332,19 +326,25 @@ private void animateDamage(ImageView sprite) {
         try {
             playerSprite.setImage(new Image(getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activePlayer.getId() + ".png")));
             cpuSprite.setImage(new Image(getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activeCpu.getId() + ".png")));
-        } catch (Exception e) {}
+            playerSprite.setOpacity(1.0);
+            cpuSprite.setOpacity(1.0);
+        } catch (Exception e) {
+            System.err.println("Erreur de chargement d'image : " + e.getMessage());
+        }
     }
 
     private void openSwitchMenu() {
         TranslateTransition tt = new TranslateTransition(Duration.millis(300), switchMenu);
         tt.setToY(0); tt.play();
         isSwitchMenuVisible = true;
+        disableUI(true);
     }
 
     @FXML private void closeSwitchMenu() {
         TranslateTransition tt = new TranslateTransition(Duration.millis(300), switchMenu);
         tt.setToY(170); tt.play();
         isSwitchMenuVisible = false;
+        disableUI(false);
     }
 
     @FXML private void toggleLog() {
@@ -376,5 +376,71 @@ private void animateDamage(ImageView sprite) {
         container.getChildren().add(badge);
     }
 }
+private void showDamagePopup(ImageView targetSprite, int damage) {
 
+    Label damageLabel = new Label("-" + damage);
+    damageLabel.getStyleClass().add("damage-popup");
+    
+    double startX = targetSprite.getParent().getLayoutX() + (targetSprite.getFitWidth() / 2);
+    double startY = targetSprite.getParent().getLayoutY() - 20;
+
+    damageLabel.setLayoutX(startX);
+    damageLabel.setLayoutY(startY);
+    
+    battleStackPane.getChildren().add(damageLabel);
+
+    TranslateTransition moveUp = new TranslateTransition(Duration.millis(800), damageLabel);
+    moveUp.setByY(-60); 
+
+    FadeTransition fadeOut = new FadeTransition(Duration.millis(800), damageLabel);
+    fadeOut.setFromValue(1.0);
+    fadeOut.setToValue(0.0);
+
+    ParallelTransition pt = new ParallelTransition(damageLabel, moveUp, fadeOut);
+    pt.setOnFinished(e -> battleStackPane.getChildren().remove(damageLabel));
+    
+    pt.play();
+}
+private void setMoveButtons(Pokemon p) {
+    Button[] moveButtons = {move1, move2, move3, move4};
+    Attack[] attacks = p.getAttacks();
+
+    for (int i = 0; i < moveButtons.length; i++) {
+
+        moveButtons[i].setGraphic(null); 
+        moveButtons[i].setText("");      
+        
+        moveButtons[i].getStyleClass().removeAll(
+            "atk-fire", "atk-water", "atk-grass", "atk-electric", "atk-ice", 
+            "atk-fighting", "atk-poison", "atk-ground", "atk-flying", "atk-psychic", 
+            "atk-bug", "atk-rock", "atk-ghost", "atk-dragon", "atk-dark", "atk-steel", 
+            "atk-fairy", "atk-normal"
+        );
+
+        if (i < attacks.length && attacks[i] != null) {
+            Attack atk = attacks[i];
+
+            VBox content = new VBox(2);
+            content.setAlignment(Pos.CENTER);
+            
+            Label nameLabel = new Label(atk.getName().toUpperCase());
+            nameLabel.setStyle("-fx-text-fill: inherit; -fx-font-weight: bold; -fx-font-size: 13px;");
+            
+            Label typeLabel = new Label(atk.getType().toString());
+            typeLabel.setStyle("-fx-text-fill: inherit; -fx-font-size: 10px; -fx-opacity: 0.8;");
+
+            content.getChildren().addAll(nameLabel, typeLabel);
+            
+            moveButtons[i].setGraphic(content);
+            
+            String typeClass = "atk-" + atk.getType().toString().toLowerCase();
+            moveButtons[i].getStyleClass().add(typeClass);
+            
+            moveButtons[i].setVisible(true);
+            moveButtons[i].setDisable(false);
+        } else {
+            moveButtons[i].setVisible(false);
+        }
+    }
+}
 }

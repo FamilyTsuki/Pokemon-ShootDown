@@ -158,7 +158,7 @@ public class TeamBuilderController {
         int count = 0;
         for (Pokemon p : team) if (p != null) count++;
 
-        if (count == 0) return;
+        if (count < 3) return;
 
         Team pTeam = new Team(this.team);
         Team cTeam = new Team(generateCpuTeam(count));
@@ -206,5 +206,42 @@ private Button getSlotButtonByIndex(int index) {
         case 1 -> slot1Btn; case 2 -> slot2Btn; case 3 -> slot3Btn;
         case 4 -> slot4Btn; case 5 -> slot5Btn; default -> slot6Btn;
     };
+}
+@FXML
+private void handleRandomTeam(ActionEvent event) {
+    Random random = new Random();
+    
+    Pokemon[] availableSpecies = {
+        new Bulbasaur(), new Ivysaur(), new Venusaur(),
+        new Charmander(), new Charmeleon(), new Charizard(),
+        new Squirtle(), new Wartortle(), new Blastoise()
+    };
+
+    for (int i = 0; i < 6; i++) {
+        Pokemon randomSpecies = availableSpecies[random.nextInt(availableSpecies.length)];
+        Pokemon newPkmn;
+        try {
+            newPkmn = randomSpecies.getClass().getDeclaredConstructor().newInstance();
+        } catch (Exception e) { 
+            newPkmn = randomSpecies; 
+        }
+
+        Attack[] learnable = newPkmn.getLearble();
+        if (learnable != null) {
+            List<Attack> pool = new ArrayList<>();
+            for (Attack a : learnable) if (a != null) pool.add(a);
+            Collections.shuffle(pool);
+            
+            Attack[] finalAtks = new Attack[4];
+            for (int j = 0; j < Math.min(4, pool.size()); j++) {
+                finalAtks[j] = pool.get(j);
+            }
+            newPkmn.setAttacks(finalAtks);
+        }
+
+        this.team[i] = newPkmn;
+        Button slotBtn = getSlotButtonByIndex(i + 1);
+        updateSlotVisual(slotBtn, newPkmn);
+    }
 }
 }
