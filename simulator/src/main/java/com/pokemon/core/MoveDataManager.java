@@ -7,7 +7,7 @@ public class MoveDataManager {
 
     public static Attack createAttackFromData(String[] d) {
         try {
-            // Ordre : name, type, power, accuracy, category, effectId
+
             String name = d[0].trim();
             PokemonType type = PokemonType.valueOf(d[1].trim().toUpperCase());
             int power = Integer.parseInt(d[2].trim());
@@ -17,7 +17,6 @@ public class MoveDataManager {
 
             Attack atk = new Attack(name, type, power, acc, category);
 
-            // Gestion simple des effets
             if (effectId.equalsIgnoreCase("HEAL_USER")) {
                 atk.setEffect((user, target, log) -> {
                     int heal = user.getMaxHp() / 2;

@@ -94,9 +94,8 @@ public class BattleController {
 }
 
     @FXML
-    private void handleMove(ActionEvent event) {
-        int moveIdx = getButtonIndex((Button) event.getSource());
-        Attack playerAtk = activePlayer.getAttacks()[moveIdx];
+private void handleMove(ActionEvent event) {
+    disableUI(true); 
 
         if (playerAtk != null) {
             disableUI(true); 
@@ -108,20 +107,19 @@ public class BattleController {
                 executeTurnSequence(activeCpu, activePlayer, cpuAtk, playerAtk);
             }
         }
+    } else {
+        disableUI(false);
     }
 
     private void executeTurnSequence(Pokemon first, Pokemon second, Attack atk1, Attack atk2) {
     battleLog.appendText("\n=== TOUR " + turnCount + " ====\n");
     
-    battleLog.appendText("[INFO] " + first.getName() + " est plus rapide (Vitesse: " + first.getSpeed() + ")\n");
-
     processAttack(first, second, atk1);
     
     if (second.isFainted()) {
         turnCount++;
         PauseTransition shortPause = new PauseTransition(Duration.seconds(1.0));
         shortPause.setOnFinished(e -> {
-            if (activePlayer.isFainted()) disableUI(false); 
             checkBattleStatus();
         });
         shortPause.play();
@@ -137,6 +135,7 @@ public class BattleController {
             turnCount++;
             if (activePlayer.isFainted()) disableUI(false); 
             checkBattleStatus(); 
+            
             if (!activePlayer.isFainted() && !activeCpu.isFainted()) {
                 disableUI(false);
             }
@@ -281,16 +280,21 @@ private void animateDamage(ImageView sprite) {
     }
 
     @FXML
-    private void handleSwitchConfirmation(ActionEvent event) {
-        int index = (int) ((Button)event.getSource()).getUserData();
-        activePlayer = playerTeam.getPokemons()[index];
-        playerTeam.setActivePokemon(activePlayer);
-        
-        battleLog.appendText("Switch : " + activePlayer.getName() + " entre en combat !\n");
-        loadSprites();
-        closeSwitchMenu();
-        refreshUI();
-        setMoveButtons(activePlayer);
+
+private void handleSwitchConfirmation(ActionEvent event) {
+    Pokemon oldPokemon = activePlayer; 
+    int index = (int) ((Button)event.getSource()).getUserData();
+    activePlayer = playerTeam.getPokemons()[index];
+    playerTeam.setActivePokemon(activePlayer);
+    
+    battleLog.appendText("\nSwitch : " + activePlayer.getName() + " entre en combat !\n");
+    loadSprites();
+    closeSwitchMenu();
+    refreshUI();
+    
+    if (oldPokemon != null && !oldPokemon.isFainted()) {
+        processCpuOnlyTurn(); 
+    } else {
         disableUI(false); 
     }
 
@@ -315,6 +319,7 @@ private void animateDamage(ImageView sprite) {
     }
 
     private void disableUI(boolean state) {
+        System.out.println(state);
         move1.setDisable(state); move2.setDisable(state);
         move3.setDisable(state); move4.setDisable(state);
     }
@@ -358,7 +363,22 @@ private void animateDamage(ImageView sprite) {
         return 3;
     }
     
-    @FXML private void handleItems(ActionEvent event) { battleLog.appendText("Sac vide !\n"); }
+    @FXML 
+private void handleItems(ActionEvent event) { 
+    
+    if (activePlayer.getHp() < activePlayer.getMaxHp()) {
+        int healAmount = 20;
+        activePlayer.setHp(Math.min(activePlayer.getMaxHp(), activePlayer.getHp() + healAmount));
+        battleLog.appendText("Objet utilisé sur " + activePlayer.getName() + " (+"+healAmount+" PV) !\n");
+        battleLog.appendText("Votre tour se termine.\n");
+        
+        refreshUI();
+    
+        processCpuOnlyTurn(); 
+    } else {
+        battleLog.appendText(activePlayer.getName() + " a déjà tous ses PV !\n");
+    }
+}
     private void displayTypes(HBox container, Pokemon pokemon) {
     container.getChildren().clear(); 
     if (pokemon == null || pokemon.getTypes() == null) return;
@@ -426,10 +446,32 @@ private void setMoveButtons(Pokemon p) {
             moveButtons[i].setGraphic(content);
             moveButtons[i].setText(""); // On enlève le texte par défaut
             
-            // Application de la classe CSS du type
-            moveButtons[i].getStyleClass().add("atk-" + atk.getType().toString().toLowerCase());
-            moveButtons[i].setDisable(false);
+            String typeClass = "atk-" + atk.getType().toString().toLowerCase();
+            moveButtons[i].getStyleClass().add(typeClass);
+            
+            moveButtons[i].setVisible(true);
+            
+        } else {
+            moveButtons[i].setVisible(false);
         }
     }
+}
+private void processCpuOnlyTurn() {
+    disableUI(true); 
+    
+    PauseTransition pause = new PauseTransition(Duration.seconds(1.0));
+    pause.setOnFinished(e -> {
+        
+        Attack cpuAtk = engine.chooseBestAttack(activeCpu, activePlayer);
+        processAttack(activeCpu, activePlayer, cpuAtk);
+        
+        PauseTransition endPause = new PauseTransition(Duration.seconds(1.0));
+        endPause.setOnFinished(ev -> {
+            checkBattleStatus();
+            if (!activePlayer.isFainted()) disableUI(false); 
+        });
+        endPause.play();
+    });
+    pause.play();
 }
 }

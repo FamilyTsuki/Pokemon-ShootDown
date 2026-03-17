@@ -125,8 +125,6 @@ public class TeamBuilderController {
     private Pokemon[] generateCpuTeam(int teamSize) {
     Pokemon[] cpuTeam = new Pokemon[6];
     Random random = new Random();
-    
-    // 1. Charger toutes les espèces depuis le CSV
     List<Pokemon> availableSpecies = com.pokemon.core.PokemonDataManager.loadPokemonsFromCSV("/com/pokemon/data/pokemons.csv");
 
     if (availableSpecies.isEmpty()) {
@@ -135,11 +133,8 @@ public class TeamBuilderController {
     }
 
     for (int i = 0; i < teamSize; i++) {
-        // 2. Sélectionner un Pokémon aléatoire dans la liste
         Pokemon basePkmn = availableSpecies.get(random.nextInt(availableSpecies.size()));
         
-        // 3. Créer une copie unique (pour éviter que deux CPU partagent les mêmes PV)
-        // Note : On utilise les données du basePkmn pour en créer un nouveau
         Pokemon newCpuPkmn = new Pokemon(
             basePkmn.getId(), basePkmn.getName(), basePkmn.getMaxHp(),
             basePkmn.getAttack(), basePkmn.getDefense(), basePkmn.getSpeed(),
@@ -147,7 +142,6 @@ public class TeamBuilderController {
             basePkmn.getLearble(), basePkmn.getSpAttack(), basePkmn.getSpDefense()
         );
 
-        // 4. Assigner des attaques aléatoires (si learble n'est pas vide)
         Attack[] pool = newCpuPkmn.getLearble();
         if (pool != null && pool.length > 0) {
             List<Attack> availableMoves = new ArrayList<>();
@@ -226,7 +220,6 @@ private Button getSlotButtonByIndex(int index) {
 private void handleRandomTeam(ActionEvent event) {
     Random random = new Random();
     
-    // 1. Charger la liste des Pokémon depuis le CSV
     List<Pokemon> allSpecies = com.pokemon.core.PokemonDataManager.loadPokemonsFromCSV("/com/pokemon/data/pokemons.csv");
 
     if (allSpecies.isEmpty()) {
@@ -235,18 +228,14 @@ private void handleRandomTeam(ActionEvent event) {
     }
 
     for (int i = 0; i < 6; i++) {
-        // 2. Choisir une espèce au hasard dans la liste CSV
         Pokemon basePkmn = allSpecies.get(random.nextInt(allSpecies.size()));
         
-        // 3. Créer une nouvelle instance unique
         Pokemon newPkmn = new Pokemon(
             basePkmn.getId(), basePkmn.getName(), basePkmn.getMaxHp(),
             basePkmn.getAttack(), basePkmn.getDefense(), basePkmn.getSpeed(),
             basePkmn.getTypes(), new Attack[4], null, 
             basePkmn.getLearble(), basePkmn.getSpAttack(), basePkmn.getSpDefense()
         );
-
-        // 4. Assigner des attaques aléatoires depuis le pool 'learble'
         Attack[] learnablePool = newPkmn.getLearble();
         if (learnablePool != null) {
             List<Attack> validMoves = new ArrayList<>();
@@ -264,7 +253,6 @@ private void handleRandomTeam(ActionEvent event) {
             }
         }
 
-        // 5. Mise à jour de l'équipe et de l'interface
         this.team[i] = newPkmn;
         Button slotBtn = getSlotButtonByIndex(i + 1);
         updateSlotVisual(slotBtn, newPkmn);
