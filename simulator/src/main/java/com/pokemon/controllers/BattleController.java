@@ -125,6 +125,7 @@ public class BattleController {
         }
     }
 
+    /** Executes ordered combat turn sequence between active pokemons. */
     private void executeTurnSequence(Pokemon f, Pokemon s, Attack a1, Attack a2) {
         battleLog.appendText("\n=== TURN " + turnCount + " ====\n");
         battleLog.appendText("[INFO] " + f.getName() + " is faster (" + 

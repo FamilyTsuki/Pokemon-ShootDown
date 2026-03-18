@@ -13,6 +13,7 @@ public class BattleEngine {
         public int getP() { return p; }
     }
 
+    /** Resolves turn priority based on action priority and speed stats. */
     public boolean isPlayerFirst(Action pA, Pokemon p, Action cA, Pokemon c) {
         if (pA.getP() != cA.getP()) return pA.getP() > cA.getP();
         if (p.getSpeed() != c.getSpeed()) return p.getSpeed() > c.getSpeed();
