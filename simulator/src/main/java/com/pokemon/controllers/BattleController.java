@@ -306,13 +306,16 @@ private void handleSwitchConfirmation(ActionEvent event) {
     playerTeam.setActivePokemon(activePlayer);
     
     loadSprites();
+
+    boolean wasForced = isForcedSwitch;
+    isForcedSwitch = false;
+    
     closeSwitchMenu();
     refreshUI();
     setMoveButtons(activePlayer);
     
-    if (isForcedSwitch) {
+    if (wasForced) {
         battleLog.appendText(activePlayer.getName() + " entre en combat !\n");
-        isForcedSwitch = false;
         disableUI(false);
     } else {
         battleLog.appendText("\n=== TOUR " + turnCount + " ====\n");
@@ -371,6 +374,7 @@ private void handleSwitchConfirmation(ActionEvent event) {
 }
 
     @FXML private void closeSwitchMenu() {
+        if (isForcedSwitch) return; // Empêche de fermer avec le bouton retour si le switch est obligatoire
         TranslateTransition tt = new TranslateTransition(Duration.millis(300), switchMenu);
         tt.setToY(170); tt.play();
         isSwitchMenuVisible = false;
@@ -397,6 +401,7 @@ private void handleSwitchConfirmation(ActionEvent event) {
 
 private void handleItems(ActionEvent event) {
     AudioManager.playSound("clic.wav");
+    if (isForcedSwitch) return; // Empêche d'ouvrir le sac si on doit d'abord envoyer un Pokémon
     if (isItemMenuVisible) { closeItemMenu(); return; }
     
     itemBtn0.setText("POTION");
