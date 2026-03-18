@@ -1,11 +1,10 @@
 package com.pokemon.effect;
 
 import com.pokemon.models.Pokemon;
-import com.pokemon.status.Burn;
 
 import javafx.scene.control.TextArea;
 
-public class BurnEffect extends Effecte {
+public class BurnEffect extends Effect {
     public BurnEffect() {
         super("Effet Brûlure", "10% de chance de brûler l'adversaire", 1);
     }

@@ -1,8 +1,6 @@
 package com.pokemon.controllers;
 
 import com.pokemon.models.Pokemon;
-import com.pokemon.models.items.Ballon;
-import com.pokemon.models.items.Reste;
 import com.pokemon.models.Attack;
 import com.pokemon.models.Item;
 
@@ -19,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import com.pokemon.core.AudioManager;
+import com.pokemon.items.items.Ballon;
+import com.pokemon.items.items.Leftovers;
 
 public class PokemonEditorController {
 
@@ -52,7 +52,7 @@ public class PokemonEditorController {
     private void setupItemComboBox() {
         availableItems.clear();
         availableItems.add(new Ballon());
-        availableItems.add(new Reste());
+        availableItems.add(new Leftovers());
 
         ObservableList<String> itemNames = FXCollections.observableArrayList();
         itemNames.add("None");

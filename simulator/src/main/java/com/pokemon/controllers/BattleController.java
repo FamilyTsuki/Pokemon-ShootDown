@@ -1,9 +1,9 @@
 package com.pokemon.controllers;
 
 import com.pokemon.models.*;
-import com.pokemon.models.UseableItems.*;
 import com.pokemon.core.BattleEngine;
-import com.pokemon.effect.Effecte;
+import com.pokemon.effect.Effect;
+import com.pokemon.items.UseableItems.*;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -611,7 +611,7 @@ private void displayEffects(HBox container, Pokemon pokemon) {
     
     if (pokemon == null || pokemon.getActiveEffects().isEmpty()) return;
 
-    for (Effecte eff : pokemon.getActiveEffects()) {
+    for (Effect eff : pokemon.getActiveEffects()) {
         Label badge = new Label(eff.getName().toUpperCase());
         
         badge.setStyle("-fx-background-radius: 5; -fx-padding: 2 5; -fx-font-weight: bold; -fx-font-size: 10px; -fx-text-fill: white;");

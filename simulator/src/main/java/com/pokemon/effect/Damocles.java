@@ -4,7 +4,7 @@ import com.pokemon.models.Pokemon;
 
 import javafx.scene.control.TextArea;
 
-public class Damocles extends Effecte {
+public class Damocles extends Effect {
 
     public Damocles() {
         super("Damoclès", "Le lanceur subit 1/3 des dégâts infligés", 3);

@@ -1,12 +1,12 @@
-package com.pokemon.models.items;
+package com.pokemon.items.items;
 
 import com.pokemon.models.Item;
 import com.pokemon.models.Pokemon;
 import com.pokemon.models.Attack;
 
-public class VesteCombat extends Item {
+public class AssaultVest extends Item {
 
-    public VesteCombat() {
+    public AssaultVest() {
         super("Veste Combat", "Augmente la Défense Spéciale de 50%");
     }
 

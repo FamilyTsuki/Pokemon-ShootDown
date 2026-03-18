@@ -1,14 +1,14 @@
-package com.pokemon.models.items;
+package com.pokemon.items.items;
 
 import com.pokemon.models.Attack;
 import com.pokemon.models.Item;
 import com.pokemon.models.Pokemon;
 import com.pokemon.models.PokemonType;
 
-public class Reste extends Item {
+public class Leftovers extends Item {
     private boolean active = true;
 
-    public Reste() {
+    public Leftovers() {
         super("Restes", "restaure 1/16ème des PV à la fin de chaque tour");
     }
 

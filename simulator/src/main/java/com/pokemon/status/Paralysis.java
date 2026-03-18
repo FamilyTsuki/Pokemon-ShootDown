@@ -3,12 +3,12 @@ package com.pokemon.status;
 import com.pokemon.models.Pokemon;
 import com.pokemon.models.Status;
 
-public class Paralyse extends Status {
+public class Paralysis extends Status {
     private int speed_storage;
     private boolean hasModifiedSpeed = false;
 
-    public Paralyse() {
-        super("Paralyse", "25% de chance de ne pas pouvoir attaquer et vitesse divisée par 2.");
+    public Paralysis() {
+        super("Paralysis", "25% de chance de ne pas pouvoir attaquer et vitesse divisée par 2.");
     }
 
     @Override

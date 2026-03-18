@@ -3,7 +3,7 @@ package com.pokemon.effect;
 import com.pokemon.models.Pokemon;
 import javafx.scene.control.TextArea;
 
-public class BoostDefEffect extends Effecte {
+public class BoostDefEffect extends Effect {
 
     public BoostDefEffect() {
         super("Boost Défense", "Augmente la défense du lanceur", 0);

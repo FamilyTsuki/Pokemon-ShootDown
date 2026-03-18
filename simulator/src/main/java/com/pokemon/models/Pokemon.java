@@ -3,7 +3,7 @@ package com.pokemon.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pokemon.effect.Effecte;
+import com.pokemon.effect.Effect;
 
 public class Pokemon {
     private int id;
@@ -20,7 +20,7 @@ public class Pokemon {
     private int spAttack;
     private int spDefense;
     private Status currentStatus;
-    private List<Effecte> activeEffects = new ArrayList<>();
+    private List<Effect> activeEffects = new ArrayList<>();
 
 
     public Pokemon(int id, String name, int hp, int attack, int defense, int speed, PokemonType[] type, Attack[] attacks , Item item, Attack[] learble, int spAttack, int spDefense) {
@@ -155,11 +155,11 @@ public class Pokemon {
 
     public void setDefmodif(int defense) {this.defense += defense;}
 
-    public List<Effecte> getActiveEffects() {
+    public List<Effect> getActiveEffects() {
         return activeEffects;
     }
 
-    public void addEffect(Effecte effect) {
+    public void addEffect(Effect effect) {
         // On n'ajoute l'effet que s'il n'est pas déjà présent (pour éviter les doublons)
         if (!activeEffects.contains(effect)) {
             activeEffects.add(effect);

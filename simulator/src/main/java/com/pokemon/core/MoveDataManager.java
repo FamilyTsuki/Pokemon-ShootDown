@@ -9,7 +9,7 @@ import java.util.Map;
 public class MoveDataManager {
 
     // On crée un catalogue d'effets pour éviter les "if/else"
-    private static final Map<String, Effecte> effectRegistry = new HashMap<>();
+    private static final Map<String, Effect> effectRegistry = new HashMap<>();
 
     static {
     
@@ -31,7 +31,7 @@ public class MoveDataManager {
 
             Attack atk = new Attack(name, type, power, acc, category);
 
-            Effecte effect = effectRegistry.get(effectId);
+            Effect effect = effectRegistry.get(effectId);
             
             if (effect != null) {
                 atk.setEffect(effect);
