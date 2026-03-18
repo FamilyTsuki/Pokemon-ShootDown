@@ -220,6 +220,9 @@ private void animateDamage(ImageView sprite) {
                 disableUI(false);
             } else {
                 showEndGameMessage("VICTOIRE !", Color.GREEN);
+                AudioManager.stopMusic();
+                AudioManager.playSound("victory.wav");
+                AudioManager.playSound("yeah-boy.wav");
             }
         } 
         else if (activePlayer.isFainted()) {
@@ -229,6 +232,8 @@ private void animateDamage(ImageView sprite) {
                 handleSwitch(null); 
             } else {
                 showEndGameMessage("DÉFAITE...", Color.RED);
+                AudioManager.stopMusic();
+                AudioManager.playSound("game_over.wav");
             }
         }
     }
