@@ -11,32 +11,17 @@ public class BerryJuice extends Item {
     }
     private boolean active = true;
 
-    public boolean useCondition(Pokemon pokemon) {
-
-        if (active && pokemon.getHp() <= (pokemon.getMaxHp() / 2)) {
-            return true;
-        }
-
-        return false;
-    }
-
     @Override
     public Item use(Pokemon pokemon) {
         System.out.println(pokemon.getName() + " récupere 20 HP grace au berryjuice");
         return null;
     }
 
-
     @Override
     public void onTurnStart(Pokemon pokemon) {}
 
     @Override
-    public void onTurnEnd(Pokemon pokemon) {
-        if (useCondition(pokemon)) {
-            pokemon.hpmodifier(20);
-            active = false;
-        }
-    }
+    public void onTurnEnd(Pokemon pokemon) {}
     @Override
     public void onAttack(Pokemon attacker, Pokemon target, Attack attack) {}
 

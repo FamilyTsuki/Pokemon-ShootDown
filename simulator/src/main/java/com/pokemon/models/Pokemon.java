@@ -37,8 +37,6 @@ public class Pokemon {
         this.learble = learble;
         this.spAttack = spAttack;
         this.spDefense = spDefense;
-
-
     }
 
     public Attack[] getLearble() {
@@ -154,7 +152,8 @@ public class Pokemon {
     public void setCanAttack(boolean canAttack) { this.canAttack = canAttack; }
 
     public void setBaseSpeed(int newSpeed) { this.speed = newSpeed; }
-    
+
+    public void setDefmodif(int defense) {this.defense += defense}
 
     public List<Effecte> getActiveEffects() {
         return activeEffects;
