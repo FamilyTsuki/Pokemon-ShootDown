@@ -12,26 +12,45 @@ import com.pokemon.core.AudioManager;
 
 public class StartController {
 
+    private static final String TEAM_BUILDER_VIEW = 
+        "/com/pokemon/views/team_builder.fxml";
+
+    /**
+     * Handles the transition to the team builder view.
+     */
     @FXML
     private void handleStart(ActionEvent event) throws IOException {
         AudioManager.playMusic("home.mp3");
         AudioManager.playSound("clic.wav");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/pokemon/views/team_builder.fxml"));
+        FXMLLoader loader = new FXMLLoader(
+            getClass().getResource(TEAM_BUILDER_VIEW));
         Parent root = loader.load();
 
-        Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) event.getSource())
+            .getScene().getWindow();
     
-        Scene scene = new Scene(root, 900, 700);
-        stage.setScene(scene);
-        stage.setTitle("Pokémon ShootDown - Préparation de l'équipe");
+        setupStage(stage, root);
     }
 
+    /**
+     * Configures the stage with the new scene and title.
+     */
+    private void setupStage(Stage stage, Parent root) {
+        Scene scene = new Scene(root, 900, 700);
+        stage.setScene(scene);
+        stage.setTitle("Pokémon ShootDown - Team Preparation");
+        stage.setResizable(false);
+        stage.centerOnScreen();
+    }
+
+    /**
+     * Terminates the application.
+     */
     @FXML
     private void handleQuit(ActionEvent event) {
         AudioManager.playSound("clic.wav");
         AudioManager.stopMusic();
         System.exit(0);
-        
     }
 }
