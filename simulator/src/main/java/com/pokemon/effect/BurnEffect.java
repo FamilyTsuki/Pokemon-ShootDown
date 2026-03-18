@@ -16,7 +16,7 @@ public class BurnEffect extends Effecte {
     @Override
     public void onAfterAttack(Pokemon attacker, Pokemon defender, int damageDealt) {
         if (Math.random() < 0.5 && defender.getCurrentStatus() == null) {
-            defender.setCurrentStatus(new Burn());
+            Pokemon.burn(16, defender);
             System.out.println(defender.getName() + " a été brûlé par l'attaque !");
             defender.addEffect(this);
         }

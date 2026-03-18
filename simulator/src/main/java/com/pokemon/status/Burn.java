@@ -22,8 +22,7 @@ public class Burn extends Status {
 
     @Override
     public void onTurnEnd(Pokemon pokemon) {
-        int damage = Math.max(1, pokemon.getMaxHp() / 16);
-        pokemon.takeDamage(damage);
+        pokemon.burn(16, pokemon);
         if (hasModifiedAttack) {
             pokemon.setBaseAttack(this.attack_storage);
             this.hasModifiedAttack = false;
