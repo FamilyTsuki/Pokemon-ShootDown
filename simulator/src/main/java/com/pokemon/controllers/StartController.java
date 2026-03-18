@@ -37,11 +37,14 @@ public class StartController {
      * Configures the stage with the new scene and title.
      */
     private void setupStage(Stage stage, Parent root) {
-        Scene scene = new Scene(root, 900, 700);
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Pokémon ShootDown - Team Preparation");
-        stage.setResizable(false);
-        stage.centerOnScreen();
+        
+        stage.setFullScreen(true);
+        
+        stage.setFullScreenExitHint("");
+        stage.setAlwaysOnTop(false);
     }
 
     /**

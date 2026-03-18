@@ -103,9 +103,12 @@ public class TeamBuilderController {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle(title);
-        stage.setScene(new Scene(root, 900, 700));
-        stage.setResizable(false);
-        stage.centerOnScreen();
+        
+        stage.setScene(new Scene(root));
+        
+        stage.setFullScreen(true);
+        stage.setFullScreenExitHint("");
+
         return stage;
     }
 
@@ -211,10 +214,15 @@ public class TeamBuilderController {
     }
 
     private void switchScene(ActionEvent event, Parent root) {
-        Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root, 900, 700));
+        Button btn = (Button) event.getSource();
+        Stage stage = (Stage) btn.getScene().getWindow();
+        
+        stage.setScene(new Scene(root));
+        
+        stage.setFullScreen(true);
+        stage.setFullScreenExitHint("");
     }
-
+    
     @FXML
     private void handleRemovePokemon(ActionEvent event) {
         AudioManager.playSound("clic.wav");

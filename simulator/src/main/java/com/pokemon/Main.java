@@ -11,15 +11,19 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         String path = "/com/pokemon/views/start_view.fxml";
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-        Parent root = loader.load();
+        Parent root = FXMLLoader.load(getClass().getResource(path));
 
-        stage.setTitle("Pokémon ShootDown - Home");
+        stage.setTitle("Pokémon ShootDown");
         stage.setScene(new Scene(root));
+        
+        stage.setFullScreen(true);
+        
+        stage.setFullScreenExitHint(""); 
+        
         stage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }

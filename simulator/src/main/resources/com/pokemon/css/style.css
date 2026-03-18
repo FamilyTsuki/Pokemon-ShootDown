@@ -200,12 +200,15 @@
 
 .type-fire {
   -fx-background-color: #ff4422;
+  -fx-text-fill: white;
 }
 .type-water {
   -fx-background-color: #3399ff;
+  -fx-text-fill: white;
 }
 .type-grass {
   -fx-background-color: #77cc55;
+  -fx-text-fill: white;
 }
 .type-electric {
   -fx-background-color: #ffcc33;
@@ -213,45 +216,59 @@
 }
 .type-ice {
   -fx-background-color: #66ccff;
+  -fx-text-fill: black;
 }
 .type-fighting {
   -fx-background-color: #bb5544;
+  -fx-text-fill: white;
 }
 .type-poison {
   -fx-background-color: #aa5599;
+  -fx-text-fill: white;
 }
 .type-ground {
   -fx-background-color: #ddbb55;
+  -fx-text-fill: black;
 }
 .type-flying {
   -fx-background-color: #8899ff;
+  -fx-text-fill: black;
 }
 .type-psychic {
   -fx-background-color: #ff5599;
+  -fx-text-fill: white;
 }
 .type-bug {
   -fx-background-color: #aabb22;
+  -fx-text-fill: black;
 }
 .type-rock {
   -fx-background-color: #bbaa66;
+  -fx-text-fill: black;
 }
 .type-ghost {
   -fx-background-color: #6666bb;
+  -fx-text-fill: white;
 }
 .type-dragon {
   -fx-background-color: #7766ee;
+  -fx-text-fill: white;
 }
 .type-dark {
   -fx-background-color: #775544;
+  -fx-text-fill: white;
 }
 .type-steel {
   -fx-background-color: #aaaabb;
+  -fx-text-fill: black;
 }
 .type-fairy {
   -fx-background-color: #ee99ee;
+  -fx-text-fill: black;
 }
 .type-normal {
   -fx-background-color: #aaaa99;
+  -fx-text-fill: black;
 }
 
 /* --- UI UTILS --- */
