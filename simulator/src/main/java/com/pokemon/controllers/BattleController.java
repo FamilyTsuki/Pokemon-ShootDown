@@ -357,6 +357,7 @@ private void handleSwitchConfirmation(ActionEvent event) {
             cpuSprite.setImage(new Image(getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activeCpu.getId() + ".png")));
             playerSprite.setOpacity(1.0);
             cpuSprite.setOpacity(1.0);
+            playerSprite.setScaleX(-1); // Applique un effet miroir pour que le Pokémon regarde vers la droite
             AudioManager.playSound(activePlayer.getId() + ".wav");
         
             AudioManager.playSound(activeCpu.getId() + ".wav");
