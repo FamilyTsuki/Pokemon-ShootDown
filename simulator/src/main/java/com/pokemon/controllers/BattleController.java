@@ -2,6 +2,7 @@ package com.pokemon.controllers;
 
 import com.pokemon.models.*;
 import com.pokemon.core.BattleEngine;
+import com.pokemon.effect.Effecte;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -40,6 +41,8 @@ public class BattleController {
     @FXML private VBox mainBattleArea; 
     @FXML private HBox playerTypeContainer;
     @FXML private HBox cpuTypeContainer;
+    @FXML private HBox playerEffectContainer;
+    @FXML private HBox cpuEffectContainer;
 
     private Team playerTeam, cpuTeam;
     private Pokemon activePlayer, activeCpu;
@@ -147,37 +150,30 @@ public class BattleController {
     delay.play();
 }
 
-    private void processAttack(Pokemon attacker, Pokemon target, Attack move) {
-
+ private void processAttack(Pokemon attacker, Pokemon target, Attack move) {
     boolean isPlayerAttacking = (attacker == activePlayer);
     ImageView attackerSprite = isPlayerAttacking ? playerSprite : cpuSprite;
     ImageView targetSprite = isPlayerAttacking ? cpuSprite : playerSprite;
 
     animateAttack(attackerSprite, isPlayerAttacking);
 
-    int damage = engine.applyDamage(attacker, target, move);
+    int damage = engine.applyDamage(attacker, target, move, battleLog); 
     
     if (damage > 0) {
         animateDamage(targetSprite);
         showDamagePopup(targetSprite, damage);
     }
 
-    String efficacite = ""; 
-    if (damage > 30) efficacite = " (C'est super efficace !)";
-    else if (damage < 10 && damage > 0) efficacite = " (Ce n'est pas très efficace...)";
-
-    battleLog.appendText("• " + attacker.getName() + " utilise " + move.getName() + efficacite + "\n");
-    battleLog.appendText("   -> " + target.getName() + " perd " + damage + " PV.\n");
-
+    battleLog.appendText("• " + attacker.getName() + " utilise " + move.getName() + "\n");
+    
     if (target.isFainted()) {
         battleLog.appendText("   -> " + target.getName() + " est KO !\n");
-
         FadeTransition koFade = new FadeTransition(Duration.millis(500), targetSprite);
         koFade.setToValue(0);
         koFade.play();
     }
 
-    refreshUI();
+    refreshUI(); 
 }
 
 private void animateAttack(ImageView sprite, boolean toRight) {
@@ -189,9 +185,6 @@ private void animateAttack(ImageView sprite, boolean toRight) {
     tt.play();
 }
 
-/**
- * Animation de clignotement quand on reçoit des dégâts
- */
 private void animateDamage(ImageView sprite) {
     FadeTransition ft = new FadeTransition(Duration.millis(50), sprite);
     ft.setFromValue(1.0);
@@ -254,6 +247,9 @@ private void animateDamage(ImageView sprite) {
     cpuNameLabel.setText(activeCpu.getName().toUpperCase());
     displayTypes(playerTypeContainer, activePlayer);
     displayTypes(cpuTypeContainer, activeCpu);
+
+    displayEffects(playerEffectContainer, activePlayer);
+    displayEffects(cpuEffectContainer, activeCpu);
 
     updateCpuIcons();
 
@@ -373,31 +369,22 @@ private void animateDamage(ImageView sprite) {
     }
 }
 private void showDamagePopup(ImageView targetSprite, int damage) {
-    // 1. Création du label de dégâts
     Label damageLabel = new Label("-" + damage);
-    damageLabel.getStyleClass().add("damage-popup"); // On va créer ce style en CSS
+    damageLabel.getStyleClass().add("damage-popup"); 
     
-    // 2. Positionnement initial (au-dessus du Pokémon cible)
-    // On récupère les coordonnées du sprite dans le StackPane
     double startX = targetSprite.getParent().getLayoutX() + (targetSprite.getFitWidth() / 2);
     double startY = targetSprite.getParent().getLayoutY() - 20;
 
     damageLabel.setLayoutX(startX);
     damageLabel.setLayoutY(startY);
     
-    // 3. Ajout au conteneur principal (battleStackPane)
     battleStackPane.getChildren().add(damageLabel);
 
-    // 4. Animation de montée (Move Up)
     TranslateTransition moveUp = new TranslateTransition(Duration.millis(800), damageLabel);
-    moveUp.setByY(-60); // Monte de 60 pixels
-
-    // 5. Animation de disparition (Fade Out)
+    moveUp.setByY(-60);
     FadeTransition fadeOut = new FadeTransition(Duration.millis(800), damageLabel);
     fadeOut.setFromValue(1.0);
     fadeOut.setToValue(0.0);
-
-    // 6. Nettoyage : supprimer le label une fois fini
     ParallelTransition pt = new ParallelTransition(damageLabel, moveUp, fadeOut);
     pt.setOnFinished(e -> battleStackPane.getChildren().remove(damageLabel));
     
@@ -411,8 +398,6 @@ private void setMoveButtons(Pokemon p) {
         // --- 1. NETTOYAGE CRITIQUE ---
         moveButtons[i].setGraphic(null); 
         moveButtons[i].setText("");
-        
-        // On retire toutes les classes de types possibles pour repartir à zéro
         moveButtons[i].getStyleClass().removeAll(
             "atk-fire", "atk-water", "atk-grass", "atk-electric", "atk-ice", 
             "atk-fighting", "atk-poison", "atk-ground", "atk-flying", "atk-psychic", 
@@ -437,16 +422,35 @@ private void setMoveButtons(Pokemon p) {
             
             moveButtons[i].setGraphic(content);
             
-            // On ajoute la nouvelle classe
             String typeClass = "atk-" + atk.getType().toString().toLowerCase();
             moveButtons[i].getStyleClass().add(typeClass);
             
             moveButtons[i].setVisible(true);
             moveButtons[i].setDisable(false);
         } else {
-            // Si pas d'attaque à cet emplacement, on cache le bouton
             moveButtons[i].setVisible(false);
         }
+    }
+}
+private void displayEffects(HBox container, Pokemon pokemon) {
+    container.getChildren().clear();
+    
+    if (pokemon == null || pokemon.getActiveEffects().isEmpty()) return;
+
+    for (Effecte eff : pokemon.getActiveEffects()) {
+        Label badge = new Label(eff.getName().toUpperCase());
+        
+        badge.setStyle("-fx-background-radius: 5; -fx-padding: 2 5; -fx-font-weight: bold; -fx-font-size: 10px; -fx-text-fill: white;");
+
+        if (eff.getName().equalsIgnoreCase("Brûlure") || eff.getName().contains("BURN")) {
+            badge.setStyle(badge.getStyle() + "-fx-background-color: #e67e22;"); // Orange pour le feu
+        } else if (eff.getName().contains("Boost")) {
+            badge.setStyle(badge.getStyle() + "-fx-background-color: #3498db;"); // Bleu pour les stats
+        } else {
+            badge.setStyle(badge.getStyle() + "-fx-background-color: #7f8c8d;");
+        }
+
+        container.getChildren().add(badge);
     }
 }
 }

@@ -14,7 +14,7 @@ module com.pokemon {
 
     opens com.pokemon.models to javafx.base;
     exports com.pokemon.models;
-
+    exports com.pokemon.effect;
 
     exports com.pokemon.controllers; 
 }

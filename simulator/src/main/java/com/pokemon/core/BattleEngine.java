@@ -34,10 +34,17 @@ public class BattleEngine {
     }
 
 
-    public int applyDamage(Pokemon attacker, Pokemon target, Attack move) {
-        double rawDmg = DamageCalculator.calculateDamage(attacker, target, move);
-        int finalDmg = (int) rawDmg;
-        target.takeDamage(finalDmg);
-        return finalDmg;
+    public int applyDamage(Pokemon attacker, Pokemon target, Attack move, javafx.scene.control.TextArea log) {
+    double rawDmg = DamageCalculator.calculateDamage(attacker, target, move);
+    int finalDmg = (int) rawDmg;
+    target.takeDamage(finalDmg);
+
+    if (move.getEffect() != null) {
+        move.getEffect().apply(attacker, target, log);
+        
+        move.getEffect().onAfterAttack(attacker, target, finalDmg);
     }
+
+    return finalDmg;
+}
 }

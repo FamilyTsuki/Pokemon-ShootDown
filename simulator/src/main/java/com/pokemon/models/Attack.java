@@ -1,7 +1,9 @@
 package com.pokemon.models;
 
+import com.pokemon.effect.Effecte;
+
 public class Attack extends Move {
-    private MoveEffect effect;
+    private Effecte effect;
 
     public Attack(String name, PokemonType type, int power, int accuracy, String category) {
         super(name, power, accuracy, type, category);
@@ -23,11 +25,12 @@ public class Attack extends Move {
 
     }
 
-    public void setEffect(MoveEffect effect) {
+    public void setEffect(Effecte effect) {
         this.effect = effect;
     }
 
-    public MoveEffect getEffect() {
+    public Effecte getEffect() {
         return effect;
     }
+    
 }
