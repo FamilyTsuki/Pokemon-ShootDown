@@ -4,6 +4,8 @@ package com.pokemon.models;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.scene.paint.Color;
+
 public enum PokemonType {
     
     NORMAL("Normal"), 
@@ -256,6 +258,19 @@ public enum PokemonType {
         addEfficiency(POISON, 0.5);
         addEfficiency(STEEL, 0.5);
     }
+    public Color getColor() {
+    switch (this) {
+        case FIRE: return Color.ORANGERED;
+        case WATER: return Color.DEEPSKYBLUE;
+        case GRASS: return Color.LIMEGREEN;
+        case ELECTRIC: return Color.GOLD;
+        case ICE: return Color.AQUA;
+        case PSYCHIC: return Color.MAGENTA;
+        case GHOST: return Color.PURPLE;
+        case ROCK: return Color.SADDLEBROWN;
+        default: return Color.WHITE; // Couleur par défaut (Normal)
+    }
+}
 
     @Override
     public String toString() {

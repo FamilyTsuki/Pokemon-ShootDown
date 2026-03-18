@@ -4,6 +4,7 @@ import com.pokemon.models.*;
 import com.pokemon.core.BattleEngine;
 import com.pokemon.effect.Effect;
 import com.pokemon.items.UseableItems.*;
+import com.pokemon.core.AudioManager;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -25,7 +26,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import com.pokemon.core.AudioManager;
+import javafx.scene.shape.Circle;
 
 public class BattleController {
 
@@ -166,7 +167,7 @@ public class BattleController {
     ImageView attackerSprite = isPlayerAttacking ? playerSprite : cpuSprite;
     ImageView targetSprite = isPlayerAttacking ? cpuSprite : playerSprite;
 
-    animateAttack(attackerSprite, isPlayerAttacking);
+    animateAttack(attackerSprite, isPlayerAttacking, move);
     AudioManager.playSound("attack.wav");
 
     int damage = engine.applyDamage(attacker, target, move, battleLog); 
@@ -190,13 +191,45 @@ public class BattleController {
     refreshUI(); 
 }
 
-private void animateAttack(ImageView sprite, boolean toRight) {
-    double distance = toRight ? 60 : -60;
-    TranslateTransition tt = new TranslateTransition(Duration.millis(100), sprite);
-    tt.setByX(distance);
-    tt.setCycleCount(2);
-    tt.setAutoReverse(true);
-    tt.play();
+private void animateAttack(ImageView attackerSprite, boolean isPlayerAttacking, Attack move) {
+    // 1. Animation de RECUL du lanceur
+    double recoilDistance = isPlayerAttacking ? -15 : 15; // Recul vers la gauche pour le joueur
+    TranslateTransition recoil = new TranslateTransition(Duration.millis(100), attackerSprite);
+    recoil.setByX(recoilDistance);
+    recoil.setCycleCount(2);
+    recoil.setAutoReverse(true);
+    recoil.play();
+
+    // 2. Création du PROJECTILE (la sphère)
+    Circle projectile = new Circle(10); // Rayon de 10px
+    projectile.setFill(move.getType().getColor()); // Couleur selon le type
+    projectile.setEffect(new GaussianBlur(5)); // Petit effet de lueur
+
+    // Position de départ du projectile (au niveau du Pokémon qui attaque)
+    // On récupère les coordonnées globales par rapport au StackPane
+    double startX = attackerSprite.localToScene(attackerSprite.getBoundsInLocal()).getCenterX();
+    double startY = attackerSprite.localToScene(attackerSprite.getBoundsInLocal()).getCenterY();
+    
+    // On ajoute le projectile au StackPane principal pour qu'il soit au-dessus de tout
+    battleStackPane.getChildren().add(projectile);
+    projectile.setManaged(false); // On gère sa position manuellement
+    projectile.setLayoutX(startX);
+    projectile.setLayoutY(startY);
+
+    // 3. Animation du PROJECTILE vers la cible
+    double targetDistance = isPlayerAttacking ? 400 : -400; // Distance à parcourir
+    TranslateTransition shoot = new TranslateTransition(Duration.millis(400), projectile);
+    shoot.setByX(targetDistance);
+    
+    // Disparition et suppression du projectile à la fin
+    FadeTransition fade = new FadeTransition(Duration.millis(100), projectile);
+    fade.setToValue(0);
+
+    shoot.setOnFinished(e -> {
+        battleStackPane.getChildren().remove(projectile);
+    });
+
+    shoot.play();
 }
 
 private void animateDamage(ImageView sprite) {
@@ -370,7 +403,7 @@ private void handleSwitchConfirmation(ActionEvent event) {
             
             playerSprite.setOpacity(1.0);
             cpuSprite.setOpacity(1.0);
-            playerSprite.setScaleX(-1); // Applique un effet miroir pour que le Pokémon regarde vers la droite
+            playerSprite.setScaleX(-1); 
             AudioManager.playSound(activePlayer.getId() + ".wav");
         
             AudioManager.playSound(activeCpu.getId() + ".wav");
@@ -415,7 +448,7 @@ private void handleSwitchConfirmation(ActionEvent event) {
 
 private void handleItems(ActionEvent event) {
     AudioManager.playSound("clic.wav");
-    if (isForcedSwitch) return; // Empêche d'ouvrir le sac si on doit d'abord envoyer un Pokémon
+    if (isForcedSwitch) return;
     if (isItemMenuVisible) { closeItemMenu(); return; }
     
     itemBtn0.setText("POTION");

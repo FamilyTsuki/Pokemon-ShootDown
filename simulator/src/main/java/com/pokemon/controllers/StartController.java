@@ -21,8 +21,9 @@ public class StartController {
         Parent root = loader.load();
 
         Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
-        
-        stage.setScene(new Scene(root));
+    
+        Scene scene = new Scene(root, 900, 700);
+        stage.setScene(scene);
         stage.setTitle("Pokémon ShootDown - Préparation de l'équipe");
     }
 

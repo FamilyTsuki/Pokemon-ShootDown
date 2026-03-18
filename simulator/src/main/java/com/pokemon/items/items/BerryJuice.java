@@ -3,13 +3,11 @@ package com.pokemon.items.items;
 import com.pokemon.models.Attack;
 import com.pokemon.models.Item;
 import com.pokemon.models.Pokemon;
-import com.pokemon.models.PokemonType;
 
 public class BerryJuice extends Item {
     public BerryJuice() {
         super("BerruJuice", "restaure 20h quand la vie déssend en dessous de 50%");
     }
-    private boolean active = true;
 
     @Override
     public Item use(Pokemon pokemon) {

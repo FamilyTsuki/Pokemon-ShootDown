@@ -13,7 +13,6 @@ public class LifeStealEffect extends Effect {
     public void onAfterAttack(Pokemon attacker, Pokemon defender, int damageDealt) {
         int healAmount = damageDealt / 2;
         if (healAmount > 0) {
-            // On utilise setHp pour soigner (ton setHp limite déjà au maxHp)
             attacker.setHp(attacker.getHp() + healAmount);
             System.out.println(attacker.getName() + " récupère " + healAmount + " PV !");
         }

@@ -11,59 +11,61 @@ public class PokemonDataManager {
 
     private static List<Attack> allAvailableMoves = new ArrayList<>();
 
-    public static List<Pokemon> loadPokemonsFromCSV(String pokemonPath) {
-        if (allAvailableMoves.isEmpty()) {
-            loadAllMoves();
-        }
-
-        List<Pokemon> pokemons = new ArrayList<>();
+   public static List<Pokemon> loadPokemonsFromCSV(String pokemonPath) {
+        if (allAvailableMoves.isEmpty()) loadAllMoves();
         
-        try (InputStream is = PokemonDataManager.class.getResourceAsStream(pokemonPath)) {
+        List<Pokemon> pokemons = new ArrayList<>();
+        try (InputStream is = PokemonDataManager.class.getResourceAsStream(pokemonPath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+            
             if (is == null) return pokemons;
+            br.readLine();
 
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-                String line;
-                br.readLine();
-
-                while ((line = br.readLine()) != null) {
-                    if (line.trim().isEmpty()) continue;
-                    String[] data = line.split(",");
-                    
-                    try {
-                        int id = Integer.parseInt(data[0].trim());
-                        String name = data[1].trim();
-                        int hp = Integer.parseInt(data[2].trim());
-                        int attack = Integer.parseInt(data[3].trim());
-                        int defense = Integer.parseInt(data[4].trim());
-                        int speed = Integer.parseInt(data[5].trim());
-
-                        PokemonType t1 = PokemonType.valueOf(data[6].trim().toUpperCase());
-                        PokemonType[] types;
-                        if (data.length > 7 && !data[7].trim().isEmpty() && !data[7].trim().equalsIgnoreCase("NULL")) {
-                            types = new PokemonType[]{t1, PokemonType.valueOf(data[7].trim().toUpperCase())};
-                        } else {
-                            types = new PokemonType[]{t1};
-                        }
-
-                        int spAtk = Integer.parseInt(data[8].trim());
-                        int spDef = Integer.parseInt(data[9].trim());
-
-                        String movesListString = (data.length > 10) ? data[10].trim() : "Charge";
-
-                        Attack[] learableMoves = filterMovesFromLibrary(movesListString);
-
-                        pokemons.add(new Pokemon(
-                            id, name, hp, attack, defense, speed, 
-                            types, new Attack[4], null, learableMoves, spAtk, spDef
-                        ));
-                        
-                    } catch (Exception e) {
-                        System.err.println("Erreur sur le Pokémon : " + line + " -> " + e.getMessage());
-                    }
-                }
+            String line;
+            while ((line = br.readLine()) != null && pokemons.size() < 60) {
+                parseAndAddPokemon(line, pokemons);
             }
         } catch (Exception e) { e.printStackTrace(); }
+
+        System.out.println("[INFO] " + pokemons.size() + " Pokémon chargés.");
         return pokemons;
+    }
+
+    private static void parseAndAddPokemon(String line, List<Pokemon> list) {
+        if (line.trim().isEmpty()) return;
+        try {
+            String[] data = line.split(",");
+            Pokemon p = createPokemonFromData(data);
+            list.add(p);
+        } catch (Exception e) {
+            System.err.println("Erreur sur la ligne : " + line + " -> " + e.getMessage());
+        }
+    }
+
+    private static Pokemon createPokemonFromData(String[] data) {
+        int id = Integer.parseInt(data[0].trim());
+        String name = data[1].trim();
+        int hp = Integer.parseInt(data[2].trim());
+        int atk = Integer.parseInt(data[3].trim());
+        int def = Integer.parseInt(data[4].trim());
+        int spd = Integer.parseInt(data[5].trim());
+
+        PokemonType[] types = parseTypes(data[6], (data.length > 7) ? data[7] : null);
+        
+        int spAtk = Integer.parseInt(data[8].trim());
+        int spDef = Integer.parseInt(data[9].trim());
+        String moveStr = (data.length > 10) ? data[10].trim() : "Charge";
+
+        return new Pokemon(id, name, hp, atk, def, spd, types, 
+                        new Attack[4], null, filterMovesFromLibrary(moveStr), spAtk, spDef);
+    }
+
+    private static PokemonType[] parseTypes(String t1, String t2) {
+        PokemonType type1 = PokemonType.valueOf(t1.trim().toUpperCase());
+        if (t2 != null && !t2.trim().isEmpty() && !t2.trim().equalsIgnoreCase("NULL")) {
+            return new PokemonType[]{type1, PokemonType.valueOf(t2.trim().toUpperCase())};
+        }
+        return new PokemonType[]{type1};
     }
 
     private static void loadAllMoves() {

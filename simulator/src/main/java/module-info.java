@@ -2,11 +2,11 @@ module com.pokemon {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.media;
-    requires javafx.graphics;
-    requires javafx.base;
+    requires transitive javafx.graphics; 
+    requires transitive javafx.base;
     
 
-
+    
     opens com.pokemon to javafx.graphics, javafx.fxml;
     
     opens com.pokemon.controllers to javafx.fxml;
@@ -19,4 +19,6 @@ module com.pokemon {
     
 
     exports com.pokemon.controllers; 
+
+    
 }
