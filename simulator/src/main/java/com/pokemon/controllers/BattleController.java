@@ -171,14 +171,17 @@ public class BattleController {
         AudioManager.playSound("attack.wav");
 
         int dmg = engine.applyDamage(atk, tar, move, battleLog);
+        
+        battleLog.appendText("• " + atk.getName() + " uses " + move.getName() + "\n");
+        battleLog.appendText("  -> Damage: " + dmg + " | " + tar.getName() + 
+            ": " + tar.getHp() + "/" + tar.getMaxHp() + " HP\n");
+
         if (dmg > 0) {
             animateDamage(tSprite);
             showDamagePopup(tSprite, dmg);
         }
 
-        battleLog.appendText("• " + atk.getName() + " uses " + move.getName() + "\n");
         if (tar.isFainted()) handleFainted(tar, tSprite);
-
         refreshUI();
     }
 
