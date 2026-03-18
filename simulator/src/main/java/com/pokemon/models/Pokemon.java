@@ -153,7 +153,7 @@ public class Pokemon {
 
     public void setBaseSpeed(int newSpeed) { this.speed = newSpeed; }
 
-    public void setDefmodif(int defense) {this.defense += defense}
+    public void setDefmodif(int defense) {this.defense += defense;}
 
     public List<Effecte> getActiveEffects() {
         return activeEffects;

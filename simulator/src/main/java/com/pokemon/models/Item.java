@@ -4,6 +4,9 @@ public abstract class Item {
     private String name;
     private String description;
 
+    // merci dany de nous avoir demander de faire un les item
+    // alors qu'ils ne sont meme pas présent dans le jeu de base
+
     public Item(String name, String description) {
         this.name = name;
         this.description = description;
