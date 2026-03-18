@@ -168,7 +168,7 @@ public class Pokemon {
     }
 
     public static void burn(int divider, Pokemon pokemon) {
-        int damage = Math.max(1, pokemon.getMaxHp() / 16);
+        int damage = Math.max(1, pokemon.getMaxHp() / divider);
         if (damage < 1) damage = 1;
         pokemon.takeDamage(damage);
     }
