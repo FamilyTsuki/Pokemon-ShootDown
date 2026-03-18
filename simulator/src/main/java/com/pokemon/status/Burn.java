@@ -4,28 +4,28 @@ import com.pokemon.models.Pokemon;
 import com.pokemon.models.Status;
 
 public class Burn extends Status {
-    private int attack_storage;
-    private boolean hasModifiedAttack = false;
+    private int originalAtk;
+    private boolean isApplied = false;
 
     public Burn() {
-        super("Burn", "L'attaque est divisée par 2 et le Pokémon perd 1/16 de ses PV max.");
+        super("Burn", "Attack halved and loses 1/16 max HP per turn.");
     }
 
     @Override
-    public void onTurnStart(Pokemon pokemon) {
-        if (!hasModifiedAttack) {
-            this.attack_storage = pokemon.getAttack();
-            pokemon.setBaseAttack(this.attack_storage / 2);
-            this.hasModifiedAttack = true;
+    public void onTurnStart(Pokemon p) {
+        if (!isApplied) {
+            originalAtk = p.getAttack();
+            p.setBaseAttack(originalAtk / 2);
+            isApplied = true;
         }
     }
 
     @Override
-    public void onTurnEnd(Pokemon pokemon) {
-        pokemon.burn(16, pokemon);
-        if (hasModifiedAttack) {
-            pokemon.setBaseAttack(this.attack_storage);
-            this.hasModifiedAttack = false;
+    public void onTurnEnd(Pokemon p) {
+        p.burn(16, p);
+        if (isApplied) {
+            p.setBaseAttack(originalAtk);
+            isApplied = false;
         }
     }
 }

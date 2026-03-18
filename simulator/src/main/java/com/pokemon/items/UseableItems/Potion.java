@@ -1,24 +1,25 @@
 package com.pokemon.items.UseableItems;
 
 import com.pokemon.models.Pokemon;
-
 import javafx.scene.control.TextArea;
 import com.pokemon.models.UseableItem;
 
 public class Potion extends UseableItem {
     public Potion() {
-        super("Potion", "Soigne 50 PV");
+        super("Potion", "Heals 50 HP");
     }
 
     @Override
     public void use(Pokemon target, TextArea log) {
-        int healAmount = 50;
+        int heal = 50;
         int oldHp = target.getHp();
-        target.setHp(Math.min(target.getMaxHp(), target.getHp() + healAmount));
-        int restored = target.getHp() - oldHp;
+        int newHp = Math.min(target.getMaxHp(), oldHp + heal);
+        target.setHp(newHp);
         
+        int restored = newHp - oldHp;
         if (log != null) {
-            log.appendText(target.getName() + " utilise une Potion et regagne " + restored + " PV !\n");
+            log.appendText(target.getName() + " uses Potion: +" + 
+                restored + " HP!\n");
         }
     }
 }

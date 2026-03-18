@@ -4,8 +4,7 @@
   -fx-font-family: "Segoe UI", Arial, sans-serif;
 }
 
-/* --- TEXTES GLOBAUX --- */
-/* Force la couleur de tous les labels par défaut */
+/* --- TEXTS --- */
 .label {
   -fx-text-fill: white;
 }
@@ -22,9 +21,7 @@
   -fx-font-weight: bold;
 }
 
-/* --- BOUTONS SPÉCIFIQUES --- */
-
-/* Bouton Vert (Valider / Combat) */
+/* --- BUTTONS --- */
 .btn-primary {
   -fx-background-color: #27ae60;
   -fx-text-fill: white;
@@ -38,8 +35,6 @@
   -fx-background-color: #2ecc71;
 }
 
-/* Boutons de combat (Attaques) */
-/* Style de base des boutons d'attaque */
 .btn-attack {
   -fx-text-fill: white;
   -fx-font-weight: bold;
@@ -50,7 +45,7 @@
   -fx-cursor: hand;
 }
 
-/* Couleurs par type pour les boutons */
+/* Attack Colors */
 .atk-fire {
   -fx-background-color: linear-gradient(to bottom, #ff4422, #a32d16);
 }
@@ -70,9 +65,7 @@
 .atk-poison {
   -fx-background-color: linear-gradient(to bottom, #aa5599, #703865);
 }
-/* Ajoute les autres types sur le même modèle (atk-psychic, atk-dark, etc.) */
 
-/* Bouton SWITCH (Orange) */
 .btn-switch {
   -fx-background-color: #e67e22;
   -fx-text-fill: white;
@@ -85,7 +78,6 @@
   -fx-background-color: #d35400;
 }
 
-/* Bouton ITEMS (Bleu) */
 .btn-items {
   -fx-background-color: #2980b9;
   -fx-text-fill: white;
@@ -98,7 +90,6 @@
   -fx-background-color: #3498db;
 }
 
-/* Bouton Retour / Annuler */
 .btn-secondary,
 .btn-cancel {
   -fx-background-color: #c0392b;
@@ -108,28 +99,25 @@
   -fx-font-weight: bold;
 }
 
-/* --- TABLEAU DE CHOIX (POKEMON SELECTOR) --- */
+/* --- SELECTOR TABLE --- */
 .pokemon-table {
   -fx-background-color: #1a252f;
   -fx-border-color: #34495e;
 }
 
-/* Style des cellules du tableau */
 .table-view .table-cell {
-  -fx-text-fill: white; /* Force le texte en blanc dans les cellules */
+  -fx-text-fill: white;
 }
 
-/* Style des en-têtes de colonnes */
 .table-view .column-header,
 .table-view .column-header-background {
   -fx-background-color: #34495e;
 }
 .table-view .column-header .label {
-  -fx-text-fill: #f1c40f; /* Texte doré pour les titres de colonnes */
+  -fx-text-fill: #f1c40f;
   -fx-font-weight: bold;
 }
 
-/* Lignes du tableau */
 .table-row-cell {
   -fx-background-color: #2c3e50;
 }
@@ -143,7 +131,7 @@
   -fx-text-fill: white;
 }
 
-/* --- BARRES DE RECHERCHE ET COMBOBOX --- */
+/* --- INPUTS --- */
 .search-field,
 .combo-box-styled {
   -fx-background-color: #34495e;
@@ -151,52 +139,49 @@
   -fx-prompt-text-fill: #bdc3c7;
 }
 
-/* Force le texte blanc à l'intérieur de la ComboBox */
 .combo-box-styled .list-cell {
   -fx-text-fill: white;
   -fx-background-color: #34495e;
 }
 
-/* --- LOG DE COMBAT --- */
+/* --- BATTLE LOG --- */
 .battle-log-area {
-  -fx-control-inner-background: #1a252f; /* Fond du TextArea */
-  -fx-text-fill: #2ecc71; /* Texte vert style terminal */
+  -fx-control-inner-background: #1a252f;
+  -fx-text-fill: #2ecc71;
   -fx-font-family: "Consolas", monospace;
 }
-/* Le conteneur de chaque slot (la carte derrière le bouton) */
+
+/* --- TEAM SLOTS --- */
 .pokemon-slot-container {
-  -fx-background-color: rgba(52, 73, 94, 0.4); /* Gris bleu transparent */
+  -fx-background-color: rgba(52, 73, 94, 0.4);
   -fx-background-radius: 20;
   -fx-border-color: rgba(255, 255, 255, 0.1);
   -fx-border-radius: 20;
   -fx-border-width: 2;
-  -fx-padding: 25; /* Donne de l'espace interne */
+  -fx-padding: 25;
   -fx-pref-width: 200;
   -fx-pref-height: 180;
 }
 
-/* Le bouton "+" à l'intérieur */
 .pokemon-slot {
-  -fx-background-radius: 100; /* Cercle parfait */
+  -fx-background-radius: 100;
   -fx-min-width: 80;
   -fx-min-height: 80;
   -fx-max-width: 80;
   -fx-max-height: 80;
   -fx-background-color: #34495e;
-  -fx-text-fill: #f1c40f; /* Le "+" en jaune */
+  -fx-text-fill: #f1c40f;
   -fx-font-size: 30px;
   -fx-font-weight: bold;
   -fx-cursor: hand;
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0, 0, 4);
 }
-
 .pokemon-slot:hover {
   -fx-background-color: #486581;
-  -fx-scale-x: 1.1; /* Petit effet de zoom au survol */
+  -fx-scale-x: 1.1;
   -fx-scale-y: 1.1;
 }
 
-/* Slot quand un Pokémon est là */
 .pokemon-slot-filled {
   -fx-background-color: linear-gradient(to bottom, #27ae60, #1e8449);
   -fx-border-color: #f1c40f;
@@ -204,7 +189,7 @@
   -fx-effect: dropshadow(gaussian, #f1c40f, 15, 0.3, 0, 0);
 }
 
-/* Style de base des badges de type */
+/* --- TYPE BADGES --- */
 .type-badge {
   -fx-padding: 2 8;
   -fx-background-radius: 5;
@@ -213,7 +198,6 @@
   -fx-font-weight: bold;
 }
 
-/* Couleurs par type */
 .type-fire {
   -fx-background-color: #ff4422;
 }
@@ -269,6 +253,8 @@
 .type-normal {
   -fx-background-color: #aaaa99;
 }
+
+/* --- UI UTILS --- */
 .btn-remove-small {
   -fx-background-color: #e74c3c;
   -fx-text-fill: white;
@@ -277,28 +263,23 @@
   -fx-background-radius: 20;
   -fx-min-width: 24;
   -fx-min-height: 24;
-  -fx-max-width: 24;
-  -fx-max-height: 24;
   -fx-padding: 0;
   -fx-cursor: hand;
-  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0, 0, 1);
 }
-
 .btn-remove-small:hover {
   -fx-background-color: #c0392b;
   -fx-scale-x: 1.2;
-  -fx-scale-y: 1.2;
 }
+
 .damage-popup {
-  -fx-text-fill: #e74c3c; /* Rouge vif */
+  -fx-text-fill: #e74c3c;
   -fx-font-size: 24px;
   -fx-font-weight: bold;
-  -fx-font-family: "System";
-  /* Contour noir pour la lisibilité */
   -fx-effect: dropshadow(one-pass-box, black, 2, 0, 1, 1);
 }
+
 #startBtn:disabled {
-  -fx-background-color: #7f8c8d; /* Gris */
-  -fx-text-fill: #ecf0f1; /* Texte gris clair */
-  -fx-opacity: 0.9; /* Évite qu'il soit trop transparent */
+  -fx-background-color: #7f8c8d;
+  -fx-text-fill: #ecf0f1;
+  -fx-opacity: 0.9;
 }

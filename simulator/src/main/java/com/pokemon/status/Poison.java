@@ -6,16 +6,18 @@ import com.pokemon.models.Status;
 public class Poison extends Status {
 
     public Poison() {
-        super("poison", "diminue la vie du pokemon de 1/8 a chaque tour");
+        super("Poison", "The Pokemon loses 1/8 of its max HP each turn.");
     }
 
     @Override
-    public void onTurnStart(Pokemon pokemon) {}
+    public void onTurnStart(Pokemon p) {}
 
     @Override
-    public void onTurnEnd(Pokemon pokemon) {
-        if (!pokemon.isFainted()) {
-            Pokemon.burn(8, pokemon);
+    public void onTurnEnd(Pokemon p) {
+        if (!p.isFainted()) {
+            // Using your static method for fractional damage
+            Pokemon.burn(8, p);
+            System.out.println(p.getName() + " is hurt by poison!");
         }
     }
 }
