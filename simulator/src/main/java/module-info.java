@@ -4,6 +4,7 @@ module com.pokemon {
     requires javafx.media;
     requires javafx.graphics;
     requires javafx.base;
+    
 
 
     opens com.pokemon to javafx.graphics, javafx.fxml;
@@ -15,6 +16,7 @@ module com.pokemon {
     opens com.pokemon.models to javafx.base;
     exports com.pokemon.models;
     exports com.pokemon.effect;
+    
 
     exports com.pokemon.controllers; 
 }
