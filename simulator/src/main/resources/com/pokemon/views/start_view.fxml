@@ -4,6 +4,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <StackPane xmlns="http://javafx.com/javafx" 
            xmlns:fx="http://javafx.com/fxml" 
@@ -17,17 +19,20 @@
 
     <VBox alignment="CENTER" spacing="50">
         <VBox alignment="CENTER" spacing="10">
-            <Label text="POKÉMON" styleClass="title-label" style="-fx-font-size: 60px;"/>
-            <Label text="SHOOTDOWN" styleClass="title-label" style="-fx-text-fill: #ecf0f1; -fx-font-size: 40px;"/>
+            <ImageView fitWidth="700" preserveRatio="true">
+                <image>
+                    <Image url="@../assets/sprites/gameTitle.png" />
+                </image>
+            </ImageView>
         </VBox>
 
         <VBox alignment="CENTER" spacing="20">
-            <Button text="COMMENCER LE COMBAT" 
+            <Button text="START" 
                     onAction="#handleStart" 
                     prefWidth="300" prefHeight="70"
                     styleClass="btn-primary"/>
 
-            <Button text="QUITTER LE JEU" 
+            <Button text="Leav" 
                     onAction="#handleQuit" 
                     prefWidth="200" prefHeight="45"
                     styleClass="btn-secondary"/>

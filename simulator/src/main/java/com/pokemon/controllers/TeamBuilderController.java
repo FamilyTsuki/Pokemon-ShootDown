@@ -32,6 +32,7 @@ public class TeamBuilderController {
     @FXML private Button slot1Btn, slot2Btn, slot3Btn, slot4Btn, slot5Btn, slot6Btn;
     @FXML private VBox rootContainer;
     @FXML private Button remove1Btn, remove2Btn, remove3Btn, remove4Btn, remove5Btn, remove6Btn;
+    @FXML private Button startBtn;
 
     private Pokemon[] team = new Pokemon[6];
 
@@ -42,6 +43,7 @@ public class TeamBuilderController {
             FadeTransition ft = new FadeTransition(Duration.millis(800), rootContainer);
             ft.setToValue(1.0);
             ft.play();
+            updateStartButton();
         }
     }
 
@@ -85,6 +87,7 @@ public class TeamBuilderController {
                     this.team[slotIndex] = finalPokemon;
 
                     updateSlotVisual(clickedBtn, finalPokemon);
+                    updateStartButton();
                 }
             }
         } catch (IOException e) {
@@ -207,6 +210,7 @@ private void handleRemovePokemon(ActionEvent event) {
     slotBtn.getStyleClass().add("pokemon-slot");
 
     removeBtn.setVisible(false);
+    updateStartButton();
 }
 
 private Button getRemoveButtonByIndex(int index) {
@@ -264,6 +268,20 @@ private void handleRandomTeam(ActionEvent event) {
         Button slotBtn = getSlotButtonByIndex(i + 1);
         updateSlotVisual(slotBtn, newPkmn);
     }
+    updateStartButton();
+}
 
+private void updateStartButton() {
+    if (startBtn == null) return; // Sécurité si le FXML n'est pas encore lié
+    int count = 0;
+    for (Pokemon p : team) if (p != null) count++;
+
+    if (count < 3) {
+        startBtn.setDisable(true);
+        startBtn.setText((3 - count) + " POKÉMON REQUIS");
+    } else {
+        startBtn.setDisable(false);
+        startBtn.setText("LANCER LE COMBAT");
+    }
 }
 }

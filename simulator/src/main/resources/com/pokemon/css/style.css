@@ -29,6 +29,8 @@
   -fx-background-color: #27ae60;
   -fx-text-fill: white;
   -fx-font-weight: bold;
+  -fx-font-size: 18px;
+  -fx-padding: 10 20;
   -fx-background-radius: 10;
   -fx-cursor: hand;
 }
@@ -75,6 +77,8 @@
   -fx-background-color: #e67e22;
   -fx-text-fill: white;
   -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: 8 15;
   -fx-background-radius: 5;
 }
 .btn-switch:hover {
@@ -86,6 +90,8 @@
   -fx-background-color: #2980b9;
   -fx-text-fill: white;
   -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: 8 15;
   -fx-background-radius: 5;
 }
 .btn-items:hover {
@@ -97,6 +103,8 @@
 .btn-cancel {
   -fx-background-color: #c0392b;
   -fx-text-fill: white;
+  -fx-font-size: 14px;
+  -fx-padding: 8 15;
   -fx-font-weight: bold;
 }
 
@@ -288,4 +296,9 @@
   -fx-font-family: "System";
   /* Contour noir pour la lisibilité */
   -fx-effect: dropshadow(one-pass-box, black, 2, 0, 1, 1);
+}
+#startBtn:disabled {
+  -fx-background-color: #7f8c8d; /* Gris */
+  -fx-text-fill: #ecf0f1; /* Texte gris clair */
+  -fx-opacity: 0.9; /* Évite qu'il soit trop transparent */
 }
