@@ -15,9 +15,7 @@ public class Poison extends Status {
     @Override
     public void onTurnEnd(Pokemon pokemon) {
         if (!pokemon.isFainted()) {
-            int damage = pokemon.getMaxHp() / 8;
-            if (damage < 1) damage = 1;
-            pokemon.takeDamage(damage);
+            Pokemon.burn(8, pokemon);
         }
     }
 }

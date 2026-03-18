@@ -26,4 +26,5 @@ public abstract class Status {
     public abstract void onTurnStart(Pokemon pokemon);
 
     public abstract void onTurnEnd(Pokemon pokemon);
+
 }

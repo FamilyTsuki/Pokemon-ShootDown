@@ -166,6 +166,13 @@ public class Pokemon {
             activeEffects.add(effect);
         }
     }
+
+    public static void burn(int divider, Pokemon pokemon) {
+        int damage = Math.max(1, pokemon.getMaxHp() / 16);
+        if (damage < 1) damage = 1;
+        pokemon.takeDamage(damage);
+    }
+
     @Override
     public String toString() {
         return String.format("%s (HP: %d/%d, Type: %s)", name, hp, maxHp, type);
