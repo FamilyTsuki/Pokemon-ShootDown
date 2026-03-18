@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import com.pokemon.core.AudioManager;
 
 public class TeamBuilderController {
 
@@ -46,6 +47,7 @@ public class TeamBuilderController {
 
     @FXML
     private void handleSelectPokemon(ActionEvent event) {
+        AudioManager.playSound("clic.wav");
         Button clickedBtn = (Button) event.getSource();
         String id = clickedBtn.getId();
         if (id == null) return;
@@ -163,6 +165,9 @@ public class TeamBuilderController {
 
     @FXML
     private void handleStartBattle(ActionEvent event) throws IOException {
+        AudioManager.playSound("clic.wav");
+        AudioManager.stopMusic();
+        AudioManager.playMusic("fight.mp3");
         int count = 0;
         for (Pokemon p : team) if (p != null) count++;
 
@@ -182,12 +187,14 @@ public class TeamBuilderController {
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
+        AudioManager.playSound("clic.wav");
         Parent root = FXMLLoader.load(getClass().getResource("/com/pokemon/views/start_view.fxml"));
         Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
     }
     @FXML
 private void handleRemovePokemon(ActionEvent event) {
+    AudioManager.playSound("clic.wav");
     Button removeBtn = (Button) event.getSource();
     int slotIndex = Integer.parseInt(removeBtn.getId().replaceAll("[^0-9]", "")) - 1;
 
@@ -217,6 +224,7 @@ private Button getSlotButtonByIndex(int index) {
 }
 @FXML
 private void handleRandomTeam(ActionEvent event) {
+    AudioManager.playSound("clic.wav");
     Random random = new Random();
     
     List<Pokemon> allSpecies = com.pokemon.core.PokemonDataManager.loadPokemonsFromCSV("/com/pokemon/data/pokemons.csv");

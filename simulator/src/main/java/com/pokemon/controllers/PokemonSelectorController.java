@@ -2,6 +2,7 @@ package com.pokemon.controllers;
 
 import java.util.List;
 
+import com.pokemon.core.AudioManager;
 import com.pokemon.core.PokemonDataManager;
 import com.pokemon.models.Pokemon;
 import com.pokemon.models.PokemonType;
@@ -16,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import com.pokemon.core.AudioManager;
 
 
 public class PokemonSelectorController {
@@ -116,6 +118,7 @@ public class PokemonSelectorController {
 
         pokemonTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2 && pokemonTable.getSelectionModel().getSelectedItem() != null) {
+                AudioManager.playSound("clic.wav");
                 this.selectedPokemon = pokemonTable.getSelectionModel().getSelectedItem();
                 closeWindow();
             }

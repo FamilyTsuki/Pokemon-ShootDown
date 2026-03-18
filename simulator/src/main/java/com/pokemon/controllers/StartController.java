@@ -8,11 +8,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import java.io.IOException;
+import com.pokemon.core.AudioManager;
 
 public class StartController {
 
     @FXML
     private void handleStart(ActionEvent event) throws IOException {
+        AudioManager.playMusic("home.mp3");
+        AudioManager.playSound("clic.wav");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/pokemon/views/team_builder.fxml"));
         Parent root = loader.load();
@@ -25,6 +28,9 @@ public class StartController {
 
     @FXML
     private void handleQuit(ActionEvent event) {
+        AudioManager.playSound("clic.wav");
+        AudioManager.stopMusic();
         System.exit(0);
+        
     }
 }

@@ -25,6 +25,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import com.pokemon.core.AudioManager;
 
 public class BattleController {
 
@@ -105,6 +106,7 @@ public class BattleController {
 
     @FXML
     private void handleMove(ActionEvent event) {
+        AudioManager.playSound("clic.wav");
         int moveIdx = getButtonIndex((Button) event.getSource());
         Attack playerAtk = activePlayer.getAttacks()[moveIdx];
 
@@ -165,6 +167,7 @@ public class BattleController {
     ImageView targetSprite = isPlayerAttacking ? cpuSprite : playerSprite;
 
     animateAttack(attackerSprite, isPlayerAttacking);
+    AudioManager.playSound("attack.wav");
 
     int damage = engine.applyDamage(attacker, target, move, battleLog); 
     
@@ -231,6 +234,7 @@ private void animateDamage(ImageView sprite) {
     }
 
     private void showEndGameMessage(String message, Color color) {
+        AudioManager.stopMusic();
         battleLog.appendText(message + "\n");
         disableUI(true);
         mainBattleArea.setVisible(false);
@@ -270,6 +274,7 @@ private void animateDamage(ImageView sprite) {
 
     @FXML
     private void handleSwitch(ActionEvent event) {
+        AudioManager.playSound("clic.wav");
         disableUI(false);
         if (isSwitchMenuVisible && event != null) { 
             if (isForcedSwitch) return; 
@@ -295,6 +300,7 @@ private void animateDamage(ImageView sprite) {
 
     @FXML
 private void handleSwitchConfirmation(ActionEvent event) {
+    AudioManager.playSound("clic.wav");
     int index = (int) ((Button)event.getSource()).getUserData();
     activePlayer = playerTeam.getPokemons()[index];
     playerTeam.setActivePokemon(activePlayer);
@@ -348,6 +354,9 @@ private void handleSwitchConfirmation(ActionEvent event) {
             cpuSprite.setImage(new Image(getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activeCpu.getId() + ".png")));
             playerSprite.setOpacity(1.0);
             cpuSprite.setOpacity(1.0);
+            AudioManager.playSound(activePlayer.getId() + ".wav");
+        
+            AudioManager.playSound(activeCpu.getId() + ".wav");
         } catch (Exception e) {
             System.err.println("Erreur de chargement d'image : " + e.getMessage());
         }
@@ -368,6 +377,7 @@ private void handleSwitchConfirmation(ActionEvent event) {
     }
 
     @FXML private void toggleLog() {
+        AudioManager.playSound("clic.wav");
         TranslateTransition tt = new TranslateTransition(Duration.millis(300), logPane);
         tt.setToX(isLogVisible ? 300 : 0);
         toggleLogBtn.setText(isLogVisible ? "◀" : "▶");
@@ -386,6 +396,7 @@ private void handleSwitchConfirmation(ActionEvent event) {
     @FXML
 
 private void handleItems(ActionEvent event) {
+    AudioManager.playSound("clic.wav");
     if (isItemMenuVisible) { closeItemMenu(); return; }
     
     itemBtn0.setText("POTION");
@@ -401,6 +412,7 @@ private void handleItems(ActionEvent event) {
 
 @FXML
 private void handleItemConfirmation(ActionEvent event) {
+    AudioManager.playSound("clic.wav");
     UseableItem selectedItem = (UseableItem) ((Button)event.getSource()).getUserData();
     
     closeItemMenu();

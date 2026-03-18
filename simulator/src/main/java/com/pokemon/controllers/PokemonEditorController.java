@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
+import com.pokemon.core.AudioManager;
 
 public class PokemonEditorController {
 
@@ -25,7 +26,6 @@ public class PokemonEditorController {
     @FXML private ImageView pokemonSprite;
     @FXML private ComboBox<String> move1, move2, move3, move4;
     @FXML private ComboBox<String> itemComboBox;
-    // --- NOUVEAU : Label pour la description ---
     @FXML private Label itemDescriptionLabel; 
 
     private Pokemon currentPokemon;
@@ -61,7 +61,6 @@ public class PokemonEditorController {
 
         itemComboBox.setItems(itemNames);
 
-        // --- NOUVEAU : Listener pour mettre à jour la description quand on change d'objet ---
         itemComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updateItemDescription(newVal);
         });
@@ -76,7 +75,6 @@ public class PokemonEditorController {
         }
     }
 
-    // --- NOUVELLE MÉTHODE : Met à jour le texte du Label ---
     private void updateItemDescription(String itemName) {
         if (itemName == null || itemName.equals("None")) {
             itemDescriptionLabel.setText("Aucun objet tenu.");
@@ -93,6 +91,7 @@ public class PokemonEditorController {
 
     @FXML
     private void handleSave() {
+        AudioManager.playSound("clic.wav");
         if (currentPokemon != null) {
             saveMoves();
 
