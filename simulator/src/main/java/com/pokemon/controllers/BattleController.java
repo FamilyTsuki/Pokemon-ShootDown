@@ -1,6 +1,7 @@
 package com.pokemon.controllers;
 
 import com.pokemon.models.*;
+import com.pokemon.models.UseableItems.Potion;
 import com.pokemon.core.BattleEngine;
 import com.pokemon.effect.Effecte;
 
@@ -43,6 +44,9 @@ public class BattleController {
     @FXML private HBox cpuTypeContainer;
     @FXML private HBox playerEffectContainer;
     @FXML private HBox cpuEffectContainer;
+    @FXML private VBox itemMenu;
+    @FXML private Button itemBtn0, itemBtn1; 
+    private boolean isItemMenuVisible = false;
 
     private Team playerTeam, cpuTeam;
     private Pokemon activePlayer, activeCpu;
@@ -50,6 +54,9 @@ public class BattleController {
     private boolean isSwitchMenuVisible = false;
     private boolean isLogVisible = false;
     private int turnCount = 1;
+    private boolean isForcedSwitch = false;
+    private FadeTransition playerFade;
+    private FadeTransition cpuFade;
     
 
     public void setupBattle(Team playerTeam, Team cpuTeam) {
@@ -124,6 +131,7 @@ public class BattleController {
         turnCount++;
         PauseTransition shortPause = new PauseTransition(Duration.seconds(1.0));
         shortPause.setOnFinished(e -> {
+            processEndOfTurn();
             if (activePlayer.isFainted()) disableUI(false); 
             checkBattleStatus();
         });
@@ -138,6 +146,7 @@ public class BattleController {
         PauseTransition endDelay = new PauseTransition(Duration.seconds(1.0));
         endDelay.setOnFinished(ev -> {
             turnCount++;
+            processEndOfTurn();
             if (activePlayer.isFainted()) disableUI(false); 
             checkBattleStatus(); 
             if (!activePlayer.isFainted() && !activeCpu.isFainted()) {
@@ -170,6 +179,8 @@ public class BattleController {
         battleLog.appendText("   -> " + target.getName() + " est KO !\n");
         FadeTransition koFade = new FadeTransition(Duration.millis(500), targetSprite);
         koFade.setToValue(0);
+        if (targetSprite == playerSprite) playerFade = koFade;
+        else cpuFade = koFade;
         koFade.play();
     }
 
@@ -211,6 +222,7 @@ private void animateDamage(ImageView sprite) {
         else if (activePlayer.isFainted()) {
             if (playerTeam.hasAvailablePokemon()) {
                 battleLog.appendText("Votre Pokémon est KO ! Switch obligatoire.\n");
+                isForcedSwitch = true;
                 handleSwitch(null); 
             } else {
                 showEndGameMessage("DÉFAITE...", Color.RED);
@@ -259,7 +271,11 @@ private void animateDamage(ImageView sprite) {
     @FXML
     private void handleSwitch(ActionEvent event) {
         disableUI(false);
-        if (isSwitchMenuVisible && event != null) { closeSwitchMenu(); return; }
+        if (isSwitchMenuVisible && event != null) { 
+            if (isForcedSwitch) return; 
+            closeSwitchMenu(); 
+            return; 
+        }
         
         Button[] btns = {switchBtn0, switchBtn1, switchBtn2, switchBtn3, switchBtn4, switchBtn5};
         Pokemon[] pokemons = playerTeam.getPokemons();
@@ -276,19 +292,28 @@ private void animateDamage(ImageView sprite) {
         openSwitchMenu();
     }
 
+
     @FXML
-    private void handleSwitchConfirmation(ActionEvent event) {
-        int index = (int) ((Button)event.getSource()).getUserData();
-        activePlayer = playerTeam.getPokemons()[index];
-        playerTeam.setActivePokemon(activePlayer);
-        
-        battleLog.appendText("Switch : " + activePlayer.getName() + " entre en combat !\n");
-        loadSprites();
-        closeSwitchMenu();
-        refreshUI();
-        setMoveButtons(activePlayer);
-        disableUI(false); 
+private void handleSwitchConfirmation(ActionEvent event) {
+    int index = (int) ((Button)event.getSource()).getUserData();
+    activePlayer = playerTeam.getPokemons()[index];
+    playerTeam.setActivePokemon(activePlayer);
+    
+    loadSprites();
+    closeSwitchMenu();
+    refreshUI();
+    setMoveButtons(activePlayer);
+    
+    if (isForcedSwitch) {
+        battleLog.appendText(activePlayer.getName() + " entre en combat !\n");
+        isForcedSwitch = false;
+        disableUI(false);
+    } else {
+        battleLog.appendText("\n=== TOUR " + turnCount + " ====\n");
+        battleLog.appendText("Switch : Vous envoyez " + activePlayer.getName() + " !\n");
+        executeCpuOnlyTurn();
     }
+}
 
     private void updateCpuIcons() {
         cpuTeamStatus.getChildren().clear();
@@ -317,6 +342,8 @@ private void animateDamage(ImageView sprite) {
 
     private void loadSprites() {
         try {
+            if (playerFade != null) playerFade.stop();
+            if (cpuFade != null) cpuFade.stop();
             playerSprite.setImage(new Image(getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activePlayer.getId() + ".png")));
             cpuSprite.setImage(new Image(getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activeCpu.getId() + ".png")));
             playerSprite.setOpacity(1.0);
@@ -327,11 +354,12 @@ private void animateDamage(ImageView sprite) {
     }
 
     private void openSwitchMenu() {
-        TranslateTransition tt = new TranslateTransition(Duration.millis(300), switchMenu);
-        tt.setToY(0); tt.play();
-        isSwitchMenuVisible = true;
-        disableUI(true);
-    }
+    if (isItemMenuVisible) closeItemMenu();
+    TranslateTransition tt = new TranslateTransition(Duration.millis(300), switchMenu);
+    tt.setToY(0); tt.play();
+    isSwitchMenuVisible = true;
+    disableUI(true);
+}
 
     @FXML private void closeSwitchMenu() {
         TranslateTransition tt = new TranslateTransition(Duration.millis(300), switchMenu);
@@ -354,7 +382,119 @@ private void animateDamage(ImageView sprite) {
         return 3;
     }
     
-    @FXML private void handleItems(ActionEvent event) { battleLog.appendText("Sac vide !\n"); }
+
+    @FXML
+private void handleItems(ActionEvent event) {
+    if (isItemMenuVisible) { closeItemMenu(); return; }
+    
+    itemBtn0.setText("POTION\n(50 PV)");
+    itemBtn0.setUserData(new Potion());
+    
+    itemBtn0.setDisable(activePlayer.getHp() >= activePlayer.getMaxHp());
+
+    openItemMenu();
+}
+
+@FXML
+private void handleItemConfirmation(ActionEvent event) {
+    UseableItem selectedItem = (UseableItem) ((Button)event.getSource()).getUserData();
+    
+    closeItemMenu();
+    battleLog.appendText("\n=== TOUR " + turnCount + " ====\n");
+    
+    selectedItem.use(activePlayer, battleLog);
+    refreshUI();
+    
+    executeCpuOnlyTurn();
+}
+
+
+private void openItemMenu() {
+    if (isSwitchMenuVisible) closeSwitchMenu();
+    TranslateTransition tt = new TranslateTransition(Duration.millis(300), itemMenu);
+    tt.setToY(0); tt.play();
+    isItemMenuVisible = true;
+    disableUI(true);
+}
+
+@FXML private void closeItemMenu() {
+    TranslateTransition tt = new TranslateTransition(Duration.millis(300), itemMenu);
+    tt.setToY(170); tt.play();
+    isItemMenuVisible = false;
+    disableUI(false);
+}
+
+    private void executeCpuOnlyTurn() {
+    disableUI(true);
+    
+    Attack cpuAtk = engine.chooseBestAttack(activeCpu, activePlayer);
+    
+    PauseTransition cpuTurnDelay = new PauseTransition(Duration.seconds(1.0));
+    cpuTurnDelay.setOnFinished(e -> {
+        if (cpuAtk != null && !activeCpu.isFainted()) {
+            processAttack(activeCpu, activePlayer, cpuAtk);
+        }
+        
+        PauseTransition endDelay = new PauseTransition(Duration.seconds(1.0));
+        endDelay.setOnFinished(ev -> {
+            turnCount++;
+            processEndOfTurn();
+            checkBattleStatus();
+            if (!activePlayer.isFainted() && !activeCpu.isFainted()) {
+                disableUI(false);
+            }
+        });
+        endDelay.play();
+    });
+    cpuTurnDelay.play();
+}
+
+    private void processEndOfTurn() {
+        boolean needsRefresh = false;
+
+        if (!activePlayer.isFainted()) {
+            int oldHp = activePlayer.getHp();
+            if (activePlayer.getCurrentStatus() != null) activePlayer.getCurrentStatus().onTurnEnd(activePlayer);
+            if (activePlayer.getItem() != null) activePlayer.getItem().onTurnEnd(activePlayer);
+            
+            if (activePlayer.getHp() < oldHp) {
+                battleLog.appendText(activePlayer.getName() + " souffre à la fin du tour !\n");
+                needsRefresh = true;
+                animateDamage(playerSprite);
+                if (activePlayer.isFainted()) {
+                    battleLog.appendText("   -> " + activePlayer.getName() + " est KO !\n");
+                    playerFade = new FadeTransition(Duration.millis(500), playerSprite);
+                    playerFade.setToValue(0); playerFade.play();
+                }
+            } else if (activePlayer.getHp() > oldHp) {
+                battleLog.appendText(activePlayer.getName() + " restaure des PV à la fin du tour !\n");
+                needsRefresh = true;
+            }
+        }
+
+        if (!activeCpu.isFainted()) {
+            int oldHp = activeCpu.getHp();
+            if (activeCpu.getCurrentStatus() != null) activeCpu.getCurrentStatus().onTurnEnd(activeCpu);
+            if (activeCpu.getItem() != null) activeCpu.getItem().onTurnEnd(activeCpu);
+            
+            if (activeCpu.getHp() < oldHp) {
+                battleLog.appendText(activeCpu.getName() + " souffre à la fin du tour !\n");
+                needsRefresh = true;
+                animateDamage(cpuSprite);
+                if (activeCpu.isFainted()) {
+                    battleLog.appendText("   -> " + activeCpu.getName() + " est KO !\n");
+                    cpuFade = new FadeTransition(Duration.millis(500), cpuSprite);
+                    cpuFade.setToValue(0); cpuFade.play();
+                }
+            } else if (activeCpu.getHp() > oldHp) {
+                battleLog.appendText(activeCpu.getName() + " restaure des PV à la fin du tour !\n");
+                needsRefresh = true;
+            }
+        }
+
+        if (needsRefresh) refreshUI();
+    }
+
     private void displayTypes(HBox container, Pokemon pokemon) {
     container.getChildren().clear(); 
     if (pokemon == null || pokemon.getTypes() == null) return;
@@ -395,7 +535,7 @@ private void setMoveButtons(Pokemon p) {
     Attack[] attacks = p.getAttacks();
 
     for (int i = 0; i < moveButtons.length; i++) {
-        // --- 1. NETTOYAGE CRITIQUE ---
+
         moveButtons[i].setGraphic(null); 
         moveButtons[i].setText("");
         moveButtons[i].getStyleClass().removeAll(
@@ -405,7 +545,6 @@ private void setMoveButtons(Pokemon p) {
             "atk-fairy", "atk-normal"
         );
 
-        // --- 2. MISE À JOUR ---
         if (i < attacks.length && attacks[i] != null) {
             Attack atk = attacks[i];
 
@@ -443,9 +582,9 @@ private void displayEffects(HBox container, Pokemon pokemon) {
         badge.setStyle("-fx-background-radius: 5; -fx-padding: 2 5; -fx-font-weight: bold; -fx-font-size: 10px; -fx-text-fill: white;");
 
         if (eff.getName().equalsIgnoreCase("Brûlure") || eff.getName().contains("BURN")) {
-            badge.setStyle(badge.getStyle() + "-fx-background-color: #e67e22;"); // Orange pour le feu
+            badge.setStyle(badge.getStyle() + "-fx-background-color: #e67e22;"); 
         } else if (eff.getName().contains("Boost")) {
-            badge.setStyle(badge.getStyle() + "-fx-background-color: #3498db;"); // Bleu pour les stats
+            badge.setStyle(badge.getStyle() + "-fx-background-color: #3498db;"); 
         } else {
             badge.setStyle(badge.getStyle() + "-fx-background-color: #7f8c8d;");
         }
@@ -453,4 +592,7 @@ private void displayEffects(HBox container, Pokemon pokemon) {
         container.getChildren().add(badge);
     }
 }
+
+
+
 }

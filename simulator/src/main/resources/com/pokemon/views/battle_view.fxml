@@ -90,5 +90,19 @@
             </HBox>
         </VBox>
     </AnchorPane>
+    <AnchorPane pickOnBounds="false" mouseTransparent="false">
+    <VBox fx:id="itemMenu" prefHeight="160.0" spacing="15" alignment="TOP_CENTER"
+          translateY="170.0" styleClass="switch-menu-overlay"
+          AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        
+        <Label text="CHOISISSEZ UN OBJET" styleClass="menu-title-label" />
+        
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="itemBtn0" onAction="#handleItemConfirmation" styleClass="btn-item-choice" prefWidth="120" prefHeight="70" wrapText="true" />
+            <Button fx:id="itemBtn1" onAction="#handleItemConfirmation" styleClass="btn-item-choice" prefWidth="120" prefHeight="70" wrapText="true" />
+            <Button text="ANNULER" onAction="#closeItemMenu" styleClass="btn-cancel" prefHeight="70" />
+        </HBox>
+    </VBox>
+</AnchorPane>
 
 </StackPane>
