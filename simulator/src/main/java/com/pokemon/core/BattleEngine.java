@@ -1,73 +1,49 @@
 package com.pokemon.core;
 
-import com.pokemon.models.Pokemon;
-import com.pokemon.models.Attack;
-import com.pokemon.models.Team;
+import com.pokemon.models.*;
 import java.util.Random;
 
 public class BattleEngine {
     private final Random random = new Random();
 
-    public enum ActionType {
-        SWITCH(2),
-        ITEM(2),
-        ATTACK(0);
-
-        private final int priority;
-
-        ActionType(int priority) {
-            this.priority = priority;
-        }
-
-        public int getPriority() {
-            return priority;
-        }
+    public enum Action {
+        SWITCH(2), ITEM(2), ATTACK(0);
+        private final int p;
+        Action(int p) { this.p = p; }
+        public int getP() { return p; }
     }
 
-    public boolean isPlayerFirst(ActionType playerAction, Pokemon player, ActionType cpuAction, Pokemon cpu) {
-        if (playerAction.getPriority() > cpuAction.getPriority()) return true;
-        if (cpuAction.getPriority() > playerAction.getPriority()) return false;
-
-        if (player.getSpeed() > cpu.getSpeed()) return true;
-        if (cpu.getSpeed() > player.getSpeed()) return false;
+    public boolean isPlayerFirst(Action pA, Pokemon p, Action cA, Pokemon c) {
+        if (pA.getP() != cA.getP()) return pA.getP() > cA.getP();
+        if (p.getSpeed() != c.getSpeed()) return p.getSpeed() > c.getSpeed();
         return random.nextBoolean();
     }
 
-    public boolean isPlayerFirst(Pokemon player, Pokemon cpu) {
-        return isPlayerFirst(ActionType.ATTACK, player, ActionType.ATTACK, cpu);
+    public boolean isPlayerFirst(Pokemon p, Pokemon c) {
+        return isPlayerFirst(Action.ATTACK, p, Action.ATTACK, c);
     }
 
-
-    public Attack chooseBestAttack(Pokemon attacker, Pokemon target) {
-        Attack[] moves = attacker.getAttacks();
+    public Attack chooseBestAttack(Pokemon atk, Pokemon tar) {
+        Attack[] moves = atk.getAttacks();
         if (moves == null || moves.length == 0) return null;
-
-        Attack bestMove = moves[0];
-        double maxDmg = -1;
-
-        for (Attack atk : moves) {
-            if (atk == null) continue;
-            double theoreticalDmg = DamageCalculator.calculateDamage(attacker, target, atk);
-            if (theoreticalDmg > maxDmg) {
-                maxDmg = theoreticalDmg;
-                bestMove = atk;
-            }
+        Attack best = moves[0];
+        double max = -1;
+        for (Attack m : moves) {
+            if (m == null) continue;
+            double d = DamageCalculator.calculateDamage(atk, tar, m);
+            if (d > max) { max = d; best = m; }
         }
-        return bestMove;
+        return best;
     }
 
-
-    public int applyDamage(Pokemon attacker, Pokemon target, Attack move, javafx.scene.control.TextArea log) {
-    double rawDmg = DamageCalculator.calculateDamage(attacker, target, move);
-    int finalDmg = (int) rawDmg;
-    target.takeDamage(finalDmg);
-
-    if (move.getEffect() != null) {
-        move.getEffect().apply(attacker, target, log);
-        
-        move.getEffect().onAfterAttack(attacker, target, finalDmg);
+    public int applyDamage(Pokemon a, Pokemon t, Attack m, 
+                           javafx.scene.control.TextArea log) {
+        int dmg = (int) DamageCalculator.calculateDamage(a, t, m);
+        t.takeDamage(dmg);
+        if (m.getEffect() != null) {
+            m.getEffect().apply(a, t, log);
+            m.getEffect().onAfterAttack(a, t, dmg);
+        }
+        return dmg;
     }
-
-    return finalDmg;
-}
 }

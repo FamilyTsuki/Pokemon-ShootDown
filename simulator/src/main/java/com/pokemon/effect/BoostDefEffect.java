@@ -6,7 +6,7 @@ import javafx.scene.control.TextArea;
 public class BoostDefEffect extends Effect {
 
     public BoostDefEffect() {
-        super("Boost Défense", "Augmente la défense du lanceur", 0);
+        super("Defense Boost", "Increases the user's defense", 0);
     }
 
     @Override
@@ -15,12 +15,13 @@ public class BoostDefEffect extends Effect {
         user.setDefense(user.getDefense() + bonus);
         
         if (log != null) {
-            log.appendText("🛡️ La défense de " + user.getName() + " augmente de " + bonus + " !\n");
+            log.appendText("🛡️ " + user.getName() + "'s defense rose by " + 
+                bonus + "!\n");
         }
     }
 
     @Override
-    public void onAfterAttack(Pokemon attacker, Pokemon defender, int damageDealt) {
-
+    public void onAfterAttack(Pokemon atk, Pokemon def, int dmg) {
+        // No post-attack effect needed
     }
 }

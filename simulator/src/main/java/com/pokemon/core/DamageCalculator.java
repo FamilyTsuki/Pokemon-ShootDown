@@ -1,52 +1,33 @@
 package com.pokemon.core;
-import com.pokemon.models.Attack;
-import com.pokemon.models.Pokemon;
-import com.pokemon.models.PokemonType;
 
+import com.pokemon.models.*;
 
 public class DamageCalculator {
-    /**
-     * 
-     * @param attacker
-     * @param defender
-     * @param movePower
-     * @param moveType
-     * @return
-     */
-    public static double calculateDamage(Pokemon attacker, Pokemon defender, Attack attack) {
+    public static double calculateDamage(Pokemon atk, Pokemon def, Attack mov) {
+        // Pokemon damage formula: ((2*Lvl/5 + 2) * Power * A/D / 50) + 2
+        double base = (22.0 * mov.getPower() * atk.getAttack() / def.getDefense() 
+                      / 50.0) + 2.0;
 
-    double baseDamage = ((((2.0 * 50.0 / 5.0) + 2.0) 
-                        * attack.getPower() 
-                        * ((double) attacker.getAttack() / defender.getDefense())) 
-                        / 50.0) + 2.0;
+        double mod = calculateModifier(atk, def, mov.getType());
 
-    double modifier = calculateModifier(attacker, defender, attack.getType());
-
-    if (attacker.getItem() != null) {
-        modifier *= attacker.getItem().getDamageModifier(attacker, defender, attack);
-    }
-
-    if (defender.getItem() != null) {
-        modifier *= defender.getItem().getDamageModifier(defender, attacker, attack);
-    }
-
-    return baseDamage * modifier;
-}
-
-    private static double calculateModifier(Pokemon attacker, Pokemon defender, PokemonType moveType) {
-        double stab = 1.0;
-        for (PokemonType type : attacker.getTypes()){
-            if (type == moveType) {
-                stab = 1.5;
-            }
+        if (atk.getItem() != null) {
+            mod *= atk.getItem().getDamageModifier(atk, def, mov);
         }
-        double typeEffectiveness = moveType.getEfficiencyAgainst(defender.getTypes());
+        if (def.getItem() != null) {
+            mod *= def.getItem().getDamageModifier(def, atk, mov);
+        }
 
-
-        double random = 0.85 + (Math.random() * (1.0 - 0.85));
-
-        return stab * typeEffectiveness * random;
+        return base * mod;
     }
-    
-}
 
+    private static double calculateModifier(Pokemon atk, Pokemon def, 
+                                            PokemonType mType) {
+        double stab = 1.0;
+        for (PokemonType t : atk.getTypes()) if (t == mType) stab = 1.5;
+
+        double eff = mType.getEfficiencyAgainst(def.getTypes());
+        double rand = 0.85 + (Math.random() * 0.15);
+
+        return stab * eff * rand;
+    }
+}

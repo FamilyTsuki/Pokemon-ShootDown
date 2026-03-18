@@ -1,24 +1,26 @@
 package com.pokemon.effect;
 
 import com.pokemon.models.Pokemon;
-
 import javafx.scene.control.TextArea;
 
 public class LifeStealEffect extends Effect {
     public LifeStealEffect() {
-        super("Vol de vie", "Soigne le lanceur de 1/2 des dégâts infligés", 1);
+        super("Life Steal", "Heals the user by 1/2 of damage dealt", 1);
     }
 
     @Override
-    public void onAfterAttack(Pokemon attacker, Pokemon defender, int damageDealt) {
-        int healAmount = damageDealt / 2;
-        if (healAmount > 0) {
-            attacker.setHp(attacker.getHp() + healAmount);
-            System.out.println(attacker.getName() + " récupère " + healAmount + " PV !");
+    public void onAfterAttack(Pokemon atk, Pokemon def, int dmg) {
+        int heal = dmg / 2;
+        if (heal > 0) {
+            int newHp = Math.min(atk.getMaxHp(), atk.getHp() + heal);
+            atk.setHp(newHp);
         }
     }
-    public void apply(Pokemon user, Pokemon target, TextArea log) {
-        if (log != null) log.appendText(user.getName() + " ses regenerer!\n");
-    }
 
+    @Override
+    public void apply(Pokemon user, Pokemon target, TextArea log) {
+        if (log != null) {
+            log.appendText(user.getName() + " restored some HP!\n");
+        }
+    }
 }
