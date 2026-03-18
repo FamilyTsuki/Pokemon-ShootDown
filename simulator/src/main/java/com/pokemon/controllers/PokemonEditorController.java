@@ -15,7 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import com.pokemon.core.AudioManager;
+import com.pokemon.items.items.AssaultVest;
 import com.pokemon.items.items.Ballon;
+import com.pokemon.items.items.BerryJuice;
+import com.pokemon.items.items.FocusSash;
 import com.pokemon.items.items.Leftovers;
 
 public class PokemonEditorController {
@@ -53,6 +56,10 @@ public class PokemonEditorController {
         availableItems.clear();
         availableItems.add(new Ballon());
         availableItems.add(new Leftovers());
+        availableItems.add(new AssaultVest());
+        availableItems.add(new BerryJuice());
+        availableItems.add(new FocusSash());
+
         ObservableList<String> names = FXCollections.observableArrayList("None");
         for (Item it : availableItems) names.add(it.getName());
         itemComboBox.setItems(names);

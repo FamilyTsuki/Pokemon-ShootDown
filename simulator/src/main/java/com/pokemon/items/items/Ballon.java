@@ -25,7 +25,6 @@ public class Ballon extends Item {
     @Override
     public Item use(Pokemon pokemon) {
         System.out.println(pokemon.getName() + " est immunisé grâce au Ballon !");
-        //TODO fair que l'object ranvoi son efect
         return null;
     }
 
