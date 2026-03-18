@@ -336,6 +336,7 @@ private void handleSwitchConfirmation(ActionEvent event) {
             try {
                 String path = "/com/pokemon/assets/sprites/" + p.getId() + ".png";
                 var res = getClass().getResourceAsStream(path);
+                if (res == null) res = getClass().getResourceAsStream("/com/pokemon/assets/sprites/missingno.png");
                 if (res != null) {
                     ImageView icon = new ImageView(new Image(res));
                     icon.setFitWidth(30); icon.setFitHeight(30);
@@ -358,8 +359,15 @@ private void handleSwitchConfirmation(ActionEvent event) {
         try {
             if (playerFade != null) playerFade.stop();
             if (cpuFade != null) cpuFade.stop();
-            playerSprite.setImage(new Image(getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activePlayer.getId() + ".png")));
-            cpuSprite.setImage(new Image(getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activeCpu.getId() + ".png")));
+            
+            var playerStream = getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activePlayer.getId() + ".png");
+            if (playerStream == null) playerStream = getClass().getResourceAsStream("/com/pokemon/assets/sprites/missingno.png");
+            playerSprite.setImage(new Image(playerStream));
+            
+            var cpuStream = getClass().getResourceAsStream("/com/pokemon/assets/sprites/" + activeCpu.getId() + ".png");
+            if (cpuStream == null) cpuStream = getClass().getResourceAsStream("/com/pokemon/assets/sprites/missingno.png");
+            cpuSprite.setImage(new Image(cpuStream));
+            
             playerSprite.setOpacity(1.0);
             cpuSprite.setOpacity(1.0);
             playerSprite.setScaleX(-1); // Applique un effet miroir pour que le Pokémon regarde vers la droite

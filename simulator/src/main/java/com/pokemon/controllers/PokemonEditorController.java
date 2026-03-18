@@ -41,6 +41,7 @@ public class PokemonEditorController {
         try {
             String imagePath = "/com/pokemon/assets/sprites/" + pokemon.getId() + ".png";
             var stream = getClass().getResourceAsStream(imagePath);
+            if (stream == null) stream = getClass().getResourceAsStream("/com/pokemon/assets/sprites/missingno.png");
             if (stream != null) pokemonSprite.setImage(new Image(stream));
         } catch (Exception e) { e.printStackTrace(); }
 
@@ -68,7 +69,7 @@ public class PokemonEditorController {
         if (currentPokemon.getItem() != null) {
             String itemName = currentPokemon.getItem().getName();
             itemComboBox.getSelectionModel().select(itemName);
-            updateItemDescription(itemName); // Init description
+            updateItemDescription(itemName);
         } else {
             itemComboBox.getSelectionModel().select("None");
             updateItemDescription("None");
@@ -94,7 +95,6 @@ public class PokemonEditorController {
         AudioManager.playSound("clic.wav");
         if (currentPokemon != null) {
             saveMoves();
-
             String selectedName = itemComboBox.getValue();
             if (selectedName == null || selectedName.equals("None")) {
                 currentPokemon.setItem(null);
@@ -120,7 +120,9 @@ public class PokemonEditorController {
         List<String> pool = new ArrayList<>();
         if (pokemon.getLearble() != null) {
             for (Attack move : pokemon.getLearble()) {
-                if (move != null) pool.add(move.getName());
+                if (move != null) {
+                    pool.add(move.getName());
+                }
             }
         }
 
@@ -162,8 +164,10 @@ public class PokemonEditorController {
         ComboBox<String>[] boxes = new ComboBox[]{move1, move2, move3, move4};
         
         List<String> allPossibleMoves = new ArrayList<>();
-        for (Attack a : currentPokemon.getLearble()) {
-            if (a != null) allPossibleMoves.add(a.getName());
+        if (currentPokemon.getLearble() != null) {
+            for (Attack a : currentPokemon.getLearble()) {
+                if (a != null) allPossibleMoves.add(a.getName());
+            }
         }
 
         for (int i = 0; i < boxes.length; i++) {
@@ -188,14 +192,21 @@ public class PokemonEditorController {
         List<Attack> finalMoves = new ArrayList<>();
         for (String name : selected) {
             if (name == null) continue;
-            for (Attack a : currentPokemon.getLearble()) {
-                if (a != null && a.getName().equals(name)) {
-                    finalMoves.add(a);
-                    break;
+            if (currentPokemon.getLearble() != null) {
+                for (Attack a : currentPokemon.getLearble()) {
+                    if (a != null && a.getName().equals(name)) {
+                        finalMoves.add(a);
+                        break;
+                    }
                 }
             }
         }
-        currentPokemon.setAttacks(finalMoves.toArray(new Attack[0]));
+
+        Attack[] finalAttacks = new Attack[4];
+        for (int i = 0; i < Math.min(4, finalMoves.size()); i++) {
+            finalAttacks[i] = finalMoves.get(i);
+        }
+        currentPokemon.setAttacks(finalAttacks);
     }
 
     public boolean isSaveClicked() { return saveClicked; }

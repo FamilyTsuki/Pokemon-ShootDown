@@ -100,7 +100,9 @@ public class TeamBuilderController {
         
         try {
             String path = "/com/pokemon/assets/sprites/" + p.getId() + ".png";
-            Image img = new Image(getClass().getResourceAsStream(path));
+            var stream = getClass().getResourceAsStream(path);
+            if (stream == null) stream = getClass().getResourceAsStream("/com/pokemon/assets/sprites/missingno.png");
+            Image img = new Image(stream);
             ImageView iv = new ImageView(img);
             iv.setFitHeight(80);
             iv.setFitWidth(80);

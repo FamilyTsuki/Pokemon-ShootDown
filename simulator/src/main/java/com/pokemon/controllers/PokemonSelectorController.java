@@ -57,6 +57,7 @@ public class PokemonSelectorController {
                     try {
                         String path = "/com/pokemon/assets/sprites/" + pokemon.getId() + ".png";
                         var stream = getClass().getResourceAsStream(path);
+                        if (stream == null) stream = getClass().getResourceAsStream("/com/pokemon/assets/sprites/missingno.png");
                         if (stream != null) {
                             imageView.setImage(new Image(stream));
                             setGraphic(imageView);
