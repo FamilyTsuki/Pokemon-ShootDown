@@ -8,10 +8,33 @@ import java.util.Random;
 public class BattleEngine {
     private final Random random = new Random();
 
-    public boolean isPlayerFirst(Pokemon player, Pokemon cpu) {
+    public enum ActionType {
+        SWITCH(2),
+        ITEM(2),
+        ATTACK(0);
+
+        private final int priority;
+
+        ActionType(int priority) {
+            this.priority = priority;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
+    }
+
+    public boolean isPlayerFirst(ActionType playerAction, Pokemon player, ActionType cpuAction, Pokemon cpu) {
+        if (playerAction.getPriority() > cpuAction.getPriority()) return true;
+        if (cpuAction.getPriority() > playerAction.getPriority()) return false;
+
         if (player.getSpeed() > cpu.getSpeed()) return true;
         if (cpu.getSpeed() > player.getSpeed()) return false;
         return random.nextBoolean();
+    }
+
+    public boolean isPlayerFirst(Pokemon player, Pokemon cpu) {
+        return isPlayerFirst(ActionType.ATTACK, player, ActionType.ATTACK, cpu);
     }
 
 
