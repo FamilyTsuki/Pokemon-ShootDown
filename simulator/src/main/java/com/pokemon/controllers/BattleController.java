@@ -1,7 +1,7 @@
 package com.pokemon.controllers;
 
 import com.pokemon.models.*;
-import com.pokemon.models.UseableItems.Potion;
+import com.pokemon.models.UseableItems.*;
 import com.pokemon.core.BattleEngine;
 import com.pokemon.effect.Effecte;
 
@@ -384,13 +384,17 @@ private void handleSwitchConfirmation(ActionEvent event) {
     
 
     @FXML
+
 private void handleItems(ActionEvent event) {
     if (isItemMenuVisible) { closeItemMenu(); return; }
     
-    itemBtn0.setText("POTION\n(50 PV)");
+    itemBtn0.setText("POTION");
     itemBtn0.setUserData(new Potion());
-    
     itemBtn0.setDisable(activePlayer.getHp() >= activePlayer.getMaxHp());
+
+    itemBtn1.setText("ANTIDOTE");
+    itemBtn1.setUserData(new Antidote());
+    itemBtn1.setDisable(activePlayer.getActiveEffects().isEmpty());
 
     openItemMenu();
 }
